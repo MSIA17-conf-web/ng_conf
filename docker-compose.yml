@@ -1,0 +1,24 @@
+version: "3.4"
+
+services:
+  ng_conf:
+    container_name: ng_conf
+    hostname: ng_conf
+    build: 
+      context: .
+      dockerfile: Dockerfile_dev
+    volumes: 
+      - ./app:/app
+      - cert-handler_certbot-letsencrypt:/etc/letsencrypt
+    ports:
+      - 4200:4200
+    stdin_open: true
+
+volumes:
+  cert-handler_certbot-letsencrypt:
+    external: true
+
+networks: 
+  default:
+    external:
+      name: the_network
