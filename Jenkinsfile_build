@@ -8,9 +8,9 @@ pipeline {
             booleanParam(name: 'Test', defaultValue: true, description: 'Pass test')
     }
 
-    environment {
+    // environment {
 
-    }
+    // }
 
     stages {
         stage('Read Jenkinsfile') {
