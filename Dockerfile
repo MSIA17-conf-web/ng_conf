@@ -1,17 +1,13 @@
 FROM node:10.16
 
-ADD ./app /app
+ADD ./app/dist /app
+
+ADD ./app/servers /app
 
 WORKDIR /app
 
-RUN npm i
+RUN npm i body-parser@^1.18.3 cors@^2.8.5 dotenv@^7.0.0 express@^4.16.4
 
-USER bower
+ENV PROD_SERVER_PORT=4200
 
-RUN bower i
-
-USER root
-
-RUN npm run build
-
-CMD npm run prod
+CMD node servers/prod_server.js

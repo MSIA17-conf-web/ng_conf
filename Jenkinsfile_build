@@ -5,7 +5,7 @@ pipeline {
     
     parameters {
             booleanParam(name: 'Refresh', defaultValue: false, description: 'Read Jenkinsfile and exit.')
-            booleanParam(name: 'Test', defaultValue: true, description: 'Pass test')
+            booleanParam(name: 'Test', defaultValue: false, description: 'Pass test')
     }
 
     // environment {
@@ -21,14 +21,27 @@ pipeline {
         stage('Run Jenkinsfile') {
             when { expression { return params.Refresh == false } }
             stages {
-                stage('Test') {
+
+                stage('Test application') {
+                    when { expression { return params.Test == true } }
                     steps {
-                        print "${workspace}"
-                        sh 'echo $worksace'
+                        dir("${workspace}/app")
+                        sh 'npm run test'
                     }
                 }
+
+                stage('Build application') {
+                    steps {
+                        dir("${workspace}/app")
+                        sh 'docker ps'
+                    }
+                }
+
+                // stage('Build docker image')
+                // {
+                    
+                // }
             }
-        
         }
     }
 }
