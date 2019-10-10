@@ -25,15 +25,17 @@ pipeline {
                 stage('Test application') {
                     when { expression { return params.Test == true } }
                     steps {
-                        dir("${workspace}/app")
-                        sh 'npm run test'
+                        dir("${workspace}/app") {
+                            sh 'npm run test'
+                        }
                     }
                 }
 
                 stage('Build application') {
                     steps {
-                        dir("${workspace}/app")
-                        sh 'docker ps'
+                        dir("${workspace}/app") {
+                            sh 'docker ps'
+                        }
                     }
                 }
 
