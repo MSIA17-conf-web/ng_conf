@@ -23,7 +23,8 @@ pipeline {
             stages {
                 stage('Test') {
                     steps {
-                        sh 'ls'
+                        print "${workspace}"
+                        sh 'echo $worksace'
                     }
                 }
             }
