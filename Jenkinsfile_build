@@ -22,7 +22,9 @@ pipeline {
             when { expression { return params.Refresh == false } }
             stages {
                 stage('Test') {
-                    sh 'ls'
+                    steps {
+                        sh 'ls'
+                    }
                 }
             }
         
