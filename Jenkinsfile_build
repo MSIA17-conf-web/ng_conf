@@ -1,0 +1,31 @@
+
+pipeline {
+
+    agent any
+    
+    parameters {
+            booleanParam(name: 'Refresh', defaultValue: false, description: 'Read Jenkinsfile and exit.')
+            booleanParam(name: 'Test', defaultValue: true, description: 'Pass test')
+    }
+
+    environment {
+
+    }
+
+    stages {
+        stage('Read Jenkinsfile') {
+            when { expression { return params.Refresh == true } }
+            steps { echo("Read Jenkinsfile to refresh properties.") }
+        }
+
+        stage('Run Jenkinsfile') {
+            when { expression { return params.Refresh == false } }
+            stages {
+                stage('Test') {
+                    sh 'ls'
+                }
+            }
+        
+        }
+    }
+}

@@ -7,6 +7,7 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
+    "prod": "node ./servers/prod_server.js",
     "e2e": "ng e2e"
   },
   "private": true,
@@ -21,7 +22,11 @@
     "@angular/router": "~8.2.8",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
-    "zone.js": "~0.9.1"
+    "zone.js": "~0.9.1",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "dotenv": "^7.0.0",
+    "express": "^4.16.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.803.6",

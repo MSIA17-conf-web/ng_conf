@@ -1,5 +1,7 @@
 FROM node:lts-slim
 
+RUN for i in {1..8}; do mkdir -p "/usr/share/man/man$i"; done
+
 RUN apt-get update
 
 RUN apt-get install git wget curl iputils-ping net-tools zsh -y

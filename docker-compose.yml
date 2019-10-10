@@ -1,9 +1,10 @@
 version: "3.4"
 
 services:
-  ng_conf:
+  ng_conf_dev:
     container_name: ng_conf
     hostname: ng_conf
+    restart: always
     build: 
       context: .
       dockerfile: Dockerfile_dev
@@ -13,6 +14,18 @@ services:
     ports:
       - 4200:4200
     stdin_open: true
+
+  # ng_conf:
+  #   container_name: ng_conf
+  #   hostname: ng_conf
+  #   build: 
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   volumes: 
+  #     - ./app:/app
+  #     - cert-handler_certbot-letsencrypt:/etc/letsencrypt
+  #   ports:
+  #     - 443:443
 
 volumes:
   cert-handler_certbot-letsencrypt:
