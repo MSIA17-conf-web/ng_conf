@@ -12,7 +12,7 @@ services:
       - ./app:/app
       - cert-handler_certbot-letsencrypt:/etc/letsencrypt
     ports:
-      - 4200:4200
+      - 4200
     stdin_open: true
 
   # ng_conf:
