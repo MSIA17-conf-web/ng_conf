@@ -3,7 +3,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { NgModule } from '@angular/core';
 
-import { MatMenuModule, MatToolbarModule, MatIconModule, MatSidenavModule, MatListModule, MatButtonModule } from '@angular/material';
+import { ReactiveFormsModule } from "@angular/forms";
+
+import {
+  MatMenuModule, MatToolbarModule, MatIconModule,
+  MatSidenavModule, MatListModule, MatButtonModule,
+  MatStepperModule, MatInputModule, MatFormFieldModule
+} from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -29,7 +35,11 @@ import { SignUpComponent } from './components/sign-up/sign-up.component';
     MatIconModule,
     MatSidenavModule,
     MatListModule,
-    MatButtonModule
+    MatButtonModule,
+    MatStepperModule,
+    MatInputModule,
+    MatFormFieldModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
