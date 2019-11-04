@@ -21,10 +21,12 @@
       </mat-form-field>
       <mat-checkbox formControlName="vehicle">Serez-vous véhiculé ?</mat-checkbox>
       <button mat-button matStepperNext type="submit" [disabled]="userForm.invalid">Les conférences</button>
+      <button mat-button matStepperNext type="button" (click)="fillForm()">Remplir form</button>
     </form>
   </mat-step>
   <mat-step [stepControl]="secondFormGroup">
     <ng-template matStepLabel>Les conférences qui vous intéresse</ng-template>
+    
     <div>
       <button mat-button matStepperPrevious>Vos informations</button>
       <button mat-button matStepperNext>Récapitulatif</button>

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
 @Component({
   selector: 'app-sign-up-page',
   templateUrl: './sign-up-page.component.html',
@@ -30,5 +29,16 @@ export class SignUpPageComponent implements OnInit {
   onSubmitUserInfo() {
     const userFormValue = this.userForm.value;
     console.log(userFormValue);
+  }
+
+  fillForm() {
+    this.userForm.setValue({
+      email : "willineito@gmail.com",
+      fName : "test",
+      lName : "test",
+      company : "test",
+      position : "test",
+      vehicle : true,
+    })
   }
 }
