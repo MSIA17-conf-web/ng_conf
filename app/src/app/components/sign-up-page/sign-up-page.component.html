@@ -1,0 +1,44 @@
+<mat-horizontal-stepper linear #stepper>
+  <mat-step [stepControl]="firstFormGroup">
+    <ng-template matStepLabel>Vos informations</ng-template>
+    <div>
+      <form [formGroup]="userForm" (ngSubmit)="onSubmitForm()" fxLayout="column" fxLayoutAlign="start">
+        <mat-form-field>
+          <input matInput type="text" class="form-control" id="email" formControlName="email"
+            placeholder="Adresse email">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="text" class="form-control" id="fName" formControlName="fName" placeholder="Prénom">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="text" class="form-control" id="lName" formControlName="lName" placeholder="Nom">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="text" class="form-control" id="company" formControlName="company"
+            placeholder="Nom de votre entreprise">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="text" class="form-control" id="position" formControlName="position"
+            placeholder="Intitulé de votre poste">
+        </mat-form-field>
+        <mat-checkbox formControlName="vehicle">Serez-vous véhiculé ?</mat-checkbox>
+      </form>
+      <button mat-button matStepperNext>Les conférences</button>
+    </div>
+  </mat-step>
+  <mat-step [stepControl]="secondFormGroup">
+    <ng-template matStepLabel>Les conférences qui vous intéresse</ng-template>
+    <div>
+      <button mat-button matStepperPrevious>Vos informations</button>
+      <button mat-button matStepperNext>Récapitulatif</button>
+    </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    You are now done.
+    <div>
+      <button mat-button matStepperPrevious>Les conférences</button>
+      <button mat-button (click)="stepper.reset()">Réinitialiser</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
