@@ -1,5 +1,5 @@
 <mat-horizontal-stepper linear #stepper>
-  <mat-step [stepControl]="firstFormGroup">
+  <mat-step [stepControl]="userForm">
     <ng-template matStepLabel>Vos informations</ng-template>
     <form [formGroup]="userForm" (ngSubmit)="onSubmitUserInfo()" fxLayout="column" fxLayoutAlign="start">
       <mat-form-field>
