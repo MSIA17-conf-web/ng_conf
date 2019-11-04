@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-  
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 @Component({
   selector: 'app-sign-up-page',
   templateUrl: './sign-up-page.component.html',
   styleUrls: ['./sign-up-page.component.scss']
 })
 export class SignUpPageComponent implements OnInit {
-  
+
   userForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder) { }
@@ -18,12 +18,17 @@ export class SignUpPageComponent implements OnInit {
 
   initForm() {
     this.userForm = this.formBuilder.group({
-      email: '',
-      fName: '',
-      lName: '',
-      company: '',
-      position: '',
-      vehicle: false
+      email: ['', [Validators.required, Validators.email, Validators.maxLength(70)]],
+      fName: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(2)]],
+      lName: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(2)]],
+      company: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(2)]],
+      position: ['', [Validators.required, Validators.maxLength(60), Validators.minLength(2)]],
+      vehicle: [false, [Validators.required]]
     })
+  }
+
+  onSubmitUserInfo() {
+    const userFormValue = this.userForm.value;
+    console.log(userFormValue);
   }
 }

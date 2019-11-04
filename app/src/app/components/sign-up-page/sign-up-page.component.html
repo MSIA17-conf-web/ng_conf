@@ -1,30 +1,27 @@
 <mat-horizontal-stepper linear #stepper>
   <mat-step [stepControl]="firstFormGroup">
     <ng-template matStepLabel>Vos informations</ng-template>
-    <div>
-      <form [formGroup]="userForm" (ngSubmit)="onSubmitForm()" fxLayout="column" fxLayoutAlign="start">
-        <mat-form-field>
-          <input matInput type="text" class="form-control" id="email" formControlName="email"
-            placeholder="Adresse email">
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput type="text" class="form-control" id="fName" formControlName="fName" placeholder="Prénom">
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput type="text" class="form-control" id="lName" formControlName="lName" placeholder="Nom">
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput type="text" class="form-control" id="company" formControlName="company"
-            placeholder="Nom de votre entreprise">
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput type="text" class="form-control" id="position" formControlName="position"
-            placeholder="Intitulé de votre poste">
-        </mat-form-field>
-        <mat-checkbox formControlName="vehicle">Serez-vous véhiculé ?</mat-checkbox>
-      </form>
-      <button mat-button matStepperNext>Les conférences</button>
-    </div>
+    <form [formGroup]="userForm" (ngSubmit)="onSubmitUserInfo()" fxLayout="column" fxLayoutAlign="start">
+      <mat-form-field>
+        <input matInput type="text" class="form-control" id="email" formControlName="email" placeholder="Adresse email">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="text" class="form-control" id="fName" formControlName="fName" placeholder="Prénom">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="text" class="form-control" id="lName" formControlName="lName" placeholder="Nom">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="text" class="form-control" id="company" formControlName="company"
+          placeholder="Nom de votre entreprise">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="text" class="form-control" id="position" formControlName="position"
+          placeholder="Intitulé de votre poste">
+      </mat-form-field>
+      <mat-checkbox formControlName="vehicle">Serez-vous véhiculé ?</mat-checkbox>
+      <button mat-button matStepperNext type="submit" [disabled]="userForm.invalid">Les conférences</button>
+    </form>
   </mat-step>
   <mat-step [stepControl]="secondFormGroup">
     <ng-template matStepLabel>Les conférences qui vous intéresse</ng-template>

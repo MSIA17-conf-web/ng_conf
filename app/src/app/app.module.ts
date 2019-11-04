@@ -15,7 +15,6 @@ import { HomeComponent } from './components/home/home.component';
 import { DefaultTemplateComponent } from './components/default-template/default-template.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { SignUpPageComponent } from './components/sign-up-page/sign-up-page.component';
-import { UserInformationsService } from "./services/user-informations.service";
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,7 +40,7 @@ import { UserInformationsService } from "./services/user-informations.service";
     ReactiveFormsModule,
     FlexLayoutModule
   ],
-  providers: [UserInformationsService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
