@@ -1,1 +1,22 @@
 <p>contact works!</p>
+
+<form [formGroup]="contactForm" (ngSubmit)="onSubmit()" fxLayout="column" fxLayoutAlign="start">
+    <mat-form-field>
+        <input matInput type="text" class="form-control" id="lastName" formControlName="lastName" placeholder="Nom">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput type="text" class="form-control" id="firstName" formControlName="firstName"
+            placeholder="Prénom">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput type="email" class="form-control" id="userEmail" formControlName="userEmail"
+            placeholder="Adresse email">
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput type="text" class="form-control" id="emailMessage" formControlName="emailMessage"
+            placeholder="Votre message">
+    </mat-form-field>
+    <button mat-button type="submit" [disabled]="contactForm.invalid">Envoyer l'email</button>
+    <button mat-button type="reset">Réinitiliser</button>
+</form>
