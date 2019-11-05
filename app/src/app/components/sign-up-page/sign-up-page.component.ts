@@ -85,7 +85,7 @@ export class SignUpPageComponent implements OnInit {
       description: "Creneau Matin",
       startTime: "11:00",
       endTime: "12:00",
-      activities: this.mockConferences[0]
+      conferences: this.mockConferences[0]
     },
     {
       crenId: "creneau2",
@@ -93,7 +93,7 @@ export class SignUpPageComponent implements OnInit {
       description: "Creneau AM 1",
       startTime: "14:00",
       endTime: "15:00",
-      activities: this.mockConferences[1]
+      conferences: this.mockConferences[1]
     },
     {
       crenId: "creneau3",
@@ -101,7 +101,7 @@ export class SignUpPageComponent implements OnInit {
       description: "Creneau AM 2",
       startTime: "15:00",
       endTime: "16:00",
-      activities: this.mockConferences[2]
+      conferences: this.mockConferences[2]
     }
   ];
 
@@ -147,7 +147,7 @@ export class SignUpPageComponent implements OnInit {
     console.log(confFormValue);
 
     Object.keys(confFormValue).forEach(key => {
-      console.log(this.mockCreneau.find(cren => cren.crenId === key).activities[confFormValue[key]].name);
+      console.log(this.mockCreneau.find(cren => cren.crenId === key).conferences[confFormValue[key]].name);
     });
   }
 

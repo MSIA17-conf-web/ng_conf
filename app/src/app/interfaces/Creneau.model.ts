@@ -1,10 +1,10 @@
-import { Conference } from "./Conferences.model";
+import { Conference } from './Conferences.model';
 
 export interface Creneau {
-    crenId: string;
+    crenId?: string;
     crenName: string;
     description: string;
     startTime: string;
     endTime: string;
-    activities: Array<Conference>;
+    conferences: Array<Conference>;
 }

@@ -30,7 +30,7 @@
       <div *ngFor="let creneau of mockCreneau, let i = index">
       <label [for]="creneau.crenId">{{ creneau.description }}</label>
       <mat-radio-group [id]="creneau.crenId" fxLayout="column" fxLayoutAlign="start" [formControlName]="creneau.crenId">
-        <mat-radio-button *ngFor="let conf of creneau.activities, let y = index" [value]="y" >{{ conf.name }}</mat-radio-button>
+        <mat-radio-button *ngFor="let conf of creneau.conferences, let y = index" [value]="y" >{{ conf.name }}</mat-radio-button>
         <mat-radio-button value='-1'>Aucune</mat-radio-button>
       </mat-radio-group>
     </div>

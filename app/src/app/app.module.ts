@@ -19,11 +19,12 @@ import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { SignUpPageComponent } from './components/sign-up-page/sign-up-page.component';
 import { AboutComponent } from './components/about/about.component';
 import { ContactComponent } from './components/contact/contact.component';
+import { OpenContactResponseDialogComponent } from './components/contact/manage/open-contact-response-dialog/open-contact-response-dialog.component';
 
 import { ContactFormValidatorDirective } from './directives/contact-form-validator.directive';
 
 import { EmailService } from './services/email/email.service';
-import { OpenContactResponseDialogComponent } from './components/contact/manage/open-contact-response-dialog/open-contact-response-dialog.component';
+import { ConferencesService } from './services/conferences/conferences.service';
 
 @NgModule({
   declarations: [
@@ -57,10 +58,8 @@ import { OpenContactResponseDialogComponent } from './components/contact/manage/
     FlexLayoutModule,
     HttpClientModule
   ],
-  entryComponents : [
-    OpenContactResponseDialogComponent
-  ],
-  providers: [EmailService],
+  entryComponents : [OpenContactResponseDialogComponent],
+  providers: [EmailService, ConferencesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
