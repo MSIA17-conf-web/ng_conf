@@ -1,0 +1,8 @@
+<div mat-dialog-content>
+    <div *ngIf="data.send">Merci pour votre demande, elle sera traité dans les plus bref délais.</div>
+    <div *ngIf="!data.send">Erreur durant l'envoi de votre message, veuillez réesayer ultérieuement.<br />
+        Si le problème persiste veuillez directement nous contacter à l'adresse <a href="mailto:msia17conferences@gmail.com?subject='Heya, custom subject'&body=Woah, I'm writing the email for you O.O">msia17conferences@gmail.com</a></div>
+</div>
+<div mat-dialog-actions align="end">
+    <button mat-button (click)="closeDialog()">Fermer</button>
+</div>

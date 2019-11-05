@@ -1,13 +1,15 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from "@angular/forms";
+import { ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { HttpClientModule } from '@angular/common/http';
 import {
   MatMenuModule, MatToolbarModule, MatIconModule,
   MatSidenavModule, MatListModule, MatButtonModule,
-  MatStepperModule, MatInputModule, MatFormFieldModule, MatCheckboxModule, MatRadioModule
+  MatStepperModule, MatInputModule, MatFormFieldModule,
+  MatCheckboxModule, MatRadioModule, MatDialogModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -17,6 +19,12 @@ import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { SignUpPageComponent } from './components/sign-up-page/sign-up-page.component';
 import { AboutComponent } from './components/about/about.component';
 import { ContactComponent } from './components/contact/contact.component';
+
+import { ContactFormValidatorDirective } from './directives/contact-form-validator.directive';
+
+import { EmailService } from './services/email/email.service';
+import { OpenContactResponseDialogComponent } from './components/contact/manage/open-contact-response-dialog/open-contact-response-dialog.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,6 +34,8 @@ import { ContactComponent } from './components/contact/contact.component';
     SignUpPageComponent,
     AboutComponent,
     ContactComponent,
+    // ContactFormValidatorDirective,
+    OpenContactResponseDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -42,10 +52,15 @@ import { ContactComponent } from './components/contact/contact.component';
     MatFormFieldModule,
     MatCheckboxModule,
     MatRadioModule,
+    MatDialogModule,
     ReactiveFormsModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    HttpClientModule
   ],
-  providers: [],
+  entryComponents : [
+    OpenContactResponseDialogComponent
+  ],
+  providers: [EmailService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
