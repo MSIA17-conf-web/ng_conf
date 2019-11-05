@@ -12,6 +12,8 @@ export class SignUpPageComponent implements OnInit {
 
   userForm: FormGroup;
   confForm: FormGroup;
+  validatedUserFormValue: object = {};
+  validatedConfFormValue: object = {};
 
   mockConferences: Array<Conference[]> = [
     [
@@ -78,6 +80,7 @@ export class SignUpPageComponent implements OnInit {
 
   mockCreneau: Array<Creneau> = [
     {
+      crenId: "creneau1",
       crenName: "Creneau 1",
       description: "Creneau Matin",
       startTime: "11:00",
@@ -85,6 +88,7 @@ export class SignUpPageComponent implements OnInit {
       activities: this.mockConferences[0]
     },
     {
+      crenId: "creneau2",
       crenName: "Creneau 2",
       description: "Creneau AM 1",
       startTime: "14:00",
@@ -92,6 +96,7 @@ export class SignUpPageComponent implements OnInit {
       activities: this.mockConferences[1]
     },
     {
+      crenId: "creneau3",
       crenName: "Creneau 3",
       description: "Creneau AM 2",
       startTime: "15:00",
@@ -116,15 +121,38 @@ export class SignUpPageComponent implements OnInit {
       position: ['', [Validators.required, Validators.maxLength(60), Validators.minLength(2)]],
       vehicle: [false, [Validators.required]]
     });
+    console.log(this.userForm);
+
   }
 
   initConfForm() {
 
+      this.confForm = this.formBuilder.group({});
+      this.mockCreneau.forEach(creneau => {
+        this.confForm.addControl(creneau.crenId, this.formBuilder.control(null, [Validators.required]));
+      });
+      console.log(this.confForm);
   }
 
   onSubmitUserInfo() {
     const userFormValue = this.userForm.value;
+    this.validatedUserFormValue = this.userForm.value;
     console.log(userFormValue);
+
+  }
+
+  onSubmitConf() {
+    const confFormValue = this.confForm.value;
+    this.validatedConfFormValue = this.confForm.value;
+    console.log(confFormValue);
+
+    Object.keys(confFormValue).forEach(key => {
+      console.log(this.mockCreneau.find(cren => cren.crenId === key).activities[confFormValue[key]].name);
+    });
+  }
+
+  validateSignUp() {
+    console.log(this.validatedUserFormValue, this.validatedConfFormValue);
   }
 
   fillUserInfoForm() {

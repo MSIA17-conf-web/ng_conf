@@ -24,18 +24,20 @@
       <button mat-button matStepperNext type="button" (click)="fillUserInfoForm()">Remplir form</button>
     </form>
   </mat-step>
-  <mat-step [stepControl]="">
+  <mat-step [stepControl]="confForm">
     <ng-template matStepLabel>Les conférences qui vous intéresse</ng-template>
-    <form [formGroup]="" (ngSubmit)="onSubmitUserInfo()" fxLayout="column" fxLayoutAlign="start">
-      <div *ngFor="let creneau of mockCreneau">
-      <label [for]="creneau.crenName">{{ creneau.description }}</label>
-      <mat-radio-group [id]="creneau.crenName" fxLayout="column" fxLayoutAlign="start">
-        <mat-radio-button *ngFor="let conf of creneau.activities, let i = index" [value]="i">{{ conf.name }}</mat-radio-button>
+    <form [formGroup]="confForm" (ngSubmit)="onSubmitConf()" fxLayout="column" fxLayoutAlign="start">
+      <div *ngFor="let creneau of mockCreneau, let i = index">
+      <label [for]="creneau.crenId">{{ creneau.description }}</label>
+      <mat-radio-group [id]="creneau.crenId" fxLayout="column" fxLayoutAlign="start" [formControlName]="creneau.crenId">
+        <mat-radio-button *ngFor="let conf of creneau.activities, let y = index" [value]="y" >{{ conf.name }}</mat-radio-button>
+        <mat-radio-button value='-1'>Aucune</mat-radio-button>
       </mat-radio-group>
     </div>
     <div>
       <button mat-button matStepperPrevious>Vos informations</button>
-      <button mat-button matStepperNext>Récapitulatif</button>
+      <button mat-button matStepperNext type="submit" [disabled]="confForm.invalid">Récapitulatif</button>
+      <button mat-button type="submit" [disabled]="confForm.invalid">log form value</button>
     </div>
   </form>
   </mat-step>
@@ -45,6 +47,7 @@
     <div>
       <button mat-button matStepperPrevious>Les conférences</button>
       <button mat-button (click)="stepper.reset()">Réinitialiser</button>
+      <button mat-button (click)="validateSignUp()">Valider</button>
     </div>
   </mat-step>
 </mat-horizontal-stepper>
