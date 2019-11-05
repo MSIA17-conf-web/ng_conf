@@ -7,7 +7,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import {
   MatMenuModule, MatToolbarModule, MatIconModule,
   MatSidenavModule, MatListModule, MatButtonModule,
-  MatStepperModule, MatInputModule, MatFormFieldModule, MatCheckboxModule
+  MatStepperModule, MatInputModule, MatFormFieldModule, MatCheckboxModule, MatRadioModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -41,6 +41,7 @@ import { ContactComponent } from './components/contact/contact.component';
     MatInputModule,
     MatFormFieldModule,
     MatCheckboxModule,
+    MatRadioModule,
     ReactiveFormsModule,
     FlexLayoutModule
   ],

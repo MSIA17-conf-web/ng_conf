@@ -21,16 +21,23 @@
       </mat-form-field>
       <mat-checkbox formControlName="vehicle">Serez-vous véhiculé ?</mat-checkbox>
       <button mat-button matStepperNext type="submit" [disabled]="userForm.invalid">Les conférences</button>
-      <button mat-button matStepperNext type="button" (click)="fillForm()">Remplir form</button>
+      <button mat-button matStepperNext type="button" (click)="fillUserInfoForm()">Remplir form</button>
     </form>
   </mat-step>
-  <mat-step [stepControl]="secondFormGroup">
+  <mat-step [stepControl]="">
     <ng-template matStepLabel>Les conférences qui vous intéresse</ng-template>
-    
+    <form [formGroup]="" (ngSubmit)="onSubmitUserInfo()" fxLayout="column" fxLayoutAlign="start">
+      <div *ngFor="let creneau of mockCreneau">
+      <label [for]="creneau.crenName">{{ creneau.description }}</label>
+      <mat-radio-group [id]="creneau.crenName" fxLayout="column" fxLayoutAlign="start">
+        <mat-radio-button *ngFor="let conf of creneau.activities, let i = index" [value]="i">{{ conf.name }}</mat-radio-button>
+      </mat-radio-group>
+    </div>
     <div>
       <button mat-button matStepperPrevious>Vos informations</button>
       <button mat-button matStepperNext>Récapitulatif</button>
     </div>
+  </form>
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>
