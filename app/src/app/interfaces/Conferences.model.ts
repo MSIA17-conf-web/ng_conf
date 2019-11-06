@@ -1,5 +1,5 @@
 export interface Conference {
-  confid ?: string;
+  confId ?: string;
   name: string;
   shortDesc: string;
   MDlink: string;

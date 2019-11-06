@@ -27,10 +27,10 @@
   <mat-step [stepControl]="confForm">
     <ng-template matStepLabel>Les conférences qui vous intéresse</ng-template>
     <form [formGroup]="confForm" (ngSubmit)="onSubmitConf()" fxLayout="column" fxLayoutAlign="start">
-      <div *ngFor="let creneau of mockCreneau, let i = index">
-      <label [for]="creneau.crenId">{{ creneau.description }}</label>
+      <div *ngFor="let creneau of cfCreneau, let i = index">
+      <label [for]="creneau.crenId">{{ creneau.crenDesc }}</label>
       <mat-radio-group [id]="creneau.crenId" fxLayout="column" fxLayoutAlign="start" [formControlName]="creneau.crenId">
-        <mat-radio-button *ngFor="let conf of creneau.conferences, let y = index" [value]="y" >{{ conf.name }}</mat-radio-button>
+        <mat-radio-button *ngFor="let conf of creneau.conferences, let y = index" [value]="y" >{{ conf.confName }}</mat-radio-button>
         <mat-radio-button value='-1'>Aucune</mat-radio-button>
       </mat-radio-group>
     </div>
