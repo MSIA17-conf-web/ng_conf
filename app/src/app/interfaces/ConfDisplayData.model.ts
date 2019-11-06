@@ -2,25 +2,26 @@ import { Creneau } from './generic/Creneau.model';
 import { Conference } from './generic/Conference.model';
 import { Thematique } from './generic/Thematique.model';
 
-export class CfConf extends Conference {
-  public theme: Thematique; // Array ?
+export class CdConf extends Conference {
+
+  public creneau: Creneau; // Array ?
 
   deserialize(input: any): this {
     Object.assign(this, input);
 
-    this.theme = new Thematique().deserialize(input.theme);
+    this.creneau = new Creneau().deserialize(input.creneau);
 
     return this;
   }
 }
 
-export class CfCreneau extends Creneau {
-  public conferences: Array<CfConf>;
+export class CdTheme extends Thematique {
+  public conferences: Array<CdConf>;
 
   deserialize(input: any): this {
     Object.assign(this, input);
 
-    this.conferences = input.conferences.map(conf => new CfConf().deserialize(conf));
+    this.conferences = input.conferences.map(conf => new CdConf().deserialize(conf));
 
     return this;
   }

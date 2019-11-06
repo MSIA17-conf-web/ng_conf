@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
-import { Creneau } from '../../interfaces/Creneau.model';
-import { Conference } from '../../interfaces/Conferences.model';
-import { UserInformations } from '../../interfaces/UserInformations.model';
-import { CfConf, CfCreneau, CfTheme } from '../../interfaces/ConfFormData.model';
 import { ConferencesService } from 'src/app/services/conferences/conferences.service';
+import { CfCreneau } from 'src/app/interfaces/ConfFormData.model';
 @Component({
   selector: 'app-sign-up-page',
   templateUrl: './sign-up-page.component.html',
@@ -45,7 +42,7 @@ export class SignUpPageComponent implements OnInit {
   initConfForm() {
     this.confForm = this.formBuilder.group({});
     this.cfCreneau.forEach(creneau => {
-      this.confForm.addControl(creneau.crenId, this.formBuilder.control(null, [Validators.required]));
+      this.confForm.addControl(creneau.crenId.toString(), this.formBuilder.control(null, [Validators.required]));
     });
     console.log(this.confForm);
   }
@@ -61,10 +58,6 @@ export class SignUpPageComponent implements OnInit {
     const confFormValue = this.confForm.value;
     this.validatedConfFormValue = this.confForm.value;
     console.log(confFormValue);
-
-    Object.keys(confFormValue).forEach(key => {
-      console.log(this.cfCreneau.find(cren => cren.crenId === key).conferences[confFormValue[key]].confName);
-    });
   }
 
   validateSignUp() {

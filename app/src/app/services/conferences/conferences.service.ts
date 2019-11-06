@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
-import { CfConf, CfCreneau, CfTheme } from '../../interfaces/ConfFormData.model';
 import { HttpClient } from '@angular/common/http';
-import { Creneau } from 'src/app/interfaces/Creneau.model';
-import { Conference } from 'src/app/interfaces/Conferences.model';
 import { map } from 'rxjs/operators';
+import { CfCreneau } from 'src/app/interfaces/ConfFormData.model';
 
 @Injectable({
   providedIn: 'root'
