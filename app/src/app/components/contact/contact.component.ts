@@ -33,11 +33,11 @@ export class ContactComponent implements OnInit {
 
   onSubmit() {
     const contactFormValue = this.contactForm.value;
-    
+
     this.emailService.sendContactEmail(contactFormValue)
       .then(res => {
         this.openContactResponseDialog(res.result, null);
-        let messageEmail = this.contactForm.controls['messageEmail'];
+        const messageEmail = this.contactForm.controls['messageEmail'];
         messageEmail.setValue('');
         messageEmail.setErrors(null);
       })
@@ -50,7 +50,7 @@ export class ContactComponent implements OnInit {
   openContactResponseDialog(bool, emailData) {
     const dialogRef = this.dialog.open(OpenContactResponseDialogComponent, {
       width: '300px',
-      data: { isEmailSend: bool,  emailData: emailData }
+      data: { isEmailSend: bool,  emailData: {emailData} }
     });
 
     dialogRef.afterClosed().subscribe();
