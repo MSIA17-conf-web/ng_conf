@@ -29,5 +29,5 @@
     <button mat-button type="submit" [disabled]="contactForm.invalid">Envoyer l'email</button>
     <button mat-button type="reset">Réinitiliser</button>
     <span mat-button (click)="openContactResponseDialog(true)">Dialog OK</span>
-    <span mat-button (click)="openContactResponseDialog(false)">Dialog error</span>
+    <span mat-button (click)="openContactResponseDialog(false, contactForm.value)">Dialog error</span>
 </form>

@@ -33,20 +33,24 @@ export class ContactComponent implements OnInit {
 
   onSubmit() {
     const contactFormValue = this.contactForm.value;
+    
     this.emailService.sendContactEmail(contactFormValue)
-      .then(res => this.openContactResponseDialog(res.result))
+      .then(res => {
+        this.openContactResponseDialog(res.result, null);
+        let messageEmail = this.contactForm.controls['messageEmail'];
+        messageEmail.setValue('');
+        messageEmail.setErrors(null);
+      })
       .catch(err => {
         console.log(err);
-        this.openContactResponseDialog(false);
+        this.openContactResponseDialog(false, contactFormValue);
       });
   }
 
-  openContactResponseDialog(value) {
-    console.log('openContactResponseDialog', value);
-    
+  openContactResponseDialog(bool, emailData) {
     const dialogRef = this.dialog.open(OpenContactResponseDialogComponent, {
       width: '300px',
-      data: { send: value }
+      data: { isEmailSend: bool,  emailData: emailData }
     });
 
     dialogRef.afterClosed().subscribe();

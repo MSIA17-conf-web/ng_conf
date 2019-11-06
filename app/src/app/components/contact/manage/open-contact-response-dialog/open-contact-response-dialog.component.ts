@@ -8,10 +8,24 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./open-contact-response-dialog.component.scss']
 })
 export class OpenContactResponseDialogComponent implements OnInit {
+  isEmailSend: boolean;
+  emailData: string;
 
-  constructor(public dialogRef: MatDialogRef<OpenContactResponseDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { }
+  constructor(public dialogRef: MatDialogRef<OpenContactResponseDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
+  }
 
   ngOnInit() {
+    this.isEmailSend = this.data.isEmailSend;
+    this.emailData = this.customizeEmailError(this.data.emailData);
+  }
+
+  customizeEmailError(data) {
+    if (!this.isEmailSend) {
+      return 'mailto:msia17conferences@gmail.com?subject=' + data.lastName + ' ' + data.firstName + ' cherche à vous contacter'
+         + '&body=' + data.messageEmail;
+    }
+
+    return null;
   }
 
   closeDialog(): void {
