@@ -20,6 +20,7 @@ import { SignUpPageComponent } from './components/sign-up-page/sign-up-page.comp
 import { AboutComponent } from './components/about/about.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { OpenContactResponseDialogComponent } from './components/contact/manage/open-contact-response-dialog/open-contact-response-dialog.component';
+import { ConferencesComponent } from './components/conferences/conferences.component';
 
 import { ContactFormValidatorDirective } from './directives/contact-form-validator.directive';
 
@@ -37,6 +38,7 @@ import { ConferencesService } from './services/conferences/conferences.service';
     ContactComponent,
     // ContactFormValidatorDirective,
     OpenContactResponseDialogComponent,
+    ConferencesComponent,
   ],
   imports: [
     BrowserModule,
