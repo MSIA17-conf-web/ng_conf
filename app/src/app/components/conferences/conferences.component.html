@@ -1,1 +1,16 @@
-<p>conferences works!</p>
+<div>
+    <mat-tab-group>
+        <mat-tab *ngFor="let theme of cdThemeList" [label]="theme.themeName">
+            <mat-list role="list">
+                <mat-tab-group>
+                    <mat-tab label="Présentation générale">
+                        <markdown [data]="markdownChanged(theme.themeMDlink)"></markdown>
+                    </mat-tab>
+                    <mat-tab *ngFor="let conference of theme.conferences;" [label]="conference.confName">
+                        <markdown [data]="markdownChanged(conference.confMDlink)"></markdown>
+                    </mat-tab>
+                </mat-tab-group>
+            </mat-list>
+        </mat-tab>
+    </mat-tab-group>
+</div>

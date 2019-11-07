@@ -5,11 +5,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
+import { MarkdownModule } from 'ngx-markdown';
 import {
   MatMenuModule, MatToolbarModule, MatIconModule,
   MatSidenavModule, MatListModule, MatButtonModule,
   MatStepperModule, MatInputModule, MatFormFieldModule,
-  MatCheckboxModule, MatRadioModule, MatDialogModule
+  MatCheckboxModule, MatRadioModule, MatDialogModule,
+  MatTabsModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -60,9 +62,11 @@ import { TokenSentDialogComponent } from './components/sign-up-page/dialog/token
     MatCheckboxModule,
     MatRadioModule,
     MatDialogModule,
+    MatTabsModule,
     ReactiveFormsModule,
     FlexLayoutModule,
-    HttpClientModule
+    HttpClientModule,
+    MarkdownModule.forRoot()
   ],
   entryComponents : [OpenContactResponseDialogComponent, AlreadyExistDialogComponent, TokenSentDialogComponent],
   providers: [EmailService, ConferencesService],
