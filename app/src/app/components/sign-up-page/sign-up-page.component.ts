@@ -5,6 +5,8 @@ import { CfCreneau } from 'src/app/interfaces/ConfFormData.model';
 import { UserInformations } from 'src/app/interfaces/generic/UserInformations.model';
 import { MatDialog } from '@angular/material';
 import { AlreadyExistDialogComponent } from './dialog/already-exist-dialog/already-exist-dialog.component';
+import { EmailService } from 'src/app/services/email/email.service';
+import { TokenSentDialogComponent } from './dialog/token-sent-dialog/token-sent-dialog.component';
 
 @Component({
   selector: 'app-sign-up-page',
@@ -24,9 +26,10 @@ export class SignUpPageComponent implements OnInit {
   cfCreneau: Array<CfCreneau>;
 
   constructor(private formBuilder: FormBuilder,
-              private conferencesService: ConferencesService,
-              public dialog: MatDialog
-    ) { }
+    private conferencesService: ConferencesService,
+    private emailService: EmailService,
+    public dialog: MatDialog
+  ) { }
 
   ngOnInit() {
     // this.mockCreneau = this.conferencesService.mockCreneau;
@@ -37,9 +40,20 @@ export class SignUpPageComponent implements OnInit {
     });
   }
 
+  openTokenSentDialog(user: UserInformations): void {
+    const dialogRef = this.dialog.open(TokenSentDialogComponent, {
+      width: '500px',
+      data: { user }
+    });
+
+    dialogRef.afterClosed().subscribe(data => {
+      console.log('Token sent dialog closed');
+    });
+  }
+
   openAlreadyExistDialog(email): void {
     const dialogRef = this.dialog.open(AlreadyExistDialogComponent, {
-      width: "570px",
+      width: '570px',
       data: email
     });
 
@@ -57,7 +71,7 @@ export class SignUpPageComponent implements OnInit {
       position: ['', [Validators.required, Validators.maxLength(60), Validators.minLength(2)]],
       vehicle: [false, [Validators.required]]
     });
-    console.log(this.userForm);
+    // console.log(this.userForm);
   }
 
   initConfForm() {
@@ -65,14 +79,14 @@ export class SignUpPageComponent implements OnInit {
     this.cfCreneau.forEach(creneau => {
       this.confForm.addControl(creneau.crenId.toString(), this.formBuilder.control(null, [Validators.required]));
     });
-    console.log(this.confForm);
+    // console.log(this.confForm);
   }
 
   onSubmitUserInfo() {
     const userFormValue = this.userForm.value;
     this.validatedUserFormValue = this.userForm.value;
     this.utilsUserForm.keys = Object.keys(this.validatedUserFormValue);
-    console.log(userFormValue);
+    console.log('User form values', userFormValue);
 
   }
 
@@ -87,13 +101,45 @@ export class SignUpPageComponent implements OnInit {
         return this.validatedConfFormValue[i + 1].confId;
       }
     });
-    console.log(confFormValue, this.utilsConfForm);
+    console.log('Conf form values', confFormValue, this.utilsConfForm);
   }
 
   validateSignUp() {
-    console.log(this.validatedUserFormValue, this.validatedConfFormValue);
+    // console.log(this.validatedUserFormValue, this.validatedConfFormValue);
     const u = this.validatedUserFormValue;
-    this.conferencesService.createUser(new UserInformations(
+    const token = this.generateToken(16);
+    const user = new UserInformations(
+      u.lName,
+      u.fName,
+      u.company,
+      u.email,
+      u.position,
+      u.vehicle,
+      false,
+      token,
+      this.utilsConfForm.ids
+    );
+    this.conferencesService.createUser(user).subscribe(data => {
+      console.log(data);
+      if (data.err) {
+        this.openAlreadyExistDialog(u.email);
+      } else {
+        console.log('Sending email confirmation');
+        this.emailService.sendEmail({
+          templateName: 'tokenEmailTemplate',
+          email: user.email,
+          fName: user.fName,
+          url: '',
+        });
+        this.openTokenSentDialog(user);
+      }
+    });
+  }
+
+  log() {
+    console.log(this.generateToken(16));
+    const u = this.validatedUserFormValue;
+    const user = new UserInformations(
       u.lName,
       u.fName,
       u.company,
@@ -103,12 +149,8 @@ export class SignUpPageComponent implements OnInit {
       false,
       '',
       this.utilsConfForm.ids
-    )).subscribe(data => {
-      console.log(data);
-      if (data.err) {
-        this.openAlreadyExistDialog(u.email);
-      }
-    });
+    );
+    console.log(btoa(JSON.stringify(user)));
   }
 
   fillUserInfoForm() {
@@ -124,5 +166,14 @@ export class SignUpPageComponent implements OnInit {
 
   isNone(conf) {
     return conf === '-1';
+  }
+  dec2hex(dec) {
+    return ('0' + dec.toString(16)).substr(-2);
+  }
+
+  generateToken(len) {
+    const arr = new Uint8Array((len || 40) / 2);
+    window.crypto.getRandomValues(arr);
+    return Array.from(arr, this.dec2hex).join('');
   }
 }

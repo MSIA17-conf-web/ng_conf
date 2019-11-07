@@ -8,11 +8,23 @@ export class EmailService {
 
   constructor(private httpClient: HttpClient) { }
 
-
+  sendEmail(options) {
+    return this.httpClient.post<any>('https://msia17conferences.com:9010/api', {
+      method: 'POST',
+      url: 'sendEmail',
+      baseURL: 'http://email_api:9010',
+      body: {
+        templateName: options.templateName,
+        email: options.email,
+        fName: options.fName,
+        url: options.url
+      }
+    });
+  }
   sendContactEmail(values): Promise<any> {
     return new Promise((resolve, reject) => {
       console.log('sendContactEmail', values);
-      
+
       this.httpClient
         .post('https://msia17conferences.com:9010/api', {
           method: 'POST',

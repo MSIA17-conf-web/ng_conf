@@ -27,6 +27,7 @@ import { ContactFormValidatorDirective } from './directives/contact-form-validat
 
 import { EmailService } from './services/email/email.service';
 import { ConferencesService } from './services/conferences/conferences.service';
+import { TokenSentDialogComponent } from './components/sign-up-page/dialog/token-sent-dialog/token-sent-dialog.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { ConferencesService } from './services/conferences/conferences.service';
     // ContactFormValidatorDirective,
     OpenContactResponseDialogComponent,
     ConferencesComponent,
-    AlreadyExistDialogComponent
+    AlreadyExistDialogComponent,
+    TokenSentDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -62,7 +64,7 @@ import { ConferencesService } from './services/conferences/conferences.service';
     FlexLayoutModule,
     HttpClientModule
   ],
-  entryComponents : [OpenContactResponseDialogComponent, AlreadyExistDialogComponent],
+  entryComponents : [OpenContactResponseDialogComponent, AlreadyExistDialogComponent, TokenSentDialogComponent],
   providers: [EmailService, ConferencesService],
   bootstrap: [AppComponent]
 })
