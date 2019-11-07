@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ConferencesService } from 'src/app/services/conferences/conferences.service';
 import { CfCreneau } from 'src/app/interfaces/ConfFormData.model';
+import { UserInformations } from 'src/app/interfaces/generic/UserInformations.model';
+import { MatDialog } from '@angular/material';
+import { AlreadyExistDialogComponent } from './dialog/already-exist-dialog/already-exist-dialog.component';
+
 @Component({
   selector: 'app-sign-up-page',
   templateUrl: './sign-up-page.component.html',
@@ -11,12 +15,18 @@ export class SignUpPageComponent implements OnInit {
 
   userForm: FormGroup;
   confForm: FormGroup = new FormGroup({});
-  validatedUserFormValue: object = {};
-  validatedConfFormValue: object = {};
+  validatedUserFormValue: any = {};
+  utilsUserForm: any = {};
+  validatedConfFormValue: any = {};
+  utilsConfForm: any = {};
+  noneString = 'Aucune';
   // mockCreneau: any;
   cfCreneau: Array<CfCreneau>;
 
-  constructor(private formBuilder: FormBuilder, private conferencesService: ConferencesService) { }
+  constructor(private formBuilder: FormBuilder,
+              private conferencesService: ConferencesService,
+              public dialog: MatDialog
+    ) { }
 
   ngOnInit() {
     // this.mockCreneau = this.conferencesService.mockCreneau;
@@ -24,6 +34,17 @@ export class SignUpPageComponent implements OnInit {
     this.conferencesService.getConfFormData().subscribe(res => {
       this.cfCreneau = res;
       this.initConfForm();
+    });
+  }
+
+  openAlreadyExistDialog(email): void {
+    const dialogRef = this.dialog.open(AlreadyExistDialogComponent, {
+      width: "570px",
+      data: email
+    });
+
+    dialogRef.afterClosed().subscribe(data => {
+      console.log('Already exist dialog closed');
     });
   }
 
@@ -50,6 +71,7 @@ export class SignUpPageComponent implements OnInit {
   onSubmitUserInfo() {
     const userFormValue = this.userForm.value;
     this.validatedUserFormValue = this.userForm.value;
+    this.utilsUserForm.keys = Object.keys(this.validatedUserFormValue);
     console.log(userFormValue);
 
   }
@@ -57,11 +79,36 @@ export class SignUpPageComponent implements OnInit {
   onSubmitConf() {
     const confFormValue = this.confForm.value;
     this.validatedConfFormValue = this.confForm.value;
-    console.log(confFormValue);
+    this.utilsConfForm.conf = Object.keys(this.validatedConfFormValue).map((key, i) => this.validatedConfFormValue[i + 1]);
+    this.utilsConfForm.ids = Object.keys(this.validatedConfFormValue).map((key, i) => {
+      if (this.validatedConfFormValue[i + 1] === '-1') {
+        return -1;
+      } else {
+        return this.validatedConfFormValue[i + 1].confId;
+      }
+    });
+    console.log(confFormValue, this.utilsConfForm);
   }
 
   validateSignUp() {
     console.log(this.validatedUserFormValue, this.validatedConfFormValue);
+    const u = this.validatedUserFormValue;
+    this.conferencesService.createUser(new UserInformations(
+      u.lName,
+      u.fName,
+      u.company,
+      u.email,
+      u.position,
+      u.vehicle,
+      false,
+      '',
+      this.utilsConfForm.ids
+    )).subscribe(data => {
+      console.log(data);
+      if (data.err) {
+        this.openAlreadyExistDialog(u.email);
+      }
+    });
   }
 
   fillUserInfoForm() {
@@ -73,5 +120,9 @@ export class SignUpPageComponent implements OnInit {
       position: 'Apprenti Architecte Solution',
       vehicle: true,
     });
+  }
+
+  isNone(conf) {
+    return conf === '-1';
   }
 }

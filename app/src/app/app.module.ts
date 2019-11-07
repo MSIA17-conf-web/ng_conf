@@ -21,6 +21,7 @@ import { AboutComponent } from './components/about/about.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { OpenContactResponseDialogComponent } from './components/contact/manage/open-contact-response-dialog/open-contact-response-dialog.component';
 import { ConferencesComponent } from './components/conferences/conferences.component';
+import { AlreadyExistDialogComponent } from './components/sign-up-page/dialog/already-exist-dialog/already-exist-dialog.component';
 
 import { ContactFormValidatorDirective } from './directives/contact-form-validator.directive';
 
@@ -39,6 +40,7 @@ import { ConferencesService } from './services/conferences/conferences.service';
     // ContactFormValidatorDirective,
     OpenContactResponseDialogComponent,
     ConferencesComponent,
+    AlreadyExistDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -60,7 +62,7 @@ import { ConferencesService } from './services/conferences/conferences.service';
     FlexLayoutModule,
     HttpClientModule
   ],
-  entryComponents : [OpenContactResponseDialogComponent],
+  entryComponents : [OpenContactResponseDialogComponent, AlreadyExistDialogComponent],
   providers: [EmailService, ConferencesService],
   bootstrap: [AppComponent]
 })
