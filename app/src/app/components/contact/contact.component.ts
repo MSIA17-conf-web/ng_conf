@@ -50,7 +50,7 @@ export class ContactComponent implements OnInit {
   openContactResponseDialog(bool, emailData) {
     const dialogRef = this.dialog.open(OpenContactResponseDialogComponent, {
       width: '300px',
-      data: { isEmailSend: bool,  emailData: {emailData} }
+      data: { isEmailSend: bool,  emailData: emailData }
     });
 
     dialogRef.afterClosed().subscribe();
