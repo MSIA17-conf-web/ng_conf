@@ -20,20 +20,9 @@ app.get("*", function (req, res, next) {
 app.use(cors());
 app.use(express.static(path.join(__dirname, "/..", "dist")))
 app.use(bodyParser.json())
-
-// app.use(function (req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*")
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-//   next()
-// })
 app.get("/hello", (req, res) => {
   res.send({res: "Bonjour"}).end();
 })
-// app.get("/", function (req, res) {
-//   console.log('Sending index.html');
-  
-//   res.sendFile("../dist/index.html", { root: __dirname })
-// })
 
 const httpServer = http.createServer(app)
 

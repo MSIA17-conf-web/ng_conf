@@ -13,12 +13,7 @@ export class EmailService {
       method: 'POST',
       url: 'sendEmail',
       baseURL: 'http://email_api:9010',
-      body: {
-        templateName: options.templateName,
-        email: options.email,
-        fName: options.fName,
-        url: options.url
-      }
+      body: options
     });
   }
   sendContactEmail(values): Promise<any> {

@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
-import { ConferencesService } from 'src/app/services/conferences/conferences.service';
-import { CfCreneau } from 'src/app/interfaces/ConfFormData.model';
-import { UserInformations } from 'src/app/interfaces/generic/UserInformations.model';
 import { MatDialog } from '@angular/material';
-import { AlreadyExistDialogComponent } from './dialog/already-exist-dialog/already-exist-dialog.component';
+
+import { ConferencesService } from 'src/app/services/conferences/conferences.service';
 import { EmailService } from 'src/app/services/email/email.service';
+
+import { AlreadyExistDialogComponent } from './dialog/already-exist-dialog/already-exist-dialog.component';
 import { TokenSentDialogComponent } from './dialog/token-sent-dialog/token-sent-dialog.component';
 
+import { UserInformations } from 'src/app/interfaces/generic/UserInformations.model';
+import { CfCreneau } from 'src/app/interfaces/ConfFormData.model';
 @Component({
   selector: 'app-sign-up-page',
   templateUrl: './sign-up-page.component.html',
@@ -26,9 +29,10 @@ export class SignUpPageComponent implements OnInit {
   cfCreneau: Array<CfCreneau>;
 
   constructor(private formBuilder: FormBuilder,
-    private conferencesService: ConferencesService,
-    private emailService: EmailService,
-    public dialog: MatDialog
+              private conferencesService: ConferencesService,
+              private emailService: EmailService,
+              public dialog: MatDialog,
+              private ngRoute: ActivatedRoute
   ) { }
 
   ngOnInit() {
@@ -37,6 +41,19 @@ export class SignUpPageComponent implements OnInit {
     this.conferencesService.getConfFormData().subscribe(res => {
       this.cfCreneau = res;
       this.initConfForm();
+    });
+    this.ngRoute.queryParams.subscribe(event => {
+      if (event.userdata) {
+        const user = JSON.parse(atob(event.userdata));
+        if (user.email && user.token) {
+          this.conferencesService.confirmUser(user.email, user.token).subscribe(verifResult => {
+            console.log(verifResult);
+            /* send the result in a moda
+            type to handle :
+            */
+          });
+        }
+      }
     });
   }
 
@@ -125,13 +142,24 @@ export class SignUpPageComponent implements OnInit {
         this.openAlreadyExistDialog(u.email);
       } else {
         console.log('Sending email confirmation');
-        this.emailService.sendEmail({
-          templateName: 'tokenEmailTemplate',
-          email: user.email,
-          fName: user.fName,
-          url: '',
-        });
-        this.openTokenSentDialog(user);
+        this.emailService.sendEmail(
+          {
+            templateName: 'tokenMail',
+            data: {
+              from: 'msia',
+              to: user.email,
+              templateOptions: {
+                fName: 'Willem',
+                url: 'https://msia17conferences.com/dev/inscription-willem?' + this.encodeData({
+                  userdata: btoa(JSON.stringify({email: user.email, token: user.token}))
+                })
+              }
+            }
+          }).subscribe(mailRes => {
+            console.log('attempt token mail ? ', mailRes);
+
+            this.openTokenSentDialog(user);
+          });
       }
     });
   }
@@ -150,7 +178,10 @@ export class SignUpPageComponent implements OnInit {
       '',
       this.utilsConfForm.ids
     );
-    console.log(btoa(JSON.stringify(user)));
+    console.log('https://msia17conferences.com/dev/conferences?' + this.encodeData({
+      userdata: btoa(JSON.stringify(user)),
+      token: this.generateToken(16)
+    }));
   }
 
   fillUserInfoForm() {
@@ -167,6 +198,7 @@ export class SignUpPageComponent implements OnInit {
   isNone(conf) {
     return conf === '-1';
   }
+
   dec2hex(dec) {
     return ('0' + dec.toString(16)).substr(-2);
   }
@@ -175,5 +207,11 @@ export class SignUpPageComponent implements OnInit {
     const arr = new Uint8Array((len || 40) / 2);
     window.crypto.getRandomValues(arr);
     return Array.from(arr, this.dec2hex).join('');
+  }
+
+  encodeData(data) {
+    return Object.keys(data).map(key => {
+      return [key, data[key]].map(encodeURIComponent).join('=');
+    }).join('&');
   }
 }

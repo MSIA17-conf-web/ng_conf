@@ -50,8 +50,15 @@ export class ConferencesService {
       url: 'guests/create',
       baseURL: 'http://postgre_api:9010',
       body: user
-    }).pipe(data => {
-      return data;
-    });
+    }).pipe(data => data);
+  }
+
+  public confirmUser(email: string, token: string) {
+    return this.httpClient.post<any>('https://msia17conferences.com:9010/api', {
+      method: 'POST',
+      url: 'misc/verify-token',
+      baseURL: 'http://postgre_api:9010',
+      body: { email, token }
+    }).pipe(data => data);
   }
 }
