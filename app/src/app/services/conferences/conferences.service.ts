@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { CfCreneau } from 'src/app/interfaces/ConfFormData.model';
 import { CdTheme } from 'src/app/interfaces/ConfDisplayData.model';
 import { UserInformations } from 'src/app/interfaces/generic/UserInformations.model';
+import { Conference } from 'src/app/interfaces/generic/Conference.model';
 
 @Injectable({
   providedIn: 'root'
@@ -43,11 +44,32 @@ export class ConferencesService {
     );
   }
 
+  public getThematicData(confId: number): Observable<Conference> {
+    return this.httpClient.post<Conference>('https://msia17conferences.com:9010/api', {
+      method: 'POST',
+      url: 'misc/get-thematic-data',
+      baseURL: 'http://postgre_api:9010',
+      body: {
+        confId: confId
+      }
+    }).pipe(data => data);
+  }
+
   // Pas dans guest.service ?
   public createUser(user: UserInformations) {
     return  this.httpClient.post<any>('https://msia17conferences.com:9010/api', {
       method: 'POST',
       url: 'guests/create',
+      baseURL: 'http://postgre_api:9010',
+      body: user
+    }).pipe(data => data);
+  }
+
+  // Pas dans guest.service ?
+  public deleteUser(user: UserInformations) {
+    return  this.httpClient.post<any>('https://msia17conferences.com:9010/api', {
+      method: 'delete',
+      url: 'guests/delete',
       baseURL: 'http://postgre_api:9010',
       body: user
     }).pipe(data => data);

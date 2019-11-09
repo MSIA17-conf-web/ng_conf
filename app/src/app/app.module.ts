@@ -30,6 +30,7 @@ import { ContactFormValidatorDirective } from './directives/contact-form-validat
 import { EmailService } from './services/email/email.service';
 import { ConferencesService } from './services/conferences/conferences.service';
 import { TokenSentDialogComponent } from './components/sign-up-page/dialog/token-sent-dialog/token-sent-dialog.component';
+import { SuccessfullSignUpDialogComponent } from './components/sign-up-page/dialog/successfull-sign-up-dialog/successfull-sign-up-dialog.component';
 
 @NgModule({
   declarations: [
@@ -41,8 +42,9 @@ import { TokenSentDialogComponent } from './components/sign-up-page/dialog/token
     AboutComponent,
     ContactComponent,
     // ContactFormValidatorDirective,
-    OpenContactResponseDialogComponent,
     ConferencesComponent,
+    OpenContactResponseDialogComponent,
+    SuccessfullSignUpDialogComponent,
     AlreadyExistDialogComponent,
     TokenSentDialogComponent
   ],
@@ -68,7 +70,7 @@ import { TokenSentDialogComponent } from './components/sign-up-page/dialog/token
     HttpClientModule,
     MarkdownModule.forRoot()
   ],
-  entryComponents : [OpenContactResponseDialogComponent, AlreadyExistDialogComponent, TokenSentDialogComponent],
+  entryComponents : [OpenContactResponseDialogComponent, SuccessfullSignUpDialogComponent, AlreadyExistDialogComponent, TokenSentDialogComponent],
   providers: [EmailService, ConferencesService],
   bootstrap: [AppComponent]
 })

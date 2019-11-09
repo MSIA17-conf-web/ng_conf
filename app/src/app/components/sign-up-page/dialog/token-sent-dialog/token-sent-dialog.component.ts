@@ -10,9 +10,8 @@ import { UserInformations } from 'src/app/interfaces/generic/UserInformations.mo
 export class TokenSentDialogComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<TokenSentDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public user: UserInformations) { }
+    @Inject(MAT_DIALOG_DATA) public user: UserInformations) { }
 
   ngOnInit() {
   }
-
 }
