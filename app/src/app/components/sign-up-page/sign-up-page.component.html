@@ -29,31 +29,33 @@
     <ng-template matStepLabel>Les conférences qui vous intéresse</ng-template>
     <form [formGroup]="confForm" (ngSubmit)="onSubmitConf()" fxLayout="column" fxLayoutAlign="start">
       <div *ngFor="let creneau of cfCreneau, let i = index">
-      <label [for]="creneau.crenId">{{ creneau.crenDesc }}</label>
-      <mat-radio-group [id]="creneau.crenId" fxLayout="column" fxLayoutAlign="start" [formControlName]="creneau.crenId">
-        <mat-radio-button *ngFor="let conf of creneau.conferences, let y = index" [value]="conf" >{{ conf.confName }}</mat-radio-button>
-        <mat-radio-button value='-1'>Aucune</mat-radio-button>
-      </mat-radio-group>
-    </div>
-    <div>
-      <button mat-button matStepperPrevious>Vos informations</button>
-      <button mat-button matStepperNext type="submit" [disabled]="confForm.invalid">Récapitulatif</button>
-      <button mat-button type="submit" [disabled]="confForm.invalid">log form value</button>
-    </div>
-  </form>
+        <label [for]="creneau.crenId">{{ creneau.crenDesc }}</label>
+        <mat-radio-group [id]="creneau.crenId" fxLayout="column" fxLayoutAlign="start"
+          [formControlName]="creneau.crenId">
+          <mat-radio-button *ngFor="let conf of creneau.conferences, let y = index" [value]="conf">{{ conf.confName }}
+          </mat-radio-button>
+          <mat-radio-button value='-1'>Aucune</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div>
+        <button mat-button matStepperPrevious>Vos informations</button>
+        <button mat-button matStepperNext type="submit" [disabled]="confForm.invalid">Récapitulatif</button>
+        <button mat-button type="submit" [disabled]="confForm.invalid">log form value</button>
+      </div>
+    </form>
   </mat-step>
   <mat-step>
-    <div fxLayout="row">
-      <div fxLayout="column">
+    <div class="row" fxLayout="row">
+      <div class="col m6" fxLayout="column" style="border-right: 2px solid grey">
         <div *ngFor="let key of utilsUserForm.keys">
           <p>{{ validatedUserFormValue[key] }}</p>
         </div>
       </div>
-      <div fxLayout="column">
-          <div *ngFor="let conf of utilsConfForm.conf">
-              <p *ngIf="conf">{{ conf.confName }}</p>
-              <p *ngIf="isNone(conf)">{{ noneString }}</p>
-            </div>
+      <div class="col m6" fxLayout="column">
+        <div *ngFor="let conf of utilsConfForm.conf">
+          <p *ngIf="conf">{{ conf.confName }}</p>
+          <p *ngIf="isNone(conf)">{{ noneString }}</p>
+        </div>
       </div>
     </div>
     <div>
