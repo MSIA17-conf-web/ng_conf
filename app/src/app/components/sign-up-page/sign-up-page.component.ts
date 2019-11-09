@@ -6,8 +6,14 @@ import { MatDialog } from '@angular/material';
 import { ConferencesService } from 'src/app/services/conferences/conferences.service';
 import { EmailService } from 'src/app/services/email/email.service';
 
+import { SuccessfullSignUpDialogComponent } from './dialog/successfull-sign-up-dialog/successfull-sign-up-dialog.component';
 import { AlreadyExistDialogComponent } from './dialog/already-exist-dialog/already-exist-dialog.component';
 import { TokenSentDialogComponent } from './dialog/token-sent-dialog/token-sent-dialog.component';
+import { UserNotFoundDialogComponent } from './dialog/user-not-found-dialog/user-not-found-dialog.component';
+import { TokenNotMatchDialogComponent } from './dialog/token-not-match-dialog/token-not-match-dialog.component';
+import { UpdateErrorDialogComponent } from './dialog/update-error-dialog/update-error-dialog.component';
+import { EmailNotFoundDialogComponent } from './dialog/email-not-found-dialog/email-not-found-dialog.component';
+
 
 import { UserInformations } from 'src/app/interfaces/generic/UserInformations.model';
 import { CfCreneau } from 'src/app/interfaces/ConfFormData.model';
@@ -29,10 +35,10 @@ export class SignUpPageComponent implements OnInit {
   cfCreneau: Array<CfCreneau>;
 
   constructor(private formBuilder: FormBuilder,
-              private conferencesService: ConferencesService,
-              private emailService: EmailService,
-              public dialog: MatDialog,
-              private ngRoute: ActivatedRoute
+    private conferencesService: ConferencesService,
+    private emailService: EmailService,
+    public dialog: MatDialog,
+    private ngRoute: ActivatedRoute
   ) { }
 
   ngOnInit() {
@@ -43,24 +49,92 @@ export class SignUpPageComponent implements OnInit {
       this.initConfForm();
     });
     this.ngRoute.queryParams.subscribe(event => {
+
       if (event.userdata) {
-        const user = JSON.parse(atob(event.userdata));
+        let user;
+        try {
+          user = JSON.parse(atob(event.userdata));
+        } catch (e) {
+          console.log('La clé utilisée est erronnée', event.userdata);
+          console.log('JSON parse exeption : ', e);
+          this.openTokenNotMatchDialogComponent();
+          return;
+        }
+
         if (user.email && user.token) {
-          this.conferencesService.confirmUser(user.email, user.token).subscribe(verifResult => {
-            console.log(verifResult);
-            /* send the result in a moda
-            type to handle :
-            */
+          Promise.all(this.getAllConfName(user)).then(allConfName => {
+            console.log('Retrieving all conference names the test user : ', user.email);
+            this.conferencesService.confirmUser(user.email, user.token).subscribe(verifResult => {
+              if (!verifResult.success) {
+                this.handleErrorDialog(verifResult, user);
+              } else {
+                console.log('successfully registred');
+                this.emailService.sendEmail(
+                  {
+                    templateName: 'successfullSignUpMail',
+                    data: {
+                      from: 'msia',
+                      to: user.email,
+                      templateOptions: {
+                        lName: user.lName,
+                        fName: user.fName,
+                        company: user.company,
+                        conferences: allConfName
+                      }
+                    }
+                  }).subscribe(mailRes => {
+                    this.openSuccessfullSignUpDialogComponent(user);
+                  });
+              }
+            });
+          }).catch(err => {
+            console.log('Error when calling getAllConfName : ', err);
           });
         }
       }
     });
   }
 
-  openTokenSentDialog(user: UserInformations): void {
-    const dialogRef = this.dialog.open(TokenSentDialogComponent, {
+  getAllConfName(user: UserInformations): any[] {
+    return user.conferences.map((confId) => {
+      return new Promise((resolve, reject) => {
+        this.conferencesService.getThematicData(confId).subscribe(conference => {
+          resolve(conference.confName);
+        });
+      });
+    });
+  }
+
+  handleErrorDialog(verifResult, user) {
+    switch (verifResult.type) {
+      case 'alreadyRegistered':
+        this.openAlreadyExistDialog(user.email);
+        break;
+
+      case 'userNotFoundAfterTokenValidation':
+        this.openUserNotFoundDialogComponent();
+        break;
+      case 'tokenNotMatch':
+        this.openTokenNotMatchDialogComponent();
+        break;
+
+      case 'updateError':
+        this.openUpdateErrorDialogComponent();
+        break;
+
+      case 'emailNotFound':
+        this.openEmailNotFoundDialogComponent();
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  openSuccessfullSignUpDialogComponent(user: UserInformations): void {
+    const dialogRef = this.dialog.open(SuccessfullSignUpDialogComponent, {
       width: '500px',
-      data: { user }
+      data: user
     });
 
     dialogRef.afterClosed().subscribe(data => {
@@ -68,7 +142,18 @@ export class SignUpPageComponent implements OnInit {
     });
   }
 
-  openAlreadyExistDialog(email): void {
+  openTokenSentDialog(user: UserInformations): void {
+    const dialogRef = this.dialog.open(TokenSentDialogComponent, {
+      width: '500px',
+      data: user
+    });
+
+    dialogRef.afterClosed().subscribe(data => {
+      console.log('Token sent dialog closed');
+    });
+  }
+
+  openAlreadyExistDialog(email: string): void {
     const dialogRef = this.dialog.open(AlreadyExistDialogComponent, {
       width: '570px',
       data: email
@@ -76,6 +161,46 @@ export class SignUpPageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(data => {
       console.log('Already exist dialog closed');
+    });
+  }
+
+  openUserNotFoundDialogComponent(): void {
+    const dialogRef = this.dialog.open(UserNotFoundDialogComponent, {
+      width: '500px'
+    });
+
+    dialogRef.afterClosed().subscribe(data => {
+      console.log('Token sent dialog closed');
+    });
+  }
+
+  openTokenNotMatchDialogComponent(): void {
+    const dialogRef = this.dialog.open(TokenNotMatchDialogComponent, {
+      width: '500px'
+    });
+
+    dialogRef.afterClosed().subscribe(data => {
+      console.log('Token sent dialog closed');
+    });
+  }
+
+  openUpdateErrorDialogComponent(): void {
+    const dialogRef = this.dialog.open(UpdateErrorDialogComponent, {
+      width: '500px'
+    });
+
+    dialogRef.afterClosed().subscribe(data => {
+      console.log('Token sent dialog closed');
+    });
+  }
+
+  openEmailNotFoundDialogComponent(): void {
+    const dialogRef = this.dialog.open(EmailNotFoundDialogComponent, {
+      width: '500px'
+    });
+
+    dialogRef.afterClosed().subscribe(data => {
+      console.log('Token sent dialog closed');
     });
   }
 
@@ -104,7 +229,6 @@ export class SignUpPageComponent implements OnInit {
     this.validatedUserFormValue = this.userForm.value;
     this.utilsUserForm.keys = Object.keys(this.validatedUserFormValue);
     console.log('User form values', userFormValue);
-
   }
 
   onSubmitConf() {
@@ -125,21 +249,11 @@ export class SignUpPageComponent implements OnInit {
     // console.log(this.validatedUserFormValue, this.validatedConfFormValue);
     const u = this.validatedUserFormValue;
     const token = this.generateToken(16);
-    const user = new UserInformations(
-      u.lName,
-      u.fName,
-      u.company,
-      u.email,
-      u.position,
-      u.vehicle,
-      false,
-      token,
-      this.utilsConfForm.ids
-    );
+    const user = new UserInformations(u.lName, u.fName, u.company, u.email, u.position, u.vehicle, false, token, this.utilsConfForm.ids);
+
     this.conferencesService.createUser(user).subscribe(data => {
-      console.log(data);
       if (data.err) {
-        this.openAlreadyExistDialog(u.email);
+        this.openAlreadyExistDialog(user.email);
       } else {
         console.log('Sending email confirmation');
         this.emailService.sendEmail(
@@ -149,15 +263,21 @@ export class SignUpPageComponent implements OnInit {
               from: 'msia',
               to: user.email,
               templateOptions: {
-                fName: 'Willem',
+                fName: user.fName,
                 url: 'https://msia17conferences.com/dev/inscription-willem?' + this.encodeData({
-                  userdata: btoa(JSON.stringify({email: user.email, token: user.token}))
+                  userdata: btoa(JSON.stringify({
+                    lName: user.lName,
+                    fName: user.fName,
+                    company: user.company,
+                    email: user.email,
+                    token: user.token,
+                    conferences: user.conferences
+                  }))
                 })
               }
             }
           }).subscribe(mailRes => {
             console.log('attempt token mail ? ', mailRes);
-
             this.openTokenSentDialog(user);
           });
       }
@@ -178,7 +298,7 @@ export class SignUpPageComponent implements OnInit {
       '',
       this.utilsConfForm.ids
     );
-    console.log('https://msia17conferences.com/dev/conferences?' + this.encodeData({
+    console.log('https://msia17conferences.com/dev/inscription-willem?userdata=' + this.encodeData({
       userdata: btoa(JSON.stringify(user)),
       token: this.generateToken(16)
     }));
@@ -192,6 +312,38 @@ export class SignUpPageComponent implements OnInit {
       company: 'General Electrics',
       position: 'Apprenti Architecte Solution',
       vehicle: true,
+    });
+  }
+
+  fillUserInfoFormRemy() {
+    this.userForm.setValue({
+      email: 'remousses@gmail.com',
+      fName: 'Remousses',
+      lName: 'Argentin',
+      company: 'CACF',
+      position: 'Ingénieur Logiciel',
+      vehicle: true,
+    });
+  }
+
+  deleteRemousses() {
+    const user = {
+      email: 'remousses@gmail.com',
+      fName: 'Remousses',
+      lName: 'Argentin',
+      company: 'CACF',
+      position: 'Ingénieur Logiciel',
+      vehicle: true,
+      token: '',
+      conferences: [],
+      hasValidate: false
+    };
+    this.conferencesService.deleteUser(user).subscribe(data => {
+      if (data.err) {
+        this.openAlreadyExistDialog(user.email);
+      } else {
+
+      }
     });
   }
 

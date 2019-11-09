@@ -24,13 +24,17 @@ import { ContactComponent } from './components/contact/contact.component';
 import { OpenContactResponseDialogComponent } from './components/contact/manage/open-contact-response-dialog/open-contact-response-dialog.component';
 import { ConferencesComponent } from './components/conferences/conferences.component';
 import { AlreadyExistDialogComponent } from './components/sign-up-page/dialog/already-exist-dialog/already-exist-dialog.component';
+import { TokenSentDialogComponent } from './components/sign-up-page/dialog/token-sent-dialog/token-sent-dialog.component';
+import { SuccessfullSignUpDialogComponent } from './components/sign-up-page/dialog/successfull-sign-up-dialog/successfull-sign-up-dialog.component';
+import { UserNotFoundDialogComponent } from './components/sign-up-page/dialog/user-not-found-dialog/user-not-found-dialog.component';
+import { TokenNotMatchDialogComponent } from './components/sign-up-page/dialog/token-not-match-dialog/token-not-match-dialog.component';
+import { UpdateErrorDialogComponent } from './components/sign-up-page/dialog/update-error-dialog/update-error-dialog.component';
+import { EmailNotFoundDialogComponent } from './components/sign-up-page/dialog/email-not-found-dialog/email-not-found-dialog.component';
 
 import { ContactFormValidatorDirective } from './directives/contact-form-validator.directive';
 
 import { EmailService } from './services/email/email.service';
 import { ConferencesService } from './services/conferences/conferences.service';
-import { TokenSentDialogComponent } from './components/sign-up-page/dialog/token-sent-dialog/token-sent-dialog.component';
-import { SuccessfullSignUpDialogComponent } from './components/sign-up-page/dialog/successfull-sign-up-dialog/successfull-sign-up-dialog.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +50,11 @@ import { SuccessfullSignUpDialogComponent } from './components/sign-up-page/dial
     OpenContactResponseDialogComponent,
     SuccessfullSignUpDialogComponent,
     AlreadyExistDialogComponent,
-    TokenSentDialogComponent
+    TokenSentDialogComponent,
+    UserNotFoundDialogComponent,
+    TokenNotMatchDialogComponent,
+    UpdateErrorDialogComponent,
+    EmailNotFoundDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -70,7 +78,16 @@ import { SuccessfullSignUpDialogComponent } from './components/sign-up-page/dial
     HttpClientModule,
     MarkdownModule.forRoot()
   ],
-  entryComponents : [OpenContactResponseDialogComponent, SuccessfullSignUpDialogComponent, AlreadyExistDialogComponent, TokenSentDialogComponent],
+  entryComponents : [
+    OpenContactResponseDialogComponent,
+    SuccessfullSignUpDialogComponent,
+    AlreadyExistDialogComponent,
+    TokenSentDialogComponent,
+    UserNotFoundDialogComponent,
+    TokenNotMatchDialogComponent,
+    UpdateErrorDialogComponent,
+    EmailNotFoundDialogComponent
+  ],
   providers: [EmailService, ConferencesService],
   bootstrap: [AppComponent]
 })
