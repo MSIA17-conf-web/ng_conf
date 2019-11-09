@@ -6,17 +6,11 @@ import { MatDialog } from '@angular/material';
 import { ConferencesService } from 'src/app/services/conferences/conferences.service';
 import { EmailService } from 'src/app/services/email/email.service';
 
-import { SuccessfullSignUpDialogComponent } from './dialog/successfull-sign-up-dialog/successfull-sign-up-dialog.component';
-import { AlreadyExistDialogComponent } from './dialog/already-exist-dialog/already-exist-dialog.component';
-import { TokenSentDialogComponent } from './dialog/token-sent-dialog/token-sent-dialog.component';
-import { UserNotFoundDialogComponent } from './dialog/user-not-found-dialog/user-not-found-dialog.component';
-import { TokenNotMatchDialogComponent } from './dialog/token-not-match-dialog/token-not-match-dialog.component';
-import { UpdateErrorDialogComponent } from './dialog/update-error-dialog/update-error-dialog.component';
-import { EmailNotFoundDialogComponent } from './dialog/email-not-found-dialog/email-not-found-dialog.component';
-
+import CustomeDialogUtils from 'src/app/utils/CustomeDialogUtils';
 
 import { UserInformations } from 'src/app/interfaces/generic/UserInformations.model';
 import { CfCreneau } from 'src/app/interfaces/ConfFormData.model';
+
 @Component({
   selector: 'app-sign-up-page',
   templateUrl: './sign-up-page.component.html',
@@ -57,7 +51,7 @@ export class SignUpPageComponent implements OnInit {
         } catch (e) {
           console.log('La clé utilisée est erronnée', event.userdata);
           console.log('JSON parse exeption : ', e);
-          this.openTokenNotMatchDialogComponent();
+          CustomeDialogUtils.openTokenNotMatchDialogComponent(this.dialog);
           return;
         }
 
@@ -83,7 +77,7 @@ export class SignUpPageComponent implements OnInit {
                       }
                     }
                   }).subscribe(mailRes => {
-                    this.openSuccessfullSignUpDialogComponent(user);
+                    CustomeDialogUtils.openSuccessfullSignUpDialogComponent(this.dialog, user);
                   });
               }
             });
@@ -108,100 +102,27 @@ export class SignUpPageComponent implements OnInit {
   handleErrorDialog(verifResult, user) {
     switch (verifResult.type) {
       case 'alreadyRegistered':
-        this.openAlreadyExistDialog(user.email);
+        CustomeDialogUtils.openAlreadyExistDialog(this.dialog, user.email);
         break;
 
       case 'userNotFoundAfterTokenValidation':
-        this.openUserNotFoundDialogComponent();
+        CustomeDialogUtils.openUserNotFoundDialogComponent(this.dialog);
         break;
       case 'tokenNotMatch':
-        this.openTokenNotMatchDialogComponent();
+        CustomeDialogUtils.openTokenNotMatchDialogComponent(this.dialog);
         break;
 
       case 'updateError':
-        this.openUpdateErrorDialogComponent();
+        CustomeDialogUtils.openUpdateErrorDialogComponent(this.dialog);
         break;
 
       case 'emailNotFound':
-        this.openEmailNotFoundDialogComponent();
+        CustomeDialogUtils.openEmailNotFoundDialogComponent(this.dialog);
         break;
 
       default:
         break;
     }
-  }
-
-  openSuccessfullSignUpDialogComponent(user: UserInformations): void {
-    const dialogRef = this.dialog.open(SuccessfullSignUpDialogComponent, {
-      width: '500px',
-      data: user
-    });
-
-    dialogRef.afterClosed().subscribe(data => {
-      console.log('Token sent dialog closed');
-    });
-  }
-
-  openTokenSentDialog(user: UserInformations): void {
-    const dialogRef = this.dialog.open(TokenSentDialogComponent, {
-      width: '500px',
-      data: user
-    });
-
-    dialogRef.afterClosed().subscribe(data => {
-      console.log('Token sent dialog closed');
-    });
-  }
-
-  openAlreadyExistDialog(email: string): void {
-    const dialogRef = this.dialog.open(AlreadyExistDialogComponent, {
-      width: '570px',
-      data: email
-    });
-
-    dialogRef.afterClosed().subscribe(data => {
-      console.log('Already exist dialog closed');
-    });
-  }
-
-  openUserNotFoundDialogComponent(): void {
-    const dialogRef = this.dialog.open(UserNotFoundDialogComponent, {
-      width: '500px'
-    });
-
-    dialogRef.afterClosed().subscribe(data => {
-      console.log('Token sent dialog closed');
-    });
-  }
-
-  openTokenNotMatchDialogComponent(): void {
-    const dialogRef = this.dialog.open(TokenNotMatchDialogComponent, {
-      width: '500px'
-    });
-
-    dialogRef.afterClosed().subscribe(data => {
-      console.log('Token sent dialog closed');
-    });
-  }
-
-  openUpdateErrorDialogComponent(): void {
-    const dialogRef = this.dialog.open(UpdateErrorDialogComponent, {
-      width: '500px'
-    });
-
-    dialogRef.afterClosed().subscribe(data => {
-      console.log('Token sent dialog closed');
-    });
-  }
-
-  openEmailNotFoundDialogComponent(): void {
-    const dialogRef = this.dialog.open(EmailNotFoundDialogComponent, {
-      width: '500px'
-    });
-
-    dialogRef.afterClosed().subscribe(data => {
-      console.log('Token sent dialog closed');
-    });
   }
 
   initUserInfoForm() {
@@ -253,7 +174,7 @@ export class SignUpPageComponent implements OnInit {
 
     this.conferencesService.createUser(user).subscribe(data => {
       if (data.err) {
-        this.openAlreadyExistDialog(user.email);
+        CustomeDialogUtils.openAlreadyExistDialog(this.dialog, user.email);
       } else {
         console.log('Sending email confirmation');
         this.emailService.sendEmail(
@@ -278,7 +199,7 @@ export class SignUpPageComponent implements OnInit {
             }
           }).subscribe(mailRes => {
             console.log('attempt token mail ? ', mailRes);
-            this.openTokenSentDialog(user);
+            CustomeDialogUtils.openTokenSentDialog(this.dialog, user);
           });
       }
     });
@@ -340,7 +261,7 @@ export class SignUpPageComponent implements OnInit {
     };
     this.conferencesService.deleteUser(user).subscribe(data => {
       if (data.err) {
-        this.openAlreadyExistDialog(user.email);
+        CustomeDialogUtils.openAlreadyExistDialog(this.dialog, user.email);
       } else {
 
       }

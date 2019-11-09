@@ -30,6 +30,7 @@ import { UserNotFoundDialogComponent } from './components/sign-up-page/dialog/us
 import { TokenNotMatchDialogComponent } from './components/sign-up-page/dialog/token-not-match-dialog/token-not-match-dialog.component';
 import { UpdateErrorDialogComponent } from './components/sign-up-page/dialog/update-error-dialog/update-error-dialog.component';
 import { EmailNotFoundDialogComponent } from './components/sign-up-page/dialog/email-not-found-dialog/email-not-found-dialog.component';
+import { InternalServerErrorDialogComponent } from './components/dialogs/internal-server-error-dialog/internal-server-error-dialog.component';
 
 import { ContactFormValidatorDirective } from './directives/contact-form-validator.directive';
 
@@ -54,7 +55,8 @@ import { ConferencesService } from './services/conferences/conferences.service';
     UserNotFoundDialogComponent,
     TokenNotMatchDialogComponent,
     UpdateErrorDialogComponent,
-    EmailNotFoundDialogComponent
+    EmailNotFoundDialogComponent,
+    InternalServerErrorDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -86,7 +88,8 @@ import { ConferencesService } from './services/conferences/conferences.service';
     UserNotFoundDialogComponent,
     TokenNotMatchDialogComponent,
     UpdateErrorDialogComponent,
-    EmailNotFoundDialogComponent
+    EmailNotFoundDialogComponent,
+    InternalServerErrorDialogComponent
   ],
   providers: [EmailService, ConferencesService],
   bootstrap: [AppComponent]
