@@ -41,6 +41,9 @@ export class SignUpPageComponent implements OnInit {
     this.conferencesService.getConfFormData().subscribe(res => {
       this.cfCreneau = res;
       this.initConfForm();
+    }, err => {
+      console.log('Error from APIs', err);
+      CustomeDialogUtils.openInternalServerErrorDialogComponent(this.dialog);
     });
     this.ngRoute.queryParams.subscribe(event => {
 
@@ -57,7 +60,7 @@ export class SignUpPageComponent implements OnInit {
 
         if (user.email && user.token) {
           Promise.all(this.getAllConfName(user)).then(allConfName => {
-            console.log('Retrieving all conference names the test user : ', user.email);
+            console.log('Retrieving all conference names for ' + user.email + ' user');
             this.conferencesService.confirmUser(user.email, user.token).subscribe(verifResult => {
               if (!verifResult.success) {
                 this.handleErrorDialog(verifResult, user);
@@ -78,6 +81,9 @@ export class SignUpPageComponent implements OnInit {
                     }
                   }).subscribe(mailRes => {
                     CustomeDialogUtils.openSuccessfullSignUpDialogComponent(this.dialog, user);
+                  }, err => {
+                    console.log('Error from APIs', err);
+                    CustomeDialogUtils.openInternalServerErrorDialogComponent(this.dialog);
                   });
               }
             });
@@ -94,6 +100,9 @@ export class SignUpPageComponent implements OnInit {
       return new Promise((resolve, reject) => {
         this.conferencesService.getThematicData(confId).subscribe(conference => {
           resolve(conference.confName);
+        }, err => {
+          console.log('Error from APIs', err);
+          CustomeDialogUtils.openInternalServerErrorDialogComponent(this.dialog);
         });
       });
     });
@@ -200,8 +209,14 @@ export class SignUpPageComponent implements OnInit {
           }).subscribe(mailRes => {
             console.log('attempt token mail ? ', mailRes);
             CustomeDialogUtils.openTokenSentDialog(this.dialog, user);
+          }, err => {
+            console.log('Error from APIs', err);
+            CustomeDialogUtils.openInternalServerErrorDialogComponent(this.dialog);
           });
       }
+    }, err => {
+      console.log('Error from APIs', err);
+      CustomeDialogUtils.openInternalServerErrorDialogComponent(this.dialog);
     });
   }
 
@@ -265,6 +280,9 @@ export class SignUpPageComponent implements OnInit {
       } else {
 
       }
+    }, err => {
+      console.log('Error from APIs', err);
+      CustomeDialogUtils.openInternalServerErrorDialogComponent(this.dialog);
     });
   }
 

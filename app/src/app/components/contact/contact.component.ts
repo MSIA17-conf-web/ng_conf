@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { OpenContactResponseDialogComponent } from './manage/open-contact-response-dialog/open-contact-response-dialog.component';
+import CustomeDialogUtils from 'src/app/utils/CustomeDialogUtils';
 
 import { EmailService } from 'src/app/services/email/email.service';
 
@@ -36,23 +36,17 @@ export class ContactComponent implements OnInit {
 
     this.emailService.sendContactEmail(contactFormValue)
       .then(res => {
-        this.openContactResponseDialog(res.result, null);
+        CustomeDialogUtils.openContactResponseDialog(this.dialog, res.result, null);
         const messageEmail = this.contactForm.controls['messageEmail'];
         messageEmail.setValue('');
         messageEmail.setErrors(null);
       })
       .catch(err => {
         console.log(err);
-        this.openContactResponseDialog(false, contactFormValue);
+        CustomeDialogUtils.openContactResponseDialog(this.dialog, false, contactFormValue);
       });
   }
 
-  openContactResponseDialog(bool, emailData) {
-    const dialogRef = this.dialog.open(OpenContactResponseDialogComponent, {
-      width: '300px',
-      data: { isEmailSend: bool,  emailData: emailData }
-    });
-
-    dialogRef.afterClosed().subscribe();
-  }
+   // convenience getter for easy access to form fields
+   get f() { return this.contactForm.controls; }
 }

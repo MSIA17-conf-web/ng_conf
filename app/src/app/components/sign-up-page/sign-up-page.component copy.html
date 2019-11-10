@@ -1,0 +1,81 @@
+<mat-horizontal-stepper linear #stepper>
+  <mat-step [stepControl]="userForm">
+    <ng-template matStepLabel>Vos informations</ng-template>
+    <form [formGroup]="userForm" (ngSubmit)="onSubmitUserInfo()" fxLayout="column" fxLayoutAlign="start">
+      <mat-form-field>
+        <input matInput type="text" class="form-control" id="email" formControlName="email" placeholder="Adresse email">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="text" class="form-control" id="fName" formControlName="fName" placeholder="Prénom">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="text" class="form-control" id="lName" formControlName="lName" placeholder="Nom">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="text" class="form-control" id="company" formControlName="company"
+          placeholder="Nom de votre entreprise">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="text" class="form-control" id="position" formControlName="position"
+          placeholder="Intitulé de votre poste">
+      </mat-form-field>
+      <mat-checkbox formControlName="vehicle">Serez-vous véhiculé ?</mat-checkbox>
+      <button mat-button matStepperNext type="submit" [disabled]="userForm.invalid">Les conférences</button>
+      <button mat-button type="button" (click)="fillUserInfoForm()">Remplir form</button>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="confForm">
+    <ng-template matStepLabel>Les conférences qui vous intéresse</ng-template>
+    <form [formGroup]="confForm" (ngSubmit)="onSubmitConf()" fxLayout="column" fxLayoutAlign="start">
+      <!-- <div *ngFor="let creneau of cfCreneau, let i = index">
+        <label [for]="creneau.crenId">{{ creneau.crenDesc }}</label>
+        <mat-radio-group [id]="creneau.crenId" fxLayout="column" fxLayoutAlign="start"
+          [formControlName]="creneau.crenId">
+          <mat-radio-button *ngFor="let conf of creneau.conferences, let y = index" [value]="y">{{ conf.confName }}
+          </mat-radio-button>
+          <mat-radio-button value='-1'>Aucune</mat-radio-button>
+        </mat-radio-group>
+      </div> -->
+      <div class="mat-elevation-z8">
+        <table mat-table>
+          <!-- <div *ngFor="let creneau of cfCreneau, let i = index">
+            <mat-radio-group [id]="creneau.crenId" fxLayout="column" fxLayoutAlign="start"
+              [formControlName]="creneau.crenId">
+              <mat-radio-button *ngFor="let conf of creneau.conferences, let y = index" [value]="y">{{ conf.confName }}
+              </mat-radio-button>
+              <mat-radio-button value='-1'>Aucune</mat-radio-button>
+            </mat-radio-group>
+          </div> -->
+
+
+          <tr *ngFor="let creneau of cfCreneau, let i = index">
+              <th mat-header-cell> {{ creneau.crenDesc }} </th>
+              <td mat-cell>
+                  <mat-radio-group [id]="creneau.crenId" fxLayout="column" fxLayoutAlign="start"
+                    [formControlName]="creneau.crenId">
+                    <mat-radio-button *ngFor="let conf of creneau.conferences, let y = index" [value]="y">
+                      {{ conf.confName }}
+                    </mat-radio-button>
+                    <mat-radio-button value='-1'>Aucune</mat-radio-button>
+                  </mat-radio-group>
+                </td>
+          </tr>
+        </table>
+      </div>
+      <div>
+        <button mat-button matStepperPrevious>Vos informations</button>
+        <button mat-button matStepperNext type="submit" [disabled]="confForm.invalid">Récapitulatif</button>
+        <button mat-button type="submit" [disabled]="confForm.invalid">log form value</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    You are now done.
+    <div>
+      <button mat-button matStepperPrevious>Les conférences</button>
+      <button mat-button (click)="stepper.reset()">Réinitialiser</button>
+      <button mat-button (click)="validateSignUp()">Valider</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>

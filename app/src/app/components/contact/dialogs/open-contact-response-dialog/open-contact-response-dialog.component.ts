@@ -19,7 +19,7 @@ export class OpenContactResponseDialogComponent implements OnInit {
     this.emailData = this.customizeEmailError(this.data.emailData);
   }
 
-  customizeEmailError(data) {
+  private customizeEmailError(data) {
     if (!this.isEmailSend) {
       return 'mailto:msia17conferences@gmail.com?subject=' + data.lastName + ' ' + data.firstName + ' cherche à vous contacter'
          + '&body=' + data.messageEmail;
@@ -32,4 +32,3 @@ export class OpenContactResponseDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 }
-

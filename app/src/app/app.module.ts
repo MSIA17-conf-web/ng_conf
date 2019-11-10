@@ -21,15 +21,15 @@ import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { SignUpPageComponent } from './components/sign-up-page/sign-up-page.component';
 import { AboutComponent } from './components/about/about.component';
 import { ContactComponent } from './components/contact/contact.component';
-import { OpenContactResponseDialogComponent } from './components/contact/manage/open-contact-response-dialog/open-contact-response-dialog.component';
+import { OpenContactResponseDialogComponent } from './components/contact/dialogs/open-contact-response-dialog/open-contact-response-dialog.component';
 import { ConferencesComponent } from './components/conferences/conferences.component';
-import { AlreadyExistDialogComponent } from './components/sign-up-page/dialog/already-exist-dialog/already-exist-dialog.component';
-import { TokenSentDialogComponent } from './components/sign-up-page/dialog/token-sent-dialog/token-sent-dialog.component';
-import { SuccessfullSignUpDialogComponent } from './components/sign-up-page/dialog/successfull-sign-up-dialog/successfull-sign-up-dialog.component';
-import { UserNotFoundDialogComponent } from './components/sign-up-page/dialog/user-not-found-dialog/user-not-found-dialog.component';
-import { TokenNotMatchDialogComponent } from './components/sign-up-page/dialog/token-not-match-dialog/token-not-match-dialog.component';
-import { UpdateErrorDialogComponent } from './components/sign-up-page/dialog/update-error-dialog/update-error-dialog.component';
-import { EmailNotFoundDialogComponent } from './components/sign-up-page/dialog/email-not-found-dialog/email-not-found-dialog.component';
+import { AlreadyExistDialogComponent } from './components/sign-up-page/dialogs/already-exist-dialog/already-exist-dialog.component';
+import { TokenSentDialogComponent } from './components/sign-up-page/dialogs/token-sent-dialog/token-sent-dialog.component';
+import { SuccessfullSignUpDialogComponent } from './components/sign-up-page/dialogs/successfull-sign-up-dialog/successfull-sign-up-dialog.component';
+import { UserNotFoundDialogComponent } from './components/sign-up-page/dialogs/user-not-found-dialog/user-not-found-dialog.component';
+import { TokenNotMatchDialogComponent } from './components/sign-up-page/dialogs/token-not-match-dialog/token-not-match-dialog.component';
+import { UpdateErrorDialogComponent } from './components/sign-up-page/dialogs/update-error-dialog/update-error-dialog.component';
+import { EmailNotFoundDialogComponent } from './components/sign-up-page/dialogs/email-not-found-dialog/email-not-found-dialog.component';
 import { InternalServerErrorDialogComponent } from './components/dialogs/internal-server-error-dialog/internal-server-error-dialog.component';
 
 import { ContactFormValidatorDirective } from './directives/contact-form-validator.directive';
@@ -46,7 +46,7 @@ import { ConferencesService } from './services/conferences/conferences.service';
     SignUpPageComponent,
     AboutComponent,
     ContactComponent,
-    // ContactFormValidatorDirective,
+    ContactFormValidatorDirective,
     ConferencesComponent,
     OpenContactResponseDialogComponent,
     SuccessfullSignUpDialogComponent,
