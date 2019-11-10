@@ -18,10 +18,8 @@ export class EmailService {
   }
   sendContactEmail(values): Promise<any> {
     return new Promise((resolve, reject) => {
-      console.log('sendContactEmail', values);
-
       this.httpClient
-        .post('https://msia17conferences.com:9010/api', {
+        .post<any>('https://msia17conferences.com:9010/api', {
           method: 'POST',
           url: 'sendContactEmail',
           baseURL: 'http://email_api:9010',
@@ -38,6 +36,9 @@ export class EmailService {
           }
         }).subscribe(res => {
           console.log('Response from APIs', res);
+          if (res.err) {
+            reject(res.err);
+          }
           resolve(res);
         }, err => {
           console.log('Error from APIs', err);

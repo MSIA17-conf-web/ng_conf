@@ -37,12 +37,11 @@ export class ContactComponent implements OnInit {
     this.emailService.sendContactEmail(contactFormValue)
       .then(res => {
         CustomeDialogUtils.openContactResponseDialog(this.dialog, res.result, null);
-        const messageEmail = this.contactForm.controls['messageEmail'];
+        const messageEmail = this.f.messageEmail;
         messageEmail.setValue('');
         messageEmail.setErrors(null);
       })
       .catch(err => {
-        console.log(err);
         CustomeDialogUtils.openContactResponseDialog(this.dialog, false, contactFormValue);
       });
   }

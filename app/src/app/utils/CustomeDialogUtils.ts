@@ -65,7 +65,7 @@ export default class CustomeDialogUtils {
   }
 
   static openContactResponseDialog(dialog: MatDialog, bool, emailData) {
-    const dialogRef = dialog.open(OpenContactResponseDialogComponent, {
+    dialog.open(OpenContactResponseDialogComponent, {
       width: '300px',
       data: { isEmailSend: bool,  emailData: emailData }
     });

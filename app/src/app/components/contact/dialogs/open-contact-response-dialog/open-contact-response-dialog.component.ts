@@ -16,16 +16,14 @@ export class OpenContactResponseDialogComponent implements OnInit {
 
   ngOnInit() {
     this.isEmailSend = this.data.isEmailSend;
-    this.emailData = this.customizeEmailError(this.data.emailData);
+    console.log(this.data.emailData);
+    
+    this.emailData = this.customizeMailTo(this.data.emailData);
   }
 
-  private customizeEmailError(data) {
-    if (!this.isEmailSend) {
-      return 'mailto:msia17conferences@gmail.com?subject=' + data.lastName + ' ' + data.firstName + ' cherche à vous contacter'
-         + '&body=' + data.messageEmail;
-    }
-
-    return null;
+  customizeMailTo(data) {
+    return 'mailto:msia17conferences@gmail.com?subject=' + data.lastName + ' ' + data.firstName + ' cherche à vous contacter'
+      + '&body=' + data.messageEmail;
   }
 
   closeDialog(): void {
