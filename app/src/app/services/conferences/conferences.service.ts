@@ -44,13 +44,13 @@ export class ConferencesService {
     );
   }
 
-  public getThematicData(confId: number): Observable<Conference> {
+  public getConfName(confId: number): Observable<Conference> {
     return this.httpClient.post<Conference>('https://msia17conferences.com:9010/api', {
       method: 'POST',
-      url: 'misc/get-thematic-data',
+      url: 'misc/get-conf-name',
       baseURL: 'http://postgre_api:9010',
       body: {
-        confId: confId
+        confId
       }
     }).pipe(data => data);
   }
@@ -66,12 +66,14 @@ export class ConferencesService {
   }
 
   // Pas dans guest.service ?
-  public deleteUser(user: UserInformations) {
+  public deleteUser(email: string) {
     return  this.httpClient.post<any>('https://msia17conferences.com:9010/api', {
       method: 'delete',
       url: 'guests/delete',
       baseURL: 'http://postgre_api:9010',
-      body: user
+      body: {
+        email
+      }
     }).pipe(data => data);
   }
 

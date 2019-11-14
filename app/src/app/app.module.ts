@@ -11,7 +11,7 @@ import {
   MatSidenavModule, MatListModule, MatButtonModule,
   MatStepperModule, MatInputModule, MatFormFieldModule,
   MatCheckboxModule, MatRadioModule, MatDialogModule,
-  MatTabsModule
+  MatTabsModule, MatSnackBarModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -31,11 +31,17 @@ import { TokenNotMatchDialogComponent } from './components/sign-up-page/dialogs/
 import { UpdateErrorDialogComponent } from './components/sign-up-page/dialogs/update-error-dialog/update-error-dialog.component';
 import { EmailNotFoundDialogComponent } from './components/sign-up-page/dialogs/email-not-found-dialog/email-not-found-dialog.component';
 import { InternalServerErrorDialogComponent } from './components/dialogs/internal-server-error-dialog/internal-server-error-dialog.component';
+import { GenericDialogComponent } from './components/dialogs/generic-dialog/generic-dialog.component';
+import { UpdateUserDialogComponent } from './components/sign-up-page/dialogs/update-user-dialog/update-user-dialog.component';
+import { DeleteUserDialogComponent } from './components/sign-up-page/dialogs/delete-user-dialog/delete-user-dialog.component';
 
 import { ContactFormValidatorDirective } from './directives/contact-form-validator.directive';
 
 import { EmailService } from './services/email/email.service';
 import { ConferencesService } from './services/conferences/conferences.service';
+import { FormService } from './services/form-service/form-service.service';
+
+// import { TestComponent } from './components/test/test.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +52,7 @@ import { ConferencesService } from './services/conferences/conferences.service';
     SignUpPageComponent,
     AboutComponent,
     ContactComponent,
-    ContactFormValidatorDirective,
+    // ContactFormValidatorDirective,
     ConferencesComponent,
     OpenContactResponseDialogComponent,
     SuccessfullSignUpDialogComponent,
@@ -56,7 +62,11 @@ import { ConferencesService } from './services/conferences/conferences.service';
     TokenNotMatchDialogComponent,
     UpdateErrorDialogComponent,
     EmailNotFoundDialogComponent,
-    InternalServerErrorDialogComponent
+    InternalServerErrorDialogComponent,
+    // TestComponent,
+    GenericDialogComponent,
+    UpdateUserDialogComponent,
+    DeleteUserDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -75,6 +85,7 @@ import { ConferencesService } from './services/conferences/conferences.service';
     MatRadioModule,
     MatDialogModule,
     MatTabsModule,
+    MatSnackBarModule,
     ReactiveFormsModule,
     FlexLayoutModule,
     HttpClientModule,
@@ -89,9 +100,12 @@ import { ConferencesService } from './services/conferences/conferences.service';
     TokenNotMatchDialogComponent,
     UpdateErrorDialogComponent,
     EmailNotFoundDialogComponent,
-    InternalServerErrorDialogComponent
+    InternalServerErrorDialogComponent,
+    GenericDialogComponent,
+    UpdateUserDialogComponent,
+    DeleteUserDialogComponent
   ],
-  providers: [EmailService, ConferencesService],
+  providers: [EmailService, ConferencesService, FormService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
