@@ -10,6 +10,8 @@ import CustomeDialogUtils from 'src/app/utils/CustomeDialogUtils';
 
 import { UserInformations } from 'src/app/interfaces/generic/UserInformations.model';
 import { CfCreneau } from 'src/app/interfaces/ConfFormData.model';
+import { GenericDialogComponent } from '../dialogs/generic-dialog/generic-dialog.component';
+import DialogTemplate from 'src/app/interfaces/DialogTemplate.model';
 
 @Component({
   selector: 'app-sign-up-page',
@@ -25,6 +27,7 @@ export class SignUpPageComponent implements OnInit {
   validatedConfFormValue: any = {};
   utilsConfForm: any = {};
   noneString = 'Aucune';
+  modalTemplates: any;
   // mockCreneau: any;
   cfCreneau: Array<CfCreneau>;
 
@@ -36,6 +39,7 @@ export class SignUpPageComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.modalTemplates = DialogTemplate.modalTempates;
     // this.mockCreneau = this.conferencesService.mockCreneau;
     this.initUserInfoForm();
     this.conferencesService.getConfFormData().subscribe(res => {
@@ -46,13 +50,19 @@ export class SignUpPageComponent implements OnInit {
       CustomeDialogUtils.openInternalServerErrorDialogComponent(this.dialog);
     });
     this.ngRoute.queryParams.subscribe(event => {
+      this.checkURI(event);
+    });
+  }
 
-      if (event.userdata) {
+  private checkURI(event: any) {
+    const userdata = event.userdata;
+
+    if (userdata) {
         let user;
         try {
-          user = JSON.parse(atob(event.userdata));
+        user = JSON.parse(atob(userdata));
         } catch (e) {
-          console.log('La clé utilisée est erronnée', event.userdata);
+        console.log('La clé utilisée est erronnée', userdata);
           console.log('JSON parse exeption : ', e);
           CustomeDialogUtils.openTokenNotMatchDialogComponent(this.dialog);
           return;
@@ -202,7 +212,8 @@ export class SignUpPageComponent implements OnInit {
                     email: user.email,
                     token: user.token,
                     conferences: user.conferences
-                  }))
+                  })),
+                  confirmation: true
                 })
               }
             }
@@ -261,7 +272,17 @@ export class SignUpPageComponent implements OnInit {
       vehicle: true,
     });
   }
+  testModal() {
+    console.log('Testing modal');
+    this.dialog.open(GenericDialogComponent, {
+        width: '500px',
+        data: DialogTemplate.modalTempates.userNotFound({
+          fName: 'ALT236',
+          email: 'a@e.f'
+        })
+      });
 
+  }
   deleteRemousses() {
     const user = {
       email: 'remousses@gmail.com',
@@ -290,17 +311,17 @@ export class SignUpPageComponent implements OnInit {
     return conf === '-1';
   }
 
-  dec2hex(dec) {
+  private dec2hex(dec) {
     return ('0' + dec.toString(16)).substr(-2);
   }
 
-  generateToken(len) {
+  private generateToken(len) {
     const arr = new Uint8Array((len || 40) / 2);
     window.crypto.getRandomValues(arr);
     return Array.from(arr, this.dec2hex).join('');
   }
 
-  encodeData(data) {
+  private encodeData(data) {
     return Object.keys(data).map(key => {
       return [key, data[key]].map(encodeURIComponent).join('=');
     }).join('&');

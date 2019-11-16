@@ -13,8 +13,8 @@ const routes: Routes = [
   { path: '', redirectTo: '/accueil', pathMatch: 'full' },
   { path: 'accueil', component: HomeComponent },
   { path: 'default-template', component: DefaultTemplateComponent },
-  { path: 'inscription', component: SignUpComponent },
-  { path: 'inscription-willem', component: SignUpPageComponent },
+  { path: 'inscription-old', component: SignUpComponent },
+  { path: 'inscription', component: SignUpPageComponent },
   { path: 'a-propos', component: AboutComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'conferences', component: ConferencesComponent }
