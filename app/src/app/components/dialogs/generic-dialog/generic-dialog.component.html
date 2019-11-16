@@ -2,6 +2,9 @@
 <div mat-dialog-content>
     <p *ngFor="let line of data.text" [innerHTML]=line></p>
 </div>
-<div mat-dialog-actions>
+
+<div mat-dialog-actions align="end">
+    <button mat-button cdkFocusInitial mat-dialog-close routerLink="inscription" *ngIf="data.displayLink.signup">S'inscrire</button>
+    <button mat-button cdkFocusInitial mat-dialog-close routerLink="contact" *ngIf="data.displayLink.contact">Nous contacter</button>
     <button mat-button cdkFocusInitial mat-dialog-close>Fermer</button>
 </div>

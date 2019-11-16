@@ -6,8 +6,6 @@ import { MatDialog } from '@angular/material';
 import { ConferencesService } from 'src/app/services/conferences/conferences.service';
 import { EmailService } from 'src/app/services/email/email.service';
 
-import CustomeDialogUtils from 'src/app/utils/CustomeDialogUtils';
-
 import { UserInformations } from 'src/app/interfaces/generic/UserInformations.model';
 import { CfCreneau } from 'src/app/interfaces/ConfFormData.model';
 import { GenericDialogComponent } from '../dialogs/generic-dialog/generic-dialog.component';
@@ -27,19 +25,16 @@ export class SignUpPageComponent implements OnInit {
   validatedConfFormValue: any = {};
   utilsConfForm: any = {};
   noneString = 'Aucune';
-  modalTemplates: any;
-  // mockCreneau: any;
   cfCreneau: Array<CfCreneau>;
 
   constructor(private formBuilder: FormBuilder,
-    private conferencesService: ConferencesService,
-    private emailService: EmailService,
-    public dialog: MatDialog,
-    private ngRoute: ActivatedRoute
+              private conferencesService: ConferencesService,
+              private emailService: EmailService,
+              public dialog: MatDialog,
+              private ngRoute: ActivatedRoute
   ) { }
 
   ngOnInit() {
-    this.modalTemplates = DialogTemplate.modalTempates;
     // this.mockCreneau = this.conferencesService.mockCreneau;
     this.initUserInfoForm();
     this.conferencesService.getConfFormData().subscribe(res => {
@@ -47,7 +42,10 @@ export class SignUpPageComponent implements OnInit {
       this.initConfForm();
     }, err => {
       console.log('Error from APIs', err);
-      CustomeDialogUtils.openInternalServerErrorDialogComponent(this.dialog);
+      this.dialog.open(GenericDialogComponent, {
+        width: 'auto',
+        data: DialogTemplate.modalTempates.internalServerError()
+      });
     });
     this.ngRoute.queryParams.subscribe(event => {
       this.checkURI(event);
@@ -58,85 +56,131 @@ export class SignUpPageComponent implements OnInit {
     const userdata = event.userdata;
 
     if (userdata) {
-        let user;
-        try {
+      let user;
+      try {
         user = JSON.parse(atob(userdata));
-        } catch (e) {
+      } catch (e) {
         console.log('La clé utilisée est erronnée', userdata);
-          console.log('JSON parse exeption : ', e);
-          CustomeDialogUtils.openTokenNotMatchDialogComponent(this.dialog);
-          return;
-        }
+        console.log('JSON parse exeption : ', e);
+        this.dialog.open(GenericDialogComponent, {
+          width: 'auto',
+          data: DialogTemplate.modalTempates.tokenNotMatch(user)
+        });
+        return;
+      }
 
-        if (user.email && user.token) {
-          Promise.all(this.getAllConfName(user)).then(allConfName => {
-            console.log('Retrieving all conference names for ' + user.email + ' user');
-            this.conferencesService.confirmUser(user.email, user.token).subscribe(verifResult => {
-              if (!verifResult.success) {
-                this.handleErrorDialog(verifResult, user);
-              } else {
-                console.log('successfully registred');
-                this.emailService.sendEmail(
-                  {
-                    templateName: 'successfullSignUpMail',
-                    data: {
-                      from: 'msia',
-                      to: user.email,
-                      templateOptions: {
-                        lName: user.lName,
-                        fName: user.fName,
-                        company: user.company,
-                        conferences: allConfName
-                      }
-                    }
-                  }).subscribe(mailRes => {
-                    CustomeDialogUtils.openSuccessfullSignUpDialogComponent(this.dialog, user);
-                  }, err => {
-                    console.log('Error from APIs', err);
-                    CustomeDialogUtils.openInternalServerErrorDialogComponent(this.dialog);
-                  });
-              }
-            });
-          }).catch(err => {
-            console.log('Error when calling getAllConfName : ', err);
+      if (user.email) {
+        if (event.confirmation) {
+          this.createUser(userdata, user);
+        } else if (event.update) {
+          this.updateUser();
+        } else if (event.delete) {
+          this.dialog.open(GenericDialogComponent, {
+            width: 'auto',
+            data: DialogTemplate.modalTempates.deleteUserSuccess(user)
           });
         }
       }
-    });
+    }
   }
 
-  getAllConfName(user: UserInformations): any[] {
+  private createUser(userdata: any, user: UserInformations) {
+    if (user.token) {
+      Promise.all(this.getAllConfName(user)).then(allConfName => {
+        console.log('Retrieving all conference names for ' + user.email + ' user');
+        this.conferencesService.confirmUser(user.email, user.token).subscribe(verifResult => {
+          if (!verifResult.success) {
+            this.handleErrorDialog(verifResult.type, user);
+          } else {
+            console.log('successfully registred');
+            this.emailService.sendEmail(
+              {
+                templateName: 'successfullSignUpMail',
+                data: {
+                  userdata,
+                  from: 'msia',
+                  to: user.email,
+                  templateOptions: {
+                    lName: user.lName,
+                    fName: user.fName,
+                    company: user.company,
+                    conferences: allConfName
+                  }
+                }
+              }).subscribe(mailRes => {
+                this.dialog.open(GenericDialogComponent, {
+                  width: 'auto',
+                  data: DialogTemplate.modalTempates.successful(user)
+                });
+              }, err => {
+                console.log('Error from APIs', err);
+                this.dialog.open(GenericDialogComponent, {
+                  width: 'auto',
+                  data: DialogTemplate.modalTempates.internalServerError(user)
+                });
+              });
+          }
+        });
+      }).catch(err => {
+        console.log('Error when calling getAllConfName : ', err);
+      });
+    }
+  }
+
+  private updateUser() {
+
+  }
+
+  private getAllConfName(user: UserInformations): any[] {
     return user.conferences.map((confId) => {
       return new Promise((resolve, reject) => {
-        this.conferencesService.getThematicData(confId).subscribe(conference => {
+        this.conferencesService.getConfName(confId).subscribe(conference => {
           resolve(conference.confName);
         }, err => {
           console.log('Error from APIs', err);
-          CustomeDialogUtils.openInternalServerErrorDialogComponent(this.dialog);
+          this.dialog.open(GenericDialogComponent, {
+            width: 'auto',
+            data: DialogTemplate.modalTempates.internalServerError(user)
+          });
         });
       });
     });
   }
 
-  handleErrorDialog(verifResult, user) {
-    switch (verifResult.type) {
+  handleErrorDialog(verifResultType: string, user: UserInformations) {
+    switch (verifResultType) {
       case 'alreadyRegistered':
-        CustomeDialogUtils.openAlreadyExistDialog(this.dialog, user.email);
+        this.dialog.open(GenericDialogComponent, {
+          width: 'auto',
+          data: DialogTemplate.modalTempates.userAlreadyExist(user)
+        });
         break;
 
       case 'userNotFoundAfterTokenValidation':
-        CustomeDialogUtils.openUserNotFoundDialogComponent(this.dialog);
+        this.dialog.open(GenericDialogComponent, {
+          width: 'auto',
+          data: DialogTemplate.modalTempates.userNotFound(user)
+        });
         break;
       case 'tokenNotMatch':
-        CustomeDialogUtils.openTokenNotMatchDialogComponent(this.dialog);
+        this.dialog.open(GenericDialogComponent, {
+          width: 'auto',
+          data: DialogTemplate.modalTempates.tokenNotMatch(user)
+        });
         break;
 
       case 'updateError':
-        CustomeDialogUtils.openUpdateErrorDialogComponent(this.dialog);
+        this.dialog.open(GenericDialogComponent, {
+          width: 'auto',
+          data: DialogTemplate.modalTempates.updateError(user)
+        });
         break;
 
       case 'emailNotFound':
-        CustomeDialogUtils.openEmailNotFoundDialogComponent(this.dialog);
+        this.dialog.open(GenericDialogComponent, {
+          width: 'auto',
+          data: DialogTemplate.modalTempates.userNotFound(user)
+        });
         break;
 
       default:
@@ -182,6 +226,7 @@ export class SignUpPageComponent implements OnInit {
         return this.validatedConfFormValue[i + 1].confId;
       }
     });
+    // Mettre un message d'erreur si l'utilisateur choisi partout "Aucune" ?
     console.log('Conf form values', confFormValue, this.utilsConfForm);
   }
 
@@ -193,7 +238,14 @@ export class SignUpPageComponent implements OnInit {
 
     this.conferencesService.createUser(user).subscribe(data => {
       if (data.err) {
-        CustomeDialogUtils.openAlreadyExistDialog(this.dialog, user.email);
+        this.dialog.open(GenericDialogComponent, {
+          width: 'auto',
+          data: DialogTemplate.modalTempates.userAlreadyExist(user)
+        });;
+        this.dialog.open(GenericDialogComponent, {
+          width: 'auto',
+          data: DialogTemplate.modalTempates.userAlreadyExist(user)
+        });
       } else {
         console.log('Sending email confirmation');
         this.emailService.sendEmail(
@@ -219,15 +271,24 @@ export class SignUpPageComponent implements OnInit {
             }
           }).subscribe(mailRes => {
             console.log('attempt token mail ? ', mailRes);
-            CustomeDialogUtils.openTokenSentDialog(this.dialog, user);
+            this.dialog.open(GenericDialogComponent, {
+              width: 'auto',
+              data: DialogTemplate.modalTempates.tokenSent(user)
+            });
           }, err => {
             console.log('Error from APIs', err);
-            CustomeDialogUtils.openInternalServerErrorDialogComponent(this.dialog);
+            this.dialog.open(GenericDialogComponent, {
+              width: 'auto',
+              data: DialogTemplate.modalTempates.internalServerError(user)
+            });
           });
       }
     }, err => {
       console.log('Error from APIs', err);
-      CustomeDialogUtils.openInternalServerErrorDialogComponent(this.dialog);
+      this.dialog.open(GenericDialogComponent, {
+        width: 'auto',
+        data: DialogTemplate.modalTempates.internalServerError(user)
+      });
     });
   }
 
@@ -275,35 +336,11 @@ export class SignUpPageComponent implements OnInit {
   testModal() {
     console.log('Testing modal');
     this.dialog.open(GenericDialogComponent, {
-        width: '500px',
-        data: DialogTemplate.modalTempates.userNotFound({
-          fName: 'ALT236',
-          email: 'a@e.f'
-        })
-      });
-
-  }
-  deleteRemousses() {
-    const user = {
-      email: 'remousses@gmail.com',
-      fName: 'Remousses',
-      lName: 'Argentin',
-      company: 'CACF',
-      position: 'Ingénieur Logiciel',
-      vehicle: true,
-      token: '',
-      conferences: [],
-      hasValidate: false
-    };
-    this.conferencesService.deleteUser(user).subscribe(data => {
-      if (data.err) {
-        CustomeDialogUtils.openAlreadyExistDialog(this.dialog, user.email);
-      } else {
-
-      }
-    }, err => {
-      console.log('Error from APIs', err);
-      CustomeDialogUtils.openInternalServerErrorDialogComponent(this.dialog);
+      width: 'auto',
+      data: DialogTemplate.modalTempates.tokenNotMatch({
+        fName: 'ALT236',
+        email: 'a@e.f'
+      })
     });
   }
 

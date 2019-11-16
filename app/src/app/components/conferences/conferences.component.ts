@@ -3,9 +3,10 @@ import { MatDialog } from '@angular/material';
 
 import { CdTheme } from 'src/app/interfaces/ConfDisplayData.model';
 
-import CustomeDialogUtils from 'src/app/utils/CustomeDialogUtils';
+import DialogTemplate from 'src/app/interfaces/DialogTemplate.model';
 
 import { ConferencesService } from 'src/app/services/conferences/conferences.service';
+import { GenericDialogComponent } from '../dialogs/generic-dialog/generic-dialog.component';
 
 @Component({
   selector: 'app-conferences',
@@ -23,7 +24,10 @@ export class ConferencesComponent implements OnInit {
       this.cdThemeList = res;
     }, err => {
       console.log('Error from APIs', err);
-      CustomeDialogUtils.openInternalServerErrorDialogComponent(this.dialog);
+      this.dialog.open(GenericDialogComponent, {
+        width: 'auto',
+        data: DialogTemplate.modalTempates.internalServerError()
+      });
     });
   }
 

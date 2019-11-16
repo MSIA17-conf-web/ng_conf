@@ -66,7 +66,7 @@ import { FormService } from './services/form-service/form-service.service';
     // TestComponent,
     GenericDialogComponent,
     UpdateUserDialogComponent,
-    DeleteUserDialogComponent
+    DeleteUserDialogComponent,
   ],
   imports: [
     BrowserModule,
