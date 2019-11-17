@@ -11,7 +11,7 @@ import {
   MatSidenavModule, MatListModule, MatButtonModule,
   MatStepperModule, MatInputModule, MatFormFieldModule,
   MatCheckboxModule, MatRadioModule, MatDialogModule,
-  MatTabsModule, MatSnackBarModule
+  MatTabsModule, MatSnackBarModule, MatCardModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -30,6 +30,7 @@ import { ContactFormValidatorDirective } from './directives/contact-form-validat
 import { EmailService } from './services/email/email.service';
 import { ConferencesService } from './services/conferences/conferences.service';
 import { FormService } from './services/form-service/form-service.service';
+import { GuardService } from './services/guard/guard.service';
 import { TestComponent } from './components/test/test.component';
 
 // import { TestComponent } from './components/test/test.component';
@@ -67,6 +68,7 @@ import { TestComponent } from './components/test/test.component';
     MatDialogModule,
     MatTabsModule,
     MatSnackBarModule,
+    MatCardModule,
     ReactiveFormsModule,
     FlexLayoutModule,
     HttpClientModule,
@@ -77,7 +79,7 @@ import { TestComponent } from './components/test/test.component';
     UpdateUserDialogComponent,
     DeleteUserDialogComponent
   ],
-  providers: [EmailService, ConferencesService, FormService],
+  providers: [EmailService, ConferencesService, FormService, GuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

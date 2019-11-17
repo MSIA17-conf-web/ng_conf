@@ -1,1 +1,9 @@
-<p>update-user-dialog works!</p>
+<h1 mat-dialog-title>Mis à jour des données pour : {{user.email}} </h1>
+<div mat-dialog-content>
+    <p>{{user.fName}},</p>
+    <p>Êtes-vous sûr de vouloir modifier vos données ?</p>
+</div>
+<div mat-dialog-actions align="end">
+    <button mat-button cdkFocusInitial (click)="initFormValues()">Oui</button>
+    <button mat-button cdkFocusInitial mat-dialog-close>Non</button>
+</div>

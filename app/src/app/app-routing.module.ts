@@ -8,13 +8,14 @@ import { AboutComponent } from './components/about/about.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { ConferencesComponent } from './components/conferences/conferences.component';
 import { TestComponent } from './components/test/test.component';
+import { GuardService } from './services/guard/guard.service';
 
 const routes: Routes = [
   { path: '', redirectTo: '/accueil', pathMatch: 'full' },
   { path: 'accueil', component: HomeComponent },
   { path: 'default-template', component: DefaultTemplateComponent },
-  { path: 'inscription', component: SignUpPageComponent },
-  { path: 'a-propos', component: AboutComponent },
+  { path: 'inscription', component: SignUpPageComponent, canActivate: [GuardService] },
+  { path: 'about', component: AboutComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'conferences', component: ConferencesComponent },
   { path: 'test', component: TestComponent }

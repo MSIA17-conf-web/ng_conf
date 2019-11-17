@@ -23,10 +23,13 @@
       <button mat-button matStepperNext type="submit" [disabled]="userForm.invalid">Les conférences</button>
       <button mat-button type="button" (click)="fillUserInfoFormRemy()">Remplir form</button>
       <button mat-button type="button" (click)="testModal()">testModal</button>
+      <button mat-button (click)="yolo()">yolo</button>
     </form>
   </mat-step>
   <mat-step [stepControl]="confForm">
     <ng-template matStepLabel>Les conférences qui vous intéresse</ng-template>
+    <mat-card *ngIf="isUpdating" style="background-color: #d94747; color:white;">Merci de bien vouloir ressaisir la liste des conférences</mat-card>
+    <br>
     <form [formGroup]="confForm" (ngSubmit)="onSubmitConf()" fxLayout="column" fxLayoutAlign="start">
       <div *ngFor="let creneau of cfCreneau, let i = index">
         <label [for]="creneau.crenId">{{ creneau.crenDesc }}</label>
@@ -64,7 +67,6 @@
       <button mat-button (click)="reset(stepper)">Réinitialiser</button>
       <button mat-button (click)="validateSignUp()" *ngIf="!isUpdating">Valider</button>
       <button mat-button (click)="updateUserData()" *ngIf="isUpdating">Mettre à jour</button>
-      isUpdating
       <button mat-button (click)="log()">Log</button>
     </div>
   </mat-step>

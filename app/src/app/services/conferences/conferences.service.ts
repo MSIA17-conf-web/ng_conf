@@ -86,7 +86,9 @@ export class ConferencesService {
     }).pipe(data => data);
   }
 
-  public updateUser(email: string, toke)
+  public updateUser(email: string, toke) {
+
+  }
 
   public resendConfirmMail(email: string) {
     console.log(email);

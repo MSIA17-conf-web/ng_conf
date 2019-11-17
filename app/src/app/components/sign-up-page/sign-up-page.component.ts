@@ -11,6 +11,7 @@ import { CfCreneau } from 'src/app/interfaces/ConfFormData.model';
 import { GenericDialogComponent } from '../dialogs/generic-dialog/generic-dialog.component';
 import DialogTemplate from 'src/app/interfaces/DialogTemplate.model';
 import { DeleteUserDialogComponent } from '../dialogs/delete-user-dialog/delete-user-dialog.component';
+import { UpdateUserDialogComponent } from '../dialogs/update-user-dialog/update-user-dialog.component';
 
 @Component({
   selector: 'app-sign-up-page',
@@ -42,6 +43,8 @@ export class SignUpPageComponent implements OnInit {
     this.conferencesService.getConfFormData().subscribe(res => {
       this.cfCreneau = res;
       this.initConfForm();
+
+
     }, err => {
       console.log('Error from APIs', err);
       this.dialog.open(GenericDialogComponent, {
@@ -54,11 +57,23 @@ export class SignUpPageComponent implements OnInit {
     });
   }
 
+  yolo() {
+    this.initFormValues({
+      fName: 'Remousses',
+      lName: 'Argentin',
+      company: 'CACF',
+      email: 'remousses@gmail.com',
+      position: 'test Logiciel',
+      vehicle: false,
+      conferences: [-1, 44, 51]
+    });
+  }
+
   private checkURI(event: any) {
     const userdata = event.userdata;
 
     if (userdata) {
-      let user;
+      let user: UserInformations;
       try {
         user = JSON.parse(atob(userdata));
       } catch (e) {
@@ -76,8 +91,13 @@ export class SignUpPageComponent implements OnInit {
           console.log('checkToken', user);
           this.checkToken(userdata, user);
         } else if (event.update) {
-          this.isUpdating = true;
-          this.updateUser();
+          this.dialog.open(UpdateUserDialogComponent, {
+            width: 'auto',
+            data: {
+              userdata,
+              user
+            }
+          });
         } else if (event.delete) {
           this.dialog.open(DeleteUserDialogComponent, {
             width: 'auto',
@@ -88,43 +108,13 @@ export class SignUpPageComponent implements OnInit {
     }
   }
 
-  private checkToken(userdata: any, user: UserInformations) {
+  private checkToken(userdata: any, user: any) {
     if (user.token) {
       // Conf name in QRCode with/ getAllConfName
       Promise.all(this.getAllConfName(user)).then(allConfName => {
         console.log('Retrieving all conference names for ' + user.email + ' user');
         this.conferencesService.confirmUser(user.email, user.token).subscribe(verifResult => {
-          if (!verifResult.success) {
-            this.handleErrorDialog(verifResult.type, user);
-          } else {
-            console.log('successfully registred');
-            this.emailService.sendEmail(
-              {
-                templateName: 'successfullSignUpMail',
-                data: {
-                  userdata,
-                  from: 'msia',
-                  to: user.email,
-                  templateOptions: {
-                    lName: user.lName,
-                    fName: user.fName,
-                    company: user.company,
-                    conferences: allConfName
-                  }
-                }
-              }).subscribe(mailRes => {
-                this.dialog.open(GenericDialogComponent, {
-                  width: 'auto',
-                  data: DialogTemplate.modalTempates.successful(user)
-                });
-              }, err => {
-                console.log('Error from APIs during token checks', err);
-                this.dialog.open(GenericDialogComponent, {
-                  width: 'auto',
-                  data: DialogTemplate.modalTempates.internalServerError(user)
-                });
-              });
-          }
+          this.checkCreate(userdata, verifResult, user, allConfName, 'successfullSignUpMail');
         });
       }).catch(err => {
         console.log('Error when calling getAllConfName : ', err);
@@ -132,20 +122,71 @@ export class SignUpPageComponent implements OnInit {
     }
   }
 
-  // Eviter pb de email déjà existant si on fait la maj
-  // et on pourra pas faire la maj si lee user change d'adresse mail,
-  private updateUserData() {
+  // Eviter pb de email déjà existant si on fait la maj OK je pense
+  // et on pourra pas faire la maj si le user change d'adresse mail,
+  updateUserData() {
+    if (this.isUpdating) {
+      // this.checkToken();
+    }
+  }
 
+  private checkCreate(userdata: any, verifResult: any, user: UserInformations, allConfName, templateName) {
+    if (!verifResult.success) {
+      this.handleErrorDialog(verifResult.type, user);
+    } else {
+      console.log('successfully registred');
+      this.emailService.sendEmail(
+        {
+          templateName,
+          data: {
+            userdata,
+            from: 'msia',
+            to: user.email,
+            templateOptions: {
+              lName: user.lName,
+              fName: user.fName,
+              company: user.company,
+              conferences: allConfName
+            }
+          }
+        }).subscribe(mailRes => {
+          this.dialog.open(GenericDialogComponent, {
+            width: 'auto',
+            data: DialogTemplate.modalTempates.successful(user)
+          });
+        }, err => {
+          console.log('Error from APIs during token checks', err);
+          this.dialog.open(GenericDialogComponent, {
+            width: 'auto',
+            data: DialogTemplate.modalTempates.internalServerError(user)
+          });
+        });
+    }
+  }
+
+  initFormValues(user: any/*UserInformations*/) {
+    this.userForm.controls['email'].disable();
+    Object.keys(this.userForm.controls).forEach(key => {
+      if (user.hasOwnProperty(key)) {
+        this.userForm.get(key).setValue(user[key]);
+      }
+    });
+    // Object.keys(this.confForm.controls).forEach(key => {
+    //   console.log('confForm', key, user.conferences[key]);
+    //   this.confForm.get(key).setValue(user.conferences[key]);
+    //   // this.confForm.get(key).writeValue(user.conferences[key]);
+    // });
+  }
+
+  // for set value in UpdateUserDialogComponent
+  setIsUpdating(isUpdating: boolean) {
+    this.isUpdating = isUpdating;
   }
 
   private getAllConfName(user: UserInformations): any[] {
-
-    console.log('getAllConfName');
     return user.conferences.map((confId) => {
       return new Promise((resolve, reject) => {
         this.conferencesService.getConfName(confId).subscribe(conference => {
-
-          console.log('confName AAAAAAAAAAAAAAAAAAAAAAAAAAAA', conference);
           resolve(conference.confName);
         }, err => {
           console.log('Error from APIs', err);
@@ -216,7 +257,6 @@ export class SignUpPageComponent implements OnInit {
     this.cfCreneau.forEach(creneau => {
       this.confForm.addControl(creneau.crenId.toString(), this.formBuilder.control(null, [Validators.required]));
     });
-    // console.log(this.confForm);
   }
 
   onSubmitUserInfo() {
@@ -228,7 +268,7 @@ export class SignUpPageComponent implements OnInit {
 
   onSubmitConf() {
     const confFormValue = this.confForm.value;
-    this.validatedConfFormValue = this.confForm.value;
+    this.validatedConfFormValue = confFormValue;
     this.utilsConfForm.conf = Object.keys(this.validatedConfFormValue).map((key, i) => this.validatedConfFormValue[i + 1]);
     this.utilsConfForm.ids = Object.keys(this.validatedConfFormValue).map((key, i) => {
       if (this.validatedConfFormValue[i + 1] === '-1') {
