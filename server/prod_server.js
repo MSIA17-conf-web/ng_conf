@@ -32,7 +32,8 @@ app.get("/*", function (req, res) {
   res.writeHead(302, {
     "Location": "/"
   });
-  res.cookie('requestedRoute', req.path, { maxAge: 900000, httpOnly: true });
+  console.log(req.path.substring(1));
+  res.cookie('requestedRoute', req.path.substring(1), { maxAge: 900000, httpOnly: true });
   res.end()
 })
 
