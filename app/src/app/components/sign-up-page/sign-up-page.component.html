@@ -61,8 +61,10 @@
     </div>
     <div>
       <button mat-button matStepperPrevious>Les conférences</button>
-      <button mat-button (click)="stepper.reset()">Réinitialiser</button>
-      <button mat-button (click)="validateSignUp()">Valider</button>
+      <button mat-button (click)="reset(stepper)">Réinitialiser</button>
+      <button mat-button (click)="validateSignUp()" *ngIf="!isUpdating">Valider</button>
+      <button mat-button (click)="updateUserData()" *ngIf="isUpdating">Mettre à jour</button>
+      isUpdating
       <button mat-button (click)="log()">Log</button>
     </div>
   </mat-step>

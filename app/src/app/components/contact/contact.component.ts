@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import CustomeDialogUtils from 'src/app/utils/CustomeDialogUtils';
+import DialogTemplate from 'src/app/interfaces/DialogTemplate.model';
 
 import { EmailService } from 'src/app/services/email/email.service';
+import { GenericDialogComponent } from '../dialogs/generic-dialog/generic-dialog.component';
 
 @Component({
   selector: 'app-contact',
@@ -36,13 +37,20 @@ export class ContactComponent implements OnInit {
 
     this.emailService.sendContactEmail(contactFormValue)
       .then(res => {
-        CustomeDialogUtils.openContactResponseDialog(this.dialog, res.result, null);
+        this.dialog.open(GenericDialogComponent, {
+          width: 'auto',
+          data: DialogTemplate.modalTempates.contactResponseSuccess()
+        });
         const messageEmail = this.f.messageEmail;
         messageEmail.setValue('');
         messageEmail.setErrors(null);
       })
       .catch(err => {
-        CustomeDialogUtils.openContactResponseDialog(this.dialog, false, contactFormValue);
+        console.log('Error when sending contact email : ', err);
+        this.dialog.open(GenericDialogComponent, {
+          width: 'auto',
+          data: DialogTemplate.modalTempates.contactResponseError(contactFormValue)
+        });
       });
   }
 

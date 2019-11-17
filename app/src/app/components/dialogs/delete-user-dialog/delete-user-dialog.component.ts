@@ -1,9 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 
 import { UserInformations } from 'src/app/interfaces/generic/UserInformations.model';
 
 import { ConferencesService } from 'src/app/services/conferences/conferences.service';
+
+import { GenericDialogComponent } from 'src/app/components/dialogs/generic-dialog/generic-dialog.component';
+import DialogTemplate from 'src/app/interfaces/DialogTemplate.model';
+
 
 @Component({
   selector: 'app-delete-user-dialog',
@@ -12,8 +16,10 @@ import { ConferencesService } from 'src/app/services/conferences/conferences.ser
 })
 export class DeleteUserDialogComponent implements OnInit {
 
-  constructor(private conferencesService: ConferencesService, public dialogRef: MatDialogRef<DeleteUserDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public user: UserInformations) { }
+  constructor(private conferencesService: ConferencesService,
+              public dialog: MatDialog,
+              public dialogRef: MatDialogRef<DeleteUserDialogComponent>,
+              @Inject(MAT_DIALOG_DATA) public user: UserInformations) { }
 
   ngOnInit() {
   }
@@ -21,11 +27,17 @@ export class DeleteUserDialogComponent implements OnInit {
   deleteUser() {
     this.conferencesService.deleteUser(this.user.email).subscribe(verifResult => {
       if (!verifResult.success) {
-        console.log("Erreur lors de la désincription");
-        // modal error
+        console.log('Erreur lors de la désincription');
+        this.dialog.open(GenericDialogComponent, {
+          width: 'auto',
+          data: DialogTemplate.modalTempates.deleteUserError()
+        });
       } else {
-        console.log("Désincription réussie");
-        // modal success
+        console.log('Désincription réussie');
+        this.dialog.open(GenericDialogComponent, {
+          width: 'auto',
+          data: DialogTemplate.modalTempates.deleteUserSuccess()
+        });
       }
 
       this.dialogRef.close();

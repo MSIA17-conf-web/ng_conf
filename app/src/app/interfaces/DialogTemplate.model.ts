@@ -5,10 +5,10 @@ export default class DialogTemplate {
   public static modalTempates: any = {
     tokenSent: (options: UserInformations) => {
       return {
-        title: 'Inscription finalisée',
+        title: 'Finalisation de votre inscription ',
         text: [
           options.fName + ', merci pour votre inscription.',
-          'Nous vous avons envoyer un email à l\'adresse :' + options.email + ' permettant de finaliser votre inscription.'
+          'Nous vous avons envoyer un email à l\'adresse : ' + options.email + ' permettant de finaliser votre inscription.'
         ],
         displayLink: {
           signup: false,
@@ -46,11 +46,13 @@ export default class DialogTemplate {
         title: 'Erreur durant votre inscription',
         text: [
           'L\'adresse email ' + options.email + ' à déjà fait l\'objet d\'une inscription.',
-          'Pour se désincrire référer vous au mail de confirmation recu lors de l\'inscription',
+          'Pour se désincrire ou modifier vos données, référer vous au mail de confirmation recu lors de l\'inscription',
         ],
+        email: options.email,
         displayLink: {
-          signup: true,
-          contact: false
+          signup: false,
+          contact: false,
+          resendConfirmMail: true
         }
       };
     },
@@ -140,18 +142,6 @@ export default class DialogTemplate {
         displayLink: {
           signup: true,
           contact: true
-        }
-      };
-    },
-    deleteUser: () => {
-      return {
-        title: 'Suppression de vos donn',
-        text: [
-          'Vos données ont correctement été supprimée de l\'intégralité de nos fichiers.',
-        ],
-        displayLink: {
-          signup: false,
-          contact: false
         }
       };
     },

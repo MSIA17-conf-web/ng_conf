@@ -80,9 +80,16 @@ export class ConferencesService {
   public confirmUser(email: string, token: string) {
     return this.httpClient.post<any>('https://msia17conferences.com:9010/api', {
       method: 'POST',
-      url: 'misc/verify-token',
+      url: 'guests/verify-token',
       baseURL: 'http://postgre_api:9010',
       body: { email, token }
     }).pipe(data => data);
+  }
+
+  public updateUser(email: string, toke)
+
+  public resendConfirmMail(email: string) {
+    console.log(email);
+    // TODO : Renvoyer mail de confirmation
   }
 }

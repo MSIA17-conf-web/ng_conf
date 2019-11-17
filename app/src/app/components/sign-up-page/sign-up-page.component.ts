@@ -10,6 +10,7 @@ import { UserInformations } from 'src/app/interfaces/generic/UserInformations.mo
 import { CfCreneau } from 'src/app/interfaces/ConfFormData.model';
 import { GenericDialogComponent } from '../dialogs/generic-dialog/generic-dialog.component';
 import DialogTemplate from 'src/app/interfaces/DialogTemplate.model';
+import { DeleteUserDialogComponent } from '../dialogs/delete-user-dialog/delete-user-dialog.component';
 
 @Component({
   selector: 'app-sign-up-page',
@@ -26,6 +27,7 @@ export class SignUpPageComponent implements OnInit {
   utilsConfForm: any = {};
   noneString = 'Aucune';
   cfCreneau: Array<CfCreneau>;
+  isUpdating = false;
 
   constructor(private formBuilder: FormBuilder,
               private conferencesService: ConferencesService,
@@ -70,22 +72,25 @@ export class SignUpPageComponent implements OnInit {
       }
 
       if (user.email) {
-        if (event.confirmation) {
-          this.createUser(userdata, user);
+        if (event.checkToken) {
+          console.log('checkToken', user);
+          this.checkToken(userdata, user);
         } else if (event.update) {
+          this.isUpdating = true;
           this.updateUser();
         } else if (event.delete) {
-          this.dialog.open(GenericDialogComponent, {
+          this.dialog.open(DeleteUserDialogComponent, {
             width: 'auto',
-            data: DialogTemplate.modalTempates.deleteUserSuccess(user)
+            data: (user)
           });
         }
       }
     }
   }
 
-  private createUser(userdata: any, user: UserInformations) {
+  private checkToken(userdata: any, user: UserInformations) {
     if (user.token) {
+      // Conf name in QRCode with/ getAllConfName
       Promise.all(this.getAllConfName(user)).then(allConfName => {
         console.log('Retrieving all conference names for ' + user.email + ' user');
         this.conferencesService.confirmUser(user.email, user.token).subscribe(verifResult => {
@@ -113,7 +118,7 @@ export class SignUpPageComponent implements OnInit {
                   data: DialogTemplate.modalTempates.successful(user)
                 });
               }, err => {
-                console.log('Error from APIs', err);
+                console.log('Error from APIs during token checks', err);
                 this.dialog.open(GenericDialogComponent, {
                   width: 'auto',
                   data: DialogTemplate.modalTempates.internalServerError(user)
@@ -127,14 +132,20 @@ export class SignUpPageComponent implements OnInit {
     }
   }
 
-  private updateUser() {
+  // Eviter pb de email déjà existant si on fait la maj
+  // et on pourra pas faire la maj si lee user change d'adresse mail,
+  private updateUserData() {
 
   }
 
   private getAllConfName(user: UserInformations): any[] {
+
+    console.log('getAllConfName');
     return user.conferences.map((confId) => {
       return new Promise((resolve, reject) => {
         this.conferencesService.getConfName(confId).subscribe(conference => {
+
+          console.log('confName AAAAAAAAAAAAAAAAAAAAAAAAAAAA', conference);
           resolve(conference.confName);
         }, err => {
           console.log('Error from APIs', err);
@@ -235,13 +246,10 @@ export class SignUpPageComponent implements OnInit {
     const u = this.validatedUserFormValue;
     const token = this.generateToken(16);
     const user = new UserInformations(u.lName, u.fName, u.company, u.email, u.position, u.vehicle, false, token, this.utilsConfForm.ids);
+    console.log(user);
 
     this.conferencesService.createUser(user).subscribe(data => {
       if (data.err) {
-        this.dialog.open(GenericDialogComponent, {
-          width: 'auto',
-          data: DialogTemplate.modalTempates.userAlreadyExist(user)
-        });;
         this.dialog.open(GenericDialogComponent, {
           width: 'auto',
           data: DialogTemplate.modalTempates.userAlreadyExist(user)
@@ -256,7 +264,7 @@ export class SignUpPageComponent implements OnInit {
               to: user.email,
               templateOptions: {
                 fName: user.fName,
-                url: 'https://msia17conferences.com/dev/inscription-willem?' + this.encodeData({
+                url: 'https://msia17conferences.com/dev/inscription?' + this.encodeData({
                   userdata: btoa(JSON.stringify({
                     lName: user.lName,
                     fName: user.fName,
@@ -265,7 +273,7 @@ export class SignUpPageComponent implements OnInit {
                     token: user.token,
                     conferences: user.conferences
                   })),
-                  confirmation: true
+                  checkToken: true
                 })
               }
             }
@@ -292,6 +300,13 @@ export class SignUpPageComponent implements OnInit {
     });
   }
 
+  reset(stepper: any) {
+    stepper.reset();
+    Object.keys(this.userForm.controls).forEach(key => {
+      this.userForm.get(key).setErrors(null) ;
+    });
+  }
+
   log() {
     console.log(this.generateToken(16));
     const u = this.validatedUserFormValue;
@@ -306,7 +321,7 @@ export class SignUpPageComponent implements OnInit {
       '',
       this.utilsConfForm.ids
     );
-    console.log('https://msia17conferences.com/dev/inscription-willem?userdata=' + this.encodeData({
+    console.log('https://msia17conferences.com/dev/inscription?userdata=' + this.encodeData({
       userdata: btoa(JSON.stringify(user)),
       token: this.generateToken(16)
     }));
