@@ -1,4 +1,6 @@
 <mat-horizontal-stepper linear #stepper>
+
+  <!-- User Form -->
   <mat-step [stepControl]="userForm">
     <ng-template matStepLabel>Vos informations</ng-template>
     <form [formGroup]="userForm" (ngSubmit)="onSubmitUserInfo()" fxLayout="column" fxLayoutAlign="start">
@@ -23,11 +25,10 @@
       <button mat-button matStepperNext type="submit" [disabled]="userForm.invalid">Les conférences</button>
       <button mat-button type="button" (click)="fillUserInfoFormRemy()">Remplir form</button>
       <button mat-button type="button" (click)="testModal()">testModal</button>
-      <button mat-button (click)="yolo()">yolo</button>
-
-    <button mat-button type="button" (click)="emailService.resendConfirmMail('remousses@gmail.com')">Renvoyer le mail</button>
     </form>
   </mat-step>
+
+  <!-- Conferenceform -->
   <mat-step [stepControl]="confForm">
     <ng-template matStepLabel>Les conférences qui vous intéresse</ng-template>
     <mat-card *ngIf="isUpdating" style="background-color: #d94747; color:white;">Merci de bien vouloir ressaisir la liste des conférences</mat-card>
@@ -49,6 +50,8 @@
       </div>
     </form>
   </mat-step>
+
+  <!-- Récapitulatif -->
   <mat-step>
     <ng-template matStepLabel>Récapitulatif</ng-template>
     <div class="row" fxLayout="row">

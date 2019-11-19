@@ -59,18 +59,6 @@ export class SignUpPageComponent implements OnInit {
     });
   }
 
-  yolo() {
-    this.initFormValues({
-      fName: 'Remousses',
-      lName: 'Argentin',
-      company: 'CACF',
-      email: 'remousses@gmail.com',
-      position: 'test Logiciel',
-      vehicle: false,
-      conferences: [-1, 44, 51]
-    });
-  }
-
   private checkURI(event: any) {
     const userdata = event.userdata;
 
@@ -195,9 +183,9 @@ export class SignUpPageComponent implements OnInit {
   initFormValues(user: any/*UserInformations*/) {
     this.userForm.controls.email.disable();
     Object.keys(this.userForm.controls).forEach(key => {
-      console.log('key', key, user)
+      console.log('key', key, user);
       if (user.hasOwnProperty(key)) {
-        console.log('user[key]', user[key])
+        console.log('user[key]', user[key]);
         this.userForm.get(key).setValue(user[key]);
       }
     });
