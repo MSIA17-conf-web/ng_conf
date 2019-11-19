@@ -31,6 +31,8 @@ import { EmailService } from './services/email/email.service';
 import { ConferencesService } from './services/conferences/conferences.service';
 import { FormService } from './services/form-service/form-service.service';
 import { GuardService } from './services/guard/guard.service';
+
+import { GuestsService } from 'src/app/services/guests/guests.service';
 import { TestComponent } from './components/test/test.component';
 import { ThemeModule } from './themes';
 
@@ -86,7 +88,7 @@ import { ThemeModule } from './themes';
     UpdateUserDialogComponent,
     DeleteUserDialogComponent
   ],
-  providers: [EmailService, ConferencesService, FormService, GuardService],
+  providers: [EmailService, ConferencesService, FormService, GuardService, GuardService, GuestsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

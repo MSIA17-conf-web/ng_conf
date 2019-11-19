@@ -46,7 +46,7 @@ export default class DialogTemplate {
         title: 'Erreur durant votre inscription',
         text: [
           'L\'adresse email ' + options.email + ' à déjà fait l\'objet d\'une inscription.',
-          'Pour se désincrire ou modifier vos données, référer vous au mail de confirmation recu lors de l\'inscription',
+          'Pour se désincrire ou modifier vos données, référer vous au mail de confirmation reçu lors de l\'inscription',
         ],
         email: options.email,
         displayLink: {

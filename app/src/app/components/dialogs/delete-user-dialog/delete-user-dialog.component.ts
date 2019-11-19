@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dial
 
 import { UserInformations } from 'src/app/interfaces/generic/UserInformations.model';
 
-import { ConferencesService } from 'src/app/services/conferences/conferences.service';
+import { GuestsService } from 'src/app/services/guests/guests.service';
 
 import { GenericDialogComponent } from 'src/app/components/dialogs/generic-dialog/generic-dialog.component';
 import DialogTemplate from 'src/app/interfaces/DialogTemplate.model';
@@ -16,7 +16,7 @@ import DialogTemplate from 'src/app/interfaces/DialogTemplate.model';
 })
 export class DeleteUserDialogComponent implements OnInit {
 
-  constructor(private conferencesService: ConferencesService,
+  constructor(private guestsService: GuestsService,
               public dialog: MatDialog,
               public dialogRef: MatDialogRef<DeleteUserDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public user: UserInformations) { }
@@ -25,7 +25,7 @@ export class DeleteUserDialogComponent implements OnInit {
   }
 
   deleteUser() {
-    this.conferencesService.deleteUser(this.user.email).subscribe(verifResult => {
+    this.guestsService.deleteUser(this.user.email).subscribe(verifResult => {
       if (!verifResult.success) {
         console.log('Erreur lors de la désincription');
         this.dialog.open(GenericDialogComponent, {

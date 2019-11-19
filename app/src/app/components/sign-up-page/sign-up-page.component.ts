@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material';
 
 import { ConferencesService } from 'src/app/services/conferences/conferences.service';
 import { EmailService } from 'src/app/services/email/email.service';
+import { GuestsService } from 'src/app/services/guests/guests.service';
 
 import { UserInformations } from 'src/app/interfaces/generic/UserInformations.model';
 import { CfCreneau } from 'src/app/interfaces/ConfFormData.model';
@@ -32,7 +33,8 @@ export class SignUpPageComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private conferencesService: ConferencesService,
-              private emailService: EmailService,
+              private guestsService: GuestsService,
+              public/*private*/ emailService: EmailService,
               public dialog: MatDialog,
               private ngRoute: ActivatedRoute
   ) { }
@@ -77,7 +79,6 @@ export class SignUpPageComponent implements OnInit {
       try {
         user = JSON.parse(atob(userdata));
       } catch (e) {
-        console.log('La clé utilisée est erronnée', userdata);
         console.log('JSON parse exeption : ', e);
         this.dialog.open(GenericDialogComponent, {
           width: 'auto',
@@ -91,12 +92,13 @@ export class SignUpPageComponent implements OnInit {
           console.log('checkToken', user);
           this.checkToken(userdata, user);
         } else if (event.update) {
-          this.dialog.open(UpdateUserDialogComponent, {
+          const updateRef = this.dialog.open(UpdateUserDialogComponent, {
             width: 'auto',
-            data: {
-              userdata,
-              user
-            }
+            data: (user)
+          });
+          updateRef.componentInstance.onUpdate.subscribe(() => {
+            this.isUpdating = true;
+            this.initFormValues(user);
           });
         } else if (event.delete) {
           this.dialog.open(DeleteUserDialogComponent, {
@@ -113,7 +115,7 @@ export class SignUpPageComponent implements OnInit {
       // Conf name in QRCode with/ getAllConfName
       Promise.all(this.getAllConfName(user)).then(allConfName => {
         console.log('Retrieving all conference names for ' + user.email + ' user');
-        this.conferencesService.confirmUser(user.email, user.token).subscribe(verifResult => {
+        this.guestsService.confirmUser(user.email, user.token).subscribe(verifResult => {
           this.checkCreate(userdata, verifResult, user, allConfName, 'successfullSignUpMail');
         });
       }).catch(err => {
@@ -126,11 +128,37 @@ export class SignUpPageComponent implements OnInit {
   // et on pourra pas faire la maj si le user change d'adresse mail,
   updateUserData() {
     if (this.isUpdating) {
-      // this.checkToken();
+      this.ngRoute.queryParams.subscribe(event => {
+        const token = JSON.parse(atob(event.userdata)).token;
+
+        const userdata = btoa(JSON.stringify({
+          lName: this.userForm.get('lName').value,
+          fName: this.userForm.get('fName').value,
+          company: this.userForm.get('company').value,
+          email: this.userForm.get('email').value,
+          position: this.userForm.get('position').value,
+          vehicle: this.userForm.get('vehicle').value,
+          token,
+          hasValidate: true,
+          conferences: this.utilsConfForm.ids
+        }));
+
+        const user = JSON.parse(atob(userdata));
+
+        // Conf name in QRCode with/ getAllConfName
+        Promise.all(this.getAllConfName(user)).then(allConfName => {
+          console.log('Retrieving all conference names for ' + user.email + ' user');
+          this.guestsService.updateUser(user).subscribe(verifResult => {
+            this.checkCreate(userdata, verifResult, user, allConfName, 'successfullUpdateSignUpMail');
+          });
+        }).catch(err => {
+          console.log('Error when calling getAllConfName :', err);
+        });
+      });
     }
   }
 
-  private checkCreate(userdata: any, verifResult: any, user: UserInformations, allConfName, templateName) {
+  private checkCreate(userdata: any, verifResult: any, user: UserInformations, allConfName: any[], templateName: string) {
     if (!verifResult.success) {
       this.handleErrorDialog(verifResult.type, user);
     } else {
@@ -165,9 +193,11 @@ export class SignUpPageComponent implements OnInit {
   }
 
   initFormValues(user: any/*UserInformations*/) {
-    this.userForm.controls['email'].disable();
+    this.userForm.controls.email.disable();
     Object.keys(this.userForm.controls).forEach(key => {
+      console.log('key', key, user)
       if (user.hasOwnProperty(key)) {
+        console.log('user[key]', user[key])
         this.userForm.get(key).setValue(user[key]);
       }
     });
@@ -178,14 +208,10 @@ export class SignUpPageComponent implements OnInit {
     // });
   }
 
-  // for set value in UpdateUserDialogComponent
-  setIsUpdating(isUpdating: boolean) {
-    this.isUpdating = isUpdating;
-  }
-
   private getAllConfName(user: UserInformations): any[] {
     return user.conferences.map((confId) => {
       return new Promise((resolve, reject) => {
+        console.log('confId', confId)
         this.conferencesService.getConfName(confId).subscribe(conference => {
           resolve(conference.confName);
         }, err => {
@@ -288,7 +314,7 @@ export class SignUpPageComponent implements OnInit {
     const user = new UserInformations(u.lName, u.fName, u.company, u.email, u.position, u.vehicle, false, token, this.utilsConfForm.ids);
     console.log(user);
 
-    this.conferencesService.createUser(user).subscribe(data => {
+    this.guestsService.createUser(user).subscribe(data => {
       if (data.err) {
         this.dialog.open(GenericDialogComponent, {
           width: 'auto',
@@ -310,6 +336,8 @@ export class SignUpPageComponent implements OnInit {
                     fName: user.fName,
                     company: user.company,
                     email: user.email,
+                    position: user.position,
+                    vehicle: user.vehicle,
                     token: user.token,
                     conferences: user.conferences
                   })),
@@ -343,7 +371,7 @@ export class SignUpPageComponent implements OnInit {
   reset(stepper: any) {
     stepper.reset();
     Object.keys(this.userForm.controls).forEach(key => {
-      this.userForm.get(key).setErrors(null) ;
+      this.userForm.get(key).setErrors(null);
     });
   }
 

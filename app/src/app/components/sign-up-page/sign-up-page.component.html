@@ -24,6 +24,8 @@
       <button mat-button type="button" (click)="fillUserInfoFormRemy()">Remplir form</button>
       <button mat-button type="button" (click)="testModal()">testModal</button>
       <button mat-button (click)="yolo()">yolo</button>
+
+    <button mat-button type="button" (click)="emailService.resendConfirmMail('remousses@gmail.com')">Renvoyer le mail</button>
     </form>
   </mat-step>
   <mat-step [stepControl]="confForm">

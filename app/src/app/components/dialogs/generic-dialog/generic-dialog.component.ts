@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ConferencesService } from 'src/app/services/conferences/conferences.service';
+import { EmailService } from 'src/app/services/email/email.service';
 
 @Component({
   selector: 'app-generic-dialog',
@@ -11,7 +11,7 @@ export class GenericDialogComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<GenericDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
-              public conferencesService: ConferencesService) { }
+              public emailService: EmailService) { }
   ngOnInit() {
   }
 
