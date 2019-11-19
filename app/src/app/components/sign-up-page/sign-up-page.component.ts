@@ -13,6 +13,7 @@ import { GenericDialogComponent } from '../dialogs/generic-dialog/generic-dialog
 import DialogTemplate from 'src/app/interfaces/DialogTemplate.model';
 import { DeleteUserDialogComponent } from '../dialogs/delete-user-dialog/delete-user-dialog.component';
 import { UpdateUserDialogComponent } from '../dialogs/update-user-dialog/update-user-dialog.component';
+import { MobileService } from 'src/app/services/mobile/mobile.service';
 
 @Component({
   selector: 'app-sign-up-page',
@@ -30,13 +31,15 @@ export class SignUpPageComponent implements OnInit {
   noneString = 'Aucune';
   cfCreneau: Array<CfCreneau>;
   isUpdating = false;
+  isMobile: boolean;
 
   constructor(private formBuilder: FormBuilder,
               private conferencesService: ConferencesService,
               private guestsService: GuestsService,
-              public/*private*/ emailService: EmailService,
+              public emailService: EmailService,
               public dialog: MatDialog,
-              private ngRoute: ActivatedRoute
+              private ngRoute: ActivatedRoute,
+              public mobSvc: MobileService
   ) { }
 
   ngOnInit() {
