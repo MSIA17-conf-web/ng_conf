@@ -26,7 +26,7 @@ h1.app-name a {
 .sidenav-container {
   /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
        causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
-  flex: 1;
+  flex: 1 auto;
 }
 
 .is-mobile .sidenav-container {
@@ -36,6 +36,10 @@ h1.app-name a {
 }
 
 .mat-toolbar-row, .mat-toolbar-single-row {
-  height: 64px;
+  height: 50px;
   width: -webkit-fill-available;
+}
+
+.toolbar {
+  margin: 0px;
 }

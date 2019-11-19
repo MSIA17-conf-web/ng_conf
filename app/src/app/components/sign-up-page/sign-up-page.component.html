@@ -3,35 +3,44 @@
   <!-- User Form -->
   <mat-step [stepControl]="userForm">
     <ng-template matStepLabel>Vos informations</ng-template>
-    <form [formGroup]="userForm" (ngSubmit)="onSubmitUserInfo()" fxLayout="column" fxLayoutAlign="start">
-      <mat-form-field>
-        <input matInput type="text" class="form-control" id="email" formControlName="email" placeholder="Adresse email">
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput type="text" class="form-control" id="fName" formControlName="fName" placeholder="Prénom">
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput type="text" class="form-control" id="lName" formControlName="lName" placeholder="Nom">
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput type="text" class="form-control" id="company" formControlName="company"
-          placeholder="Nom de votre entreprise">
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput type="text" class="form-control" id="position" formControlName="position"
-          placeholder="Intitulé de votre poste">
-      </mat-form-field>
-      <mat-checkbox formControlName="vehicle">Serez-vous véhiculé ?</mat-checkbox>
-      <button mat-button matStepperNext type="submit" [disabled]="userForm.invalid">Les conférences</button>
-      <button mat-button type="button" (click)="fillUserInfoFormRemy()">Remplir form</button>
-      <button mat-button type="button" (click)="testModal()">testModal</button>
-    </form>
+    <mat-card>
+      <form [formGroup]="userForm" (ngSubmit)="onSubmitUserInfo()" fxLayout="column" fxLayoutAlign="start">
+        <mat-form-field>
+          <input matInput type="text" class="form-control" #email maxlength="70" formControlName="email"
+            placeholder="Adresse email">
+            <mat-hint align="end">{{email.value.length}} / 70</mat-hint>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="text" class="form-control" #fName maxlength="60" formControlName="fName" placeholder="Prénom">
+          <mat-hint align="end">{{fName.value.length}} / 60</mat-hint>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="text" class="form-control" #lName maxlength="60" formControlName="lName" placeholder="Nom">
+          <mat-hint align="end">{{lName.value.length}} / 60</mat-hint>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="text" class="form-control" #company maxlength="60" formControlName="company"
+            placeholder="Nom de votre entreprise">
+            <mat-hint align="end">{{company.value.length}} / 60</mat-hint>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="text" class="form-control" #position maxlength="70" formControlName="position"
+            placeholder="Intitulé de votre poste">
+            <mat-hint align="end">{{position.value.length}} / 70</mat-hint>
+        </mat-form-field>
+        <mat-checkbox formControlName="vehicle">Serez-vous véhiculé ?</mat-checkbox>
+        <button mat-button matStepperNext type="submit" [disabled]="userForm.invalid">Les conférences</button>
+        <button mat-button type="button" (click)="fillUserInfoFormRemy()">Remplir form</button>
+        <button mat-button type="button" (click)="testModal()">testModal</button>
+      </form>
+    </mat-card>
   </mat-step>
 
   <!-- Conferenceform -->
   <mat-step [stepControl]="confForm">
     <ng-template matStepLabel>Les conférences qui vous intéresse</ng-template>
-    <mat-card *ngIf="isUpdating" style="background-color: #d94747; color:white;">Merci de bien vouloir ressaisir la liste des conférences</mat-card>
+    <mat-card *ngIf="isUpdating" style="background-color: #d94747; color:white;">Merci de bien vouloir ressaisir la
+      liste des conférences</mat-card>
     <br>
     <form [formGroup]="confForm" (ngSubmit)="onSubmitConf()" fxLayout="column" fxLayoutAlign="start">
       <div *ngFor="let creneau of cfCreneau, let i = index">
@@ -110,7 +119,8 @@
   <!-- Conferenceform -->
   <mat-step [stepControl]="confForm">
     <ng-template matStepLabel>Les conférences qui vous intéresse</ng-template>
-    <mat-card *ngIf="isUpdating" style="background-color: #d94747; color:white;">Merci de bien vouloir ressaisir la liste des conférences</mat-card>
+    <mat-card *ngIf="isUpdating" style="background-color: #d94747; color:white;">Merci de bien vouloir ressaisir la
+      liste des conférences</mat-card>
     <br>
     <form [formGroup]="confForm" (ngSubmit)="onSubmitConf()" fxLayout="column" fxLayoutAlign="start">
       <div *ngFor="let creneau of cfCreneau, let i = index">

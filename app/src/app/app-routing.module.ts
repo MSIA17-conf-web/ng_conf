@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: 'accueil', component: HomeComponent },
   { path: 'default-template', component: DefaultTemplateComponent },
   { path: 'inscription', component: SignUpPageComponent, canActivate: [GuardService] },
-  { path: 'about', component: AboutComponent },
+  { path: 'a-propos', component: AboutComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'conferences', component: ConferencesComponent },
   { path: 'test', component: TestComponent }
