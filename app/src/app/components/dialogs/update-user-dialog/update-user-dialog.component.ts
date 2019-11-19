@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, EventEmitter } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 
 import { SignUpPageComponent } from 'src/app/components/sign-up-page/sign-up-page.component';
@@ -11,16 +11,17 @@ import { UserInformations } from 'src/app/interfaces/generic/UserInformations.mo
 })
 export class UpdateUserDialogComponent implements OnInit {
 
-  constructor(private signUpPage: SignUpPageComponent,
-              public dialog: MatDialog,
+  onUpdate = new EventEmitter();
+
+  constructor(public dialog: MatDialog,
               public dialogRef: MatDialogRef<UpdateUserDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public user: UserInformations) { }
 
   ngOnInit() {
   }
 
-  initFormValues() {
-    this.signUpPage.setIsUpdating(true);
-    this.signUpPage.initFormValues(this.user);
+  onYesClick() {
+    this.onUpdate.emit();
+    this.dialogRef.close();
   }
 }

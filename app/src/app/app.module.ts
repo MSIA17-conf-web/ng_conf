@@ -32,6 +32,7 @@ import { ConferencesService } from './services/conferences/conferences.service';
 import { FormService } from './services/form-service/form-service.service';
 import { GuardService } from './services/guard/guard.service';
 import { TestComponent } from './components/test/test.component';
+import { ThemeModule } from './themes';
 
 // import { TestComponent } from './components/test/test.component';
 
@@ -72,7 +73,13 @@ import { TestComponent } from './components/test/test.component';
     ReactiveFormsModule,
     FlexLayoutModule,
     HttpClientModule,
-    MarkdownModule.forRoot()
+    MarkdownModule.forRoot(),
+    // ThemeModule.forRoot({
+    //   themes: [{
+    //     name: 'first'
+    //   }],
+    //   active: 'first'
+    // })
   ],
   entryComponents : [
     GenericDialogComponent,

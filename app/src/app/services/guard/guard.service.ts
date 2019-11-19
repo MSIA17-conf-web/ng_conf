@@ -11,8 +11,6 @@ export class GuardService implements CanActivate {
   constructor(private router: Router) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    console.log('enculé');
-
     const dataObj = localStorage.getItem('requestedRoute');
     console.log('dataObj', dataObj);
     if (dataObj) {
@@ -20,7 +18,7 @@ export class GuardService implements CanActivate {
       this.router.navigate([dataObj]);
       return false;
     } else {
-      console.log('test');
+      console.log('via routerLink');
       return true;
     }
   }

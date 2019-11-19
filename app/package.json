@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --host=0.0.0.0 --poll 1000 --publicHost msia17conferences.com --ssl true --ssl-cert /etc/letsencrypt/live/www.msia17conferences.com/cert.pem --ssl-key /etc/letsencrypt/live/www.msia17conferences.com/privkey.pem",
-    "build": "ng build",
+    "start": "ng serve --host=0.0.0.0 --poll 1000 --publicHost msia17conferences.com --baseHref=/dev --deployUrl=/dev/ --ssl true --ssl-cert /etc/letsencrypt/live/www.msia17conferences.com/cert.pem --ssl-key /etc/letsencrypt/live/www.msia17conferences.com/privkey.pem",
+    "build": "ng build --baseHref=/ --deployUrl=/ --prod",
     "test": "ng test",
     "lint": "ng lint",
     "prod": "node ./servers/prod_server.js",

@@ -9,7 +9,7 @@ WORKDIR /app
 
 COPY ./app /app
 
-RUN npm run build -- --prod
+RUN npm run build
 
 ### Stage 1-2 : Install and copy server
 FROM node:10.16-alpine as server_build

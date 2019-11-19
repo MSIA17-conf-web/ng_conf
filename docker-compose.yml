@@ -15,17 +15,14 @@ services:
       - 4200
     stdin_open: true
 
-  # ng_conf:
-  #   container_name: ng_conf
-  #   hostname: ng_conf
-  #   build: 
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   volumes: 
-  #     - ./app:/app
-  #     - cert-handler_certbot-letsencrypt:/etc/letsencrypt
-  #   ports:
-  #     - 443:443
+  ng_conf:
+    container_name: ng_conf_prod
+    hostname: ng_conf_prod
+    build: 
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - 4200
 
 volumes:
   cert-handler_certbot-letsencrypt:
