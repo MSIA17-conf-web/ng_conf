@@ -7,6 +7,7 @@ import DialogTemplate from 'src/app/interfaces/DialogTemplate.model';
 
 import { ConferencesService } from 'src/app/services/conferences/conferences.service';
 import { GenericDialogComponent } from '../dialogs/generic-dialog/generic-dialog.component';
+import { MobileService } from 'src/app/services/mobile/mobile.service';
 
 @Component({
   selector: 'app-conferences',
@@ -15,12 +16,16 @@ import { GenericDialogComponent } from '../dialogs/generic-dialog/generic-dialog
 })
 export class ConferencesComponent implements OnInit {
   cdThemeList: Array<CdTheme>;
+  panelOpenState = false;
 
   constructor(private conferencesService: ConferencesService,
+              public mobSvc: MobileService,
               public dialog: MatDialog) { }
 
   ngOnInit() {
     this.conferencesService.getConfDisplayData().subscribe(res => {
+      console.log(res);
+
       this.cdThemeList = res;
     }, err => {
       console.log('Error from APIs', err);
@@ -31,7 +36,7 @@ export class ConferencesComponent implements OnInit {
     });
   }
 
-  markdownChanged(mdLink) {
+  markdownChanged(mdLink: string) {
     return atob(mdLink);
   }
 }

@@ -1,4 +1,5 @@
-<div>
+<!-- For desktop -->
+<div *ngIf="!mobSvc.getIsMobile()">
     <mat-tab-group>
         <mat-tab *ngFor="let theme of cdThemeList" [label]="theme.themeName">
             <mat-list role="list">
@@ -6,7 +7,7 @@
                     <mat-tab label="Présentation générale">
                         <markdown [data]="markdownChanged(theme.themeMDlink)"></markdown>
                     </mat-tab>
-                    <mat-tab *ngFor="let conference of theme.conferences;" [label]="conference.confName">
+                    <mat-tab *ngFor="let conference of theme.conferences" [label]="conference.confName">
                         <markdown [data]="markdownChanged(conference.confMDlink)"></markdown>
                     </mat-tab>
                 </mat-tab-group>
@@ -14,3 +15,28 @@
         </mat-tab>
     </mat-tab-group>
 </div>
+
+<!-- For mobile -->
+<mat-accordion *ngIf="mobSvc.getIsMobile()">
+    <mat-expansion-panel *ngFor="let theme of cdThemeList">
+        <mat-expansion-panel-header>
+            <mat-panel-description>
+                {{ theme.themeName }}
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <mat-expansion-panel *ngFor="let conference of theme.conferences">
+            <mat-expansion-panel-header>
+                <mat-panel-description>
+                    {{ conference.confName }} - {{ conference.creneau["0"].crenStartTime }} /
+                    {{ conference.creneau["0"].crenEndTime }}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <markdown [data]="markdownChanged(conference.confMDlink)"></markdown>
+        </mat-expansion-panel>
+        
+        <h1>Présentation générale</h1>
+        <markdown [data]="markdownChanged(theme.themeMDlink)"></markdown>
+    </mat-expansion-panel>
+</mat-accordion>

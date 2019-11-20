@@ -11,7 +11,8 @@ import {
   MatSidenavModule, MatListModule, MatButtonModule,
   MatStepperModule, MatInputModule, MatFormFieldModule,
   MatCheckboxModule, MatRadioModule, MatDialogModule,
-  MatTabsModule, MatSnackBarModule, MatCardModule
+  MatTabsModule, MatSnackBarModule, MatCardModule,
+  MatExpansionModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -73,6 +74,7 @@ import { ThemeModule } from './themes';
     MatTabsModule,
     MatSnackBarModule,
     MatCardModule,
+    MatExpansionModule,
     ReactiveFormsModule,
     FlexLayoutModule,
     HttpClientModule,
