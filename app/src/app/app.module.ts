@@ -26,16 +26,12 @@ import { GenericDialogComponent } from './components/dialogs/generic-dialog/gene
 import { UpdateUserDialogComponent } from './components/dialogs/update-user-dialog/update-user-dialog.component';
 import { DeleteUserDialogComponent } from './components/dialogs/delete-user-dialog/delete-user-dialog.component';
 
-import { ContactFormValidatorDirective } from './directives/contact-form-validator.directive';
-
 import { EmailService } from './services/email/email.service';
 import { ConferencesService } from './services/conferences/conferences.service';
-import { FormService } from './services/form-service/form-service.service';
 import { GuardService } from './services/guard/guard.service';
 import { MobileService } from './services/mobile/mobile.service';
 
 import { GuestsService } from 'src/app/services/guests/guests.service';
-import { TestComponent } from './components/test/test.component';
 import { ThemeModule } from './themes';
 
 // import { TestComponent } from './components/test/test.component';
@@ -50,7 +46,6 @@ import { ThemeModule } from './themes';
     ContactComponent,
     // ContactFormValidatorDirective,
     ConferencesComponent,
-    TestComponent,
     GenericDialogComponent,
     UpdateUserDialogComponent,
     DeleteUserDialogComponent
@@ -91,7 +86,7 @@ import { ThemeModule } from './themes';
     UpdateUserDialogComponent,
     DeleteUserDialogComponent
   ],
-  providers: [EmailService, ConferencesService, FormService, GuardService, GuardService, GuestsService, MobileService],
+  providers: [EmailService, ConferencesService, GuardService, GuardService, GuestsService, MobileService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -15,6 +15,8 @@ import { DeleteUserDialogComponent } from '../dialogs/delete-user-dialog/delete-
 import { UpdateUserDialogComponent } from '../dialogs/update-user-dialog/update-user-dialog.component';
 import { MobileService } from 'src/app/services/mobile/mobile.service';
 
+import { environment } from '../../../environments/environment';
+
 @Component({
   selector: 'app-sign-up-page',
   templateUrl: './sign-up-page.component.html',
@@ -321,7 +323,7 @@ export class SignUpPageComponent implements OnInit {
               to: user.email,
               templateOptions: {
                 fName: user.fName,
-                url: 'https://msia17conferences.com/dev/inscription?' + this.encodeData({
+                url: 'https://msia17conferences.com' + environment.production ? '' : '/dev' + '/inscription?' + this.encodeData({
                   userdata: btoa(JSON.stringify({
                     lName: user.lName,
                     fName: user.fName,
@@ -337,7 +339,13 @@ export class SignUpPageComponent implements OnInit {
               }
             }
           }).subscribe(mailRes => {
-            console.log('attempt token mail ? ', mailRes);
+            if (!mailRes.success) {
+              console.log('err', mailRes.err);
+              this.dialog.open(GenericDialogComponent, {
+                width: 'auto',
+                data: DialogTemplate.modalTempates.internalServerError(user)
+              });
+            }
             this.dialog.open(GenericDialogComponent, {
               width: 'auto',
               data: DialogTemplate.modalTempates.tokenSent(user)
@@ -380,7 +388,7 @@ export class SignUpPageComponent implements OnInit {
       '',
       this.utilsConfForm.ids
     );
-    console.log('https://msia17conferences.com/dev/inscription?userdata=' + this.encodeData({
+    console.log('https://msia17conferences.com' + environment.production ? '' : '/dev' + '/inscription?userdata=' + this.encodeData({
       userdata: btoa(JSON.stringify(user)),
       token: this.generateToken(16)
     }));

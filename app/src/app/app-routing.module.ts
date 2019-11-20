@@ -7,7 +7,6 @@ import { SignUpPageComponent } from './components/sign-up-page/sign-up-page.comp
 import { AboutComponent } from './components/about/about.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { ConferencesComponent } from './components/conferences/conferences.component';
-import { TestComponent } from './components/test/test.component';
 import { GuardService } from './services/guard/guard.service';
 
 const routes: Routes = [
@@ -17,8 +16,7 @@ const routes: Routes = [
   { path: 'inscription', component: SignUpPageComponent, canActivate: [GuardService] },
   { path: 'a-propos', component: AboutComponent },
   { path: 'contact', component: ContactComponent },
-  { path: 'conferences', component: ConferencesComponent },
-  { path: 'test', component: TestComponent }
+  { path: 'conferences', component: ConferencesComponent }
 ];
 
 @NgModule({
