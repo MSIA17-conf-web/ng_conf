@@ -8,11 +8,12 @@ const fs = require("fs"),
   cors = require("cors"),
   express = require("express"),
   bodyParser = require("body-parser"),
-app = express()
+  app = express(),
+  cookieParser = require('cookie-parser');
 
+app.use(cookieParser());
 
-app.get("*", function (req, res, next) {
-
+app.all("*", function (req, res, next) {
   console.log("Got request on ", req.path);
   next();
 })
@@ -29,16 +30,16 @@ app.use("/", express.static(path.join(__dirname, '../', "dist")))
 // })
 
 app.get("/*", function (req, res) {
+  console.log(req.path.substring(1));
+  res.cookie('requestedRoute', req.path.substring(1), { maxAge: 900000, httpOnly: true });
   res.writeHead(302, {
     "Location": "/"
   });
-  console.log(req.path.substring(1));
-  res.cookie('requestedRoute', req.path.substring(1), { maxAge: 900000, httpOnly: true });
   res.end()
 })
 
 app.get("/hello", (req, res) => {
-  res.send({res: "Bonjour"}).end();
+  res.send({ res: "Bonjour" }).end();
 })
 
 const httpServer = http.createServer(app)
