@@ -31,7 +31,9 @@ app.use("/", express.static(path.join(__dirname, '../', "dist")))
 
 app.get("/*", function (req, res) {
   console.log(req.path.substring(1));
-  res.cookie('requestedRoute', req.path.substring(1), { maxAge: 900000, httpOnly: true });
+  if(!req.path.includes('sockjs')) {
+    res.cookie('requestedRoute', req.path.substring(1), { maxAge: 900000, httpOnly: false });
+  }
   res.writeHead(302, {
     "Location": "/"
   });

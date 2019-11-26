@@ -15,7 +15,6 @@
         </mat-tab>
     </mat-tab-group>
 </div>
-
 <!-- For mobile -->
 <mat-accordion *ngIf="mobSvc.getIsMobile()">
     <mat-expansion-panel *ngFor="let theme of cdThemeList">
@@ -35,7 +34,7 @@
 
             <markdown [data]="markdownChanged(conference.confMDlink)"></markdown>
         </mat-expansion-panel>
-        
+
         <h1>Présentation générale</h1>
         <markdown [data]="markdownChanged(theme.themeMDlink)"></markdown>
     </mat-expansion-panel>

@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MobileService } from './services/mobile/mobile.service';
+import { LoaderService } from './services/loader/loader.service';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,7 @@ export class AppComponent implements OnDestroy, OnInit {
 
   isMobile: boolean;
 
-  constructor(public mobSvc: MobileService) {}
+  constructor(public mobSvc: MobileService, public loaderService: LoaderService) {}
 
   public ngOnInit(): void {
   }

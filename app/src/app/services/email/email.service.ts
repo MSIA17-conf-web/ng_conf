@@ -16,6 +16,8 @@ export class EmailService {
               private conferencesService: ConferencesService) { }
 
   sendEmail(options) {
+    // console.log(options.data);
+
     return this.httpClient.post<any>('https://msia17conferences.com:9010/api', {
       method: 'POST',
       url: 'sendEmail',
@@ -76,7 +78,7 @@ export class EmailService {
           token: user.token,
           conferences: user.conferences
         }));
-        
+
         this.httpClient.post<any>('https://msia17conferences.com:9010/api', {
           method: 'POST',
           url: 'sendEmail',

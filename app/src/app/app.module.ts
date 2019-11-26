@@ -12,7 +12,7 @@ import {
   MatStepperModule, MatInputModule, MatFormFieldModule,
   MatCheckboxModule, MatRadioModule, MatDialogModule,
   MatTabsModule, MatSnackBarModule, MatCardModule,
-  MatExpansionModule
+  MatExpansionModule, MatProgressSpinnerModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -30,9 +30,8 @@ import { EmailService } from './services/email/email.service';
 import { ConferencesService } from './services/conferences/conferences.service';
 import { GuardService } from './services/guard/guard.service';
 import { MobileService } from './services/mobile/mobile.service';
-
 import { GuestsService } from 'src/app/services/guests/guests.service';
-import { ThemeModule } from './themes';
+import { LoaderService } from './services/loader/loader.service';
 
 // import { TestComponent } from './components/test/test.component';
 
@@ -70,23 +69,26 @@ import { ThemeModule } from './themes';
     MatSnackBarModule,
     MatCardModule,
     MatExpansionModule,
+    MatProgressSpinnerModule,
     ReactiveFormsModule,
     FlexLayoutModule,
     HttpClientModule,
-    MarkdownModule.forRoot(),
-    // ThemeModule.forRoot({
-    //   themes: [{
-    //     name: 'first'
-    //   }],
-    //   active: 'first'
-    // })
+    MarkdownModule.forRoot()
   ],
   entryComponents : [
     GenericDialogComponent,
     UpdateUserDialogComponent,
     DeleteUserDialogComponent
   ],
-  providers: [EmailService, ConferencesService, GuardService, GuardService, GuestsService, MobileService],
+  providers: [
+    EmailService,
+    ConferencesService,
+    GuardService,
+    GuardService,
+    GuestsService,
+    MobileService,
+    LoaderService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

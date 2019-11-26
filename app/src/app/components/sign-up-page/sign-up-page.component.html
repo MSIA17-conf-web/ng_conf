@@ -1,4 +1,5 @@
 <!-- For desktop -->
+
 <mat-horizontal-stepper *ngIf="!mobSvc.getIsMobile()" linear #stepper>
   <!-- User Form -->
   <mat-step [stepControl]="userForm">
@@ -8,25 +9,27 @@
         <mat-form-field>
           <input matInput type="text" class="form-control" #email maxlength="70" formControlName="email"
             placeholder="Adresse email">
-            <mat-hint align="end">{{email.value.length}} / 70</mat-hint>
+          <mat-hint align="end">{{email.value.length}} / 70</mat-hint>
         </mat-form-field>
         <mat-form-field>
-          <input matInput type="text" class="form-control" #fName maxlength="60" formControlName="fName" placeholder="Prénom">
+          <input matInput type="text" class="form-control" #fName maxlength="60" formControlName="fName"
+            placeholder="Prénom">
           <mat-hint align="end">{{fName.value.length}} / 60</mat-hint>
         </mat-form-field>
         <mat-form-field>
-          <input matInput type="text" class="form-control" #lName maxlength="60" formControlName="lName" placeholder="Nom">
+          <input matInput type="text" class="form-control" #lName maxlength="60" formControlName="lName"
+            placeholder="Nom">
           <mat-hint align="end">{{lName.value.length}} / 60</mat-hint>
         </mat-form-field>
         <mat-form-field>
           <input matInput type="text" class="form-control" #company maxlength="60" formControlName="company"
             placeholder="Nom de votre entreprise">
-            <mat-hint align="end">{{company.value.length}} / 60</mat-hint>
+          <mat-hint align="end">{{company.value.length}} / 60</mat-hint>
         </mat-form-field>
         <mat-form-field>
           <input matInput type="text" class="form-control" #position maxlength="70" formControlName="position"
             placeholder="Intitulé de votre poste">
-            <mat-hint align="end">{{position.value.length}} / 70</mat-hint>
+          <mat-hint align="end">{{position.value.length}} / 70</mat-hint>
         </mat-form-field>
         <mat-checkbox formControlName="vehicle">Serez-vous véhiculé ?</mat-checkbox>
         <button mat-button matStepperNext type="submit" [disabled]="userForm.invalid">Les conférences</button>
@@ -43,15 +46,19 @@
       liste des conférences</mat-card>
     <br>
     <form [formGroup]="confForm" (ngSubmit)="onSubmitConf()" fxLayout="column" fxLayoutAlign="start">
-      <div *ngFor="let creneau of cfCreneau, let i = index">
-        <label [for]="creneau.crenId">{{ creneau.crenDesc }}</label>
-        <mat-radio-group [id]="creneau.crenId" fxLayout="column" fxLayoutAlign="start"
-          [formControlName]="creneau.crenId">
-          <mat-radio-button *ngFor="let conf of creneau.conferences, let y = index" [value]="conf">{{ conf.confName }}
-          </mat-radio-button>
-          <mat-radio-button value='-1'>Aucune</mat-radio-button>
-        </mat-radio-group>
-      </div>
+      <mat-card class="conf-form" *ngFor="let creneau of cfCreneau, let i = index">
+        <mat-card-header>
+          <label [for]="creneau.crenId">{{ creneau.crenDesc }}</label>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-radio-group [id]="creneau.crenId" fxLayout="column" fxLayoutAlign="start"
+            [formControlName]="creneau.crenId">
+            <mat-radio-button *ngFor="let conf of creneau.conferences, let y = index" [value]="conf">{{ conf.confName }}
+            </mat-radio-button>
+            <mat-radio-button value='-1'>Aucune</mat-radio-button>
+          </mat-radio-group>
+        </mat-card-content>
+      </mat-card>
       <div>
         <button mat-button matStepperPrevious>Vos informations</button>
         <button mat-button matStepperNext type="submit" [disabled]="confForm.invalid">Récapitulatif</button>
@@ -123,15 +130,19 @@
       liste des conférences</mat-card>
     <br>
     <form [formGroup]="confForm" (ngSubmit)="onSubmitConf()" fxLayout="column" fxLayoutAlign="start">
-      <div *ngFor="let creneau of cfCreneau, let i = index">
-        <label [for]="creneau.crenId">{{ creneau.crenDesc }}</label>
-        <mat-radio-group [id]="creneau.crenId" fxLayout="column" fxLayoutAlign="start"
-          [formControlName]="creneau.crenId">
-          <mat-radio-button *ngFor="let conf of creneau.conferences, let y = index" [value]="conf">{{ conf.confName }}
-          </mat-radio-button>
-          <mat-radio-button value='-1'>Aucune</mat-radio-button>
-        </mat-radio-group>
-      </div>
+      <mat-card class="conf-form" *ngFor="let creneau of cfCreneau, let i = index">
+        <mat-card-header>
+          <label [for]="creneau.crenId">{{ creneau.crenDesc }}</label>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-radio-group [id]="creneau.crenId" fxLayout="column" fxLayoutAlign="start"
+            [formControlName]="creneau.crenId">
+            <mat-radio-button *ngFor="let conf of creneau.conferences, let y = index" [value]="conf">{{ conf.confName }}
+            </mat-radio-button>
+            <mat-radio-button value='-1'>Aucune</mat-radio-button>
+          </mat-radio-group>
+        </mat-card-content>
+      </mat-card>
       <div>
         <button mat-button matStepperPrevious>Vos informations</button>
         <button mat-button matStepperNext type="submit" [disabled]="confForm.invalid">Récapitulatif</button>

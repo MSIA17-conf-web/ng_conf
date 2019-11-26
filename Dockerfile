@@ -1,11 +1,13 @@
 ### Stage 1-1 : Build Angulare Dist folder and UI dependencies
 FROM node:10.16-alpine as ui_build
 
-COPY app/package.json app/package-lock.json ./
-
-RUN npm ci && mkdir /app && mv ./node_modules /app/
+RUN mkdir /app
 
 WORKDIR /app
+
+COPY app/package.json app/package-lock.json ./
+
+RUN npm ci
 
 COPY ./app /app
 

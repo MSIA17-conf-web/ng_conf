@@ -3,18 +3,20 @@ import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 
+import { UserInformations } from 'src/app/interfaces/generic/UserInformations.model';
+import { CfCreneau } from 'src/app/interfaces/ConfFormData.model';
+
+import { GenericDialogComponent } from '../dialogs/generic-dialog/generic-dialog.component';
+import { DeleteUserDialogComponent } from '../dialogs/delete-user-dialog/delete-user-dialog.component';
+import { UpdateUserDialogComponent } from '../dialogs/update-user-dialog/update-user-dialog.component';
+
 import { ConferencesService } from 'src/app/services/conferences/conferences.service';
 import { EmailService } from 'src/app/services/email/email.service';
 import { GuestsService } from 'src/app/services/guests/guests.service';
-
-import { UserInformations } from 'src/app/interfaces/generic/UserInformations.model';
-import { CfCreneau } from 'src/app/interfaces/ConfFormData.model';
-import { GenericDialogComponent } from '../dialogs/generic-dialog/generic-dialog.component';
-import DialogTemplate from 'src/app/interfaces/DialogTemplate.model';
-import { DeleteUserDialogComponent } from '../dialogs/delete-user-dialog/delete-user-dialog.component';
-import { UpdateUserDialogComponent } from '../dialogs/update-user-dialog/update-user-dialog.component';
 import { MobileService } from 'src/app/services/mobile/mobile.service';
+import { LoaderService } from 'src/app/services/loader/loader.service';
 
+import DialogTemplate from 'src/app/interfaces/DialogTemplate.model';
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -41,24 +43,28 @@ export class SignUpPageComponent implements OnInit {
               public emailService: EmailService,
               public dialog: MatDialog,
               private ngRoute: ActivatedRoute,
-              public mobSvc: MobileService
+              public mobSvc: MobileService,
+              public loaderService: LoaderService
   ) { }
 
   ngOnInit() {
+
+    this.loaderService.setSpinnerState(true);
     // this.mockCreneau = this.conferencesService.mockCreneau;
     this.initUserInfoForm();
     this.conferencesService.getConfFormData().subscribe(res => {
+      this.loaderService.setSpinnerState(false);
       this.cfCreneau = res;
       this.initConfForm();
-
-
     }, err => {
+      this.loaderService.setSpinnerState(false);
       console.log('Error from APIs', err);
       this.dialog.open(GenericDialogComponent, {
         width: 'auto',
         data: DialogTemplate.modalTempates.internalServerError()
       });
     });
+
     this.ngRoute.queryParams.subscribe(event => {
       this.checkURI(event);
     });
@@ -68,10 +74,12 @@ export class SignUpPageComponent implements OnInit {
     const userdata = event.userdata;
 
     if (userdata) {
+      this.loaderService.setSpinnerState(true);
       let user: UserInformations;
       try {
         user = JSON.parse(atob(userdata));
       } catch (e) {
+        this.loaderService.setSpinnerState(false);
         console.log('JSON parse exeption : ', e);
         this.dialog.open(GenericDialogComponent, {
           width: 'auto',
@@ -82,9 +90,9 @@ export class SignUpPageComponent implements OnInit {
 
       if (user.email) {
         if (event.checkToken) {
-          console.log('checkToken', user);
           this.checkToken(userdata, user);
         } else if (event.update) {
+          this.loaderService.setSpinnerState(false);
           const updateRef = this.dialog.open(UpdateUserDialogComponent, {
             width: 'auto',
             data: (user)
@@ -94,6 +102,7 @@ export class SignUpPageComponent implements OnInit {
             this.initFormValues(user);
           });
         } else if (event.delete) {
+          this.loaderService.setSpinnerState(false);
           this.dialog.open(DeleteUserDialogComponent, {
             width: 'auto',
             data: (user)
@@ -105,6 +114,7 @@ export class SignUpPageComponent implements OnInit {
 
   private checkToken(userdata: any, user: any) {
     if (user.token) {
+      this.loaderService.setSpinnerState(true);
       // Conf name in QRCode with/ getAllConfName
       Promise.all(this.getAllConfName(user)).then(allConfName => {
         console.log('Retrieving all conference names for ' + user.email + ' user');
@@ -112,6 +122,7 @@ export class SignUpPageComponent implements OnInit {
           this.checkCreate(userdata, verifResult, user, allConfName, 'successfullSignUpMail');
         });
       }).catch(err => {
+        this.loaderService.setSpinnerState(false);
         console.log('Error when calling getAllConfName : ', err);
       });
     }
@@ -121,6 +132,8 @@ export class SignUpPageComponent implements OnInit {
   // et on pourra pas faire la maj si le user change d'adresse mail,
   updateUserData() {
     if (this.isUpdating) {
+      this.loaderService.setSpinnerState(true);
+
       this.ngRoute.queryParams.subscribe(event => {
         const token = JSON.parse(atob(event.userdata)).token;
 
@@ -145,6 +158,7 @@ export class SignUpPageComponent implements OnInit {
             this.checkCreate(userdata, verifResult, user, allConfName, 'successfullUpdateSignUpMail');
           });
         }).catch(err => {
+          this.loaderService.setSpinnerState(false);
           console.log('Error when calling getAllConfName :', err);
         });
       });
@@ -153,6 +167,7 @@ export class SignUpPageComponent implements OnInit {
 
   private checkCreate(userdata: any, verifResult: any, user: UserInformations, allConfName: any[], templateName: string) {
     if (!verifResult.success) {
+      this.loaderService.setSpinnerState(false);
       this.handleErrorDialog(verifResult.type, user);
     } else {
       console.log('successfully registred');
@@ -171,11 +186,13 @@ export class SignUpPageComponent implements OnInit {
             }
           }
         }).subscribe(mailRes => {
+          this.loaderService.setSpinnerState(false);
           this.dialog.open(GenericDialogComponent, {
             width: 'auto',
             data: DialogTemplate.modalTempates.successful(user)
           });
         }, err => {
+          this.loaderService.setSpinnerState(false);
           console.log('Error from APIs during token checks', err);
           this.dialog.open(GenericDialogComponent, {
             width: 'auto',
@@ -301,6 +318,9 @@ export class SignUpPageComponent implements OnInit {
   }
 
   validateSignUp() {
+    console.log('this.loaderService', this.loaderService);
+
+    this.loaderService.setSpinnerState(true);
     // console.log(this.validatedUserFormValue, this.validatedConfFormValue);
     const u = this.validatedUserFormValue;
     const token = this.generateToken(16);
@@ -308,13 +328,16 @@ export class SignUpPageComponent implements OnInit {
     console.log(user);
 
     this.guestsService.createUser(user).subscribe(data => {
+      console.log('this.loaderService', this.loaderService);
       if (data.err) {
+        this.loaderService.setSpinnerState(false);
         this.dialog.open(GenericDialogComponent, {
           width: 'auto',
           data: DialogTemplate.modalTempates.userAlreadyExist(user)
         });
       } else {
         console.log('Sending email confirmation');
+        const route = environment.production ? '' : '/dev';
         this.emailService.sendEmail(
           {
             templateName: 'tokenMail',
@@ -323,7 +346,7 @@ export class SignUpPageComponent implements OnInit {
               to: user.email,
               templateOptions: {
                 fName: user.fName,
-                url: 'https://msia17conferences.com' + environment.production ? '' : '/dev' + '/inscription?' + this.encodeData({
+                url: 'https://msia17conferences.com' + route + '/inscription?' + this.encodeData({
                   userdata: btoa(JSON.stringify({
                     lName: user.lName,
                     fName: user.fName,
@@ -339,6 +362,8 @@ export class SignUpPageComponent implements OnInit {
               }
             }
           }).subscribe(mailRes => {
+            this.loaderService.setSpinnerState(false);
+
             if (!mailRes.success) {
               console.log('err', mailRes.err);
               this.dialog.open(GenericDialogComponent, {
@@ -351,6 +376,7 @@ export class SignUpPageComponent implements OnInit {
               data: DialogTemplate.modalTempates.tokenSent(user)
             });
           }, err => {
+            this.loaderService.setSpinnerState(false);
             console.log('Error from APIs', err);
             this.dialog.open(GenericDialogComponent, {
               width: 'auto',
@@ -359,6 +385,7 @@ export class SignUpPageComponent implements OnInit {
           });
       }
     }, err => {
+      this.loaderService.setSpinnerState(false);
       console.log('Error from APIs', err);
       this.dialog.open(GenericDialogComponent, {
         width: 'auto',

@@ -11,9 +11,9 @@ import { GuardService } from './services/guard/guard.service';
 
 const routes: Routes = [
   { path: '', redirectTo: '/accueil', pathMatch: 'full' },
-  { path: 'accueil', component: HomeComponent },
+  { path: 'accueil', component: HomeComponent, canActivate: [GuardService] },
   { path: 'default-template', component: DefaultTemplateComponent },
-  { path: 'inscription', component: SignUpPageComponent, canActivate: [GuardService] },
+  { path: 'inscription', component: SignUpPageComponent },
   { path: 'a-propos', component: AboutComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'conferences', component: ConferencesComponent }
