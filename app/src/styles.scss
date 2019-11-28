@@ -37,20 +37,20 @@ $cesi: (
   )
 );
 $cesi-accent: (
-  50: #f4e0e3,
-  100: #e4b3b9,
-  200: #d2808a,
-  300: #bf4d5b,
-  400: #b22637,
-  500: #a40014,
-  600: #9c0012,
-  700: #92000e,
-  800: #89000b,
-  900: #780006,
-  A100: #ffa6a7,
-  A200: #ff7374,
-  A400: #ff4042,
-  A700: #ff2629,
+  50: #f6e0e9,
+  100: #e9b3c9,
+  200: #db80a5,
+  300: #cc4d80,
+  400: #c12665,
+  500: #b6004a,
+  600: #af0043,
+  700: #a6003a,
+  800: #9e0032,
+  900: #8e0022,
+  A100: #ffbac5,
+  A200: #ff879b,
+  A400: #ff5470,
+  A700: #ff3b5b,
   contrast: (
     50: #000000,
     100: #000000,
@@ -64,11 +64,43 @@ $cesi-accent: (
     900: #ffffff,
     A100: #000000,
     A200: #000000,
-    A400: #ffffff,
+    A400: #000000,
     A700: #ffffff
   )
 );
 
+$cesi-warn: (
+  50: #f6e0e9,
+  100: #e9b3c9,
+  200: #db80a5,
+  300: #cc4d80,
+  400: #c12665,
+  500: #b6004a,
+  600: #af0043,
+  700: #a6003a,
+  800: #9e0032,
+  900: #8e0022,
+  A100: #ffbac5,
+  A200: #ff879b,
+  A400: #ff5470,
+  A700: #ff3b5b,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #ffffff,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #ffffff
+  )
+);
 
 @import "../node_modules/material-design-icons/iconfont/material-icons.css";
 
@@ -107,6 +139,6 @@ body {
 
 $my-app-primary: mat-palette($cesi);
 $my-app-accent: mat-palette($cesi-accent);
-$my-app-warn: mat-palette($mat-deep-orange);
+$my-app-warn: mat-palette($cesi-warn);
 $my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
 @include angular-material-theme($my-app-theme);

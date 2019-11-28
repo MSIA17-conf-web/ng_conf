@@ -6,7 +6,7 @@
     <mat-card>
       <form [formGroup]="userForm" (ngSubmit)="onSubmitUserInfo()" fxLayout="column" fxLayoutAlign="start">
         <mat-form-field>
-          <input matInput type="text" class="form-control" #email maxlength="70" formControlName="email"
+          <input matInput type="email" class="form-control" #email maxlength="70" formControlName="email"
             placeholder="Adresse email">
           <mat-hint align="end">{{email.value.length}} / 70</mat-hint>
         </mat-form-field>
@@ -31,9 +31,13 @@
           <mat-hint align="end">{{position.value.length}} / 70</mat-hint>
         </mat-form-field>
         <mat-checkbox formControlName="vehicle">Avez-vous besoin d'une place de parking ?</mat-checkbox>
-        <button mat-button matStepperNext type="submit" [disabled]="userForm.invalid">Suivant - Les conférences</button>
-        <button mat-button type="button" (click)="fillUserInfoFormRemy()" *ngIf="!env.production">Remplir form</button>
-        <button mat-button type="button" (click)="testModal()" *ngIf="!env.production">testModal</button>
+        <mat-card-actions style="margin: 8px 0 0 0;">
+          <button mat-button mat-flat-button color="accent" matStepperNext type="submit"
+            [disabled]="userForm.invalid">Suivant - Les conférences</button>
+          <button mat-button type="button" (click)="fillUserInfoFormRemy()" *ngIf="!env.production">Remplir
+            form</button>
+          <button mat-button type="button" (click)="testModal()" *ngIf="!env.production">testModal</button>
+        </mat-card-actions>
       </form>
     </mat-card>
   </mat-step>
@@ -70,11 +74,12 @@
           </mat-radio-group>
         </mat-card-content>
       </mat-card>
-      <div>
-        <button mat-button matStepperPrevious>Précédent - Vos informations</button>
-        <button mat-button matStepperNext type="submit" [disabled]="confForm.invalid">Suivant - Récapitulatif</button>
+      <mat-card-actions>
+        <button mat-flat-button color="primary" matStepperPrevious>Précédent - Vos informations</button>
+        <button mat-button mat-flat-button color="accent" matStepperNext type="submit"
+          [disabled]="confForm.invalid">Suivant - Récapitulatif</button>
         <button mat-button type="submit" [disabled]="confForm.invalid" *ngIf="!env.production">log form value</button>
-      </div>
+      </mat-card-actions>
     </form>
   </mat-step>
 
@@ -94,13 +99,14 @@
         </div>
       </div>
     </div>
-    <div>
-      <button mat-button matStepperPrevious>Précédent - Les conférences</button>
-      <button mat-button (click)="reset(stepper)">Réinitialiser le formulaire</button>
-      <button mat-button (click)="validateSignUp()" *ngIf="!isUpdating">Valider la préinscription</button>
-      <button mat-button (click)="updateUserData()" *ngIf="isUpdating">Mettre à jour</button>
+    <mat-card-actions>
+      <button mat-button (click)="reset(stepper)">Réinitialiser les formulaires</button>
+      <button mat-flat-button color="primary" matStepperPrevious>Précédent - Les conférences</button>
+      <button mat-raised-button color="accent" (click)="validateSignUp()" *ngIf="!isUpdating">Valider la
+        préinscription</button>
+      <button mat-raised-button color="accent" (click)="updateUserData()" *ngIf="isUpdating">Mettre à jour</button>
       <button mat-button (click)="log()" *ngIf="!env.production">Log</button>
-    </div>
+    </mat-card-actions>
   </mat-step>
 </mat-horizontal-stepper>
 
@@ -112,7 +118,8 @@
     <ng-template matStepLabel>Vos informations</ng-template>
     <form [formGroup]="userForm" (ngSubmit)="onSubmitUserInfo()" fxLayout="column" fxLayoutAlign="start">
       <mat-form-field>
-        <input matInput type="text" class="form-control" id="email" formControlName="email" placeholder="Adresse email">
+        <input matInput type="email" class="form-control" id="email" formControlName="email"
+          placeholder="Adresse email">
       </mat-form-field>
       <mat-form-field>
         <input matInput type="text" class="form-control" id="fName" formControlName="fName" placeholder="Prénom">
@@ -129,9 +136,10 @@
           placeholder="Intitulé de votre poste">
       </mat-form-field>
       <mat-checkbox formControlName="vehicle">
-        <span class="wrap-mat-label">Avez-vous besoin d'une
+        <span class="wrap-mat-label" style="margin: 0 0 8px 0;">Avez-vous besoin d'une
           place de parking ?</span></mat-checkbox>
-      <button mat-button matStepperNext type="submit" [disabled]="userForm.invalid">Suivant - Les conférences</button>
+      <button mat-button mat-flat-button color="accent" matStepperNext type="submit"
+        [disabled]="userForm.invalid">Suivant - Les conférences</button>
       <button mat-button type="button" (click)="fillUserInfoFormRemy()" *ngIf="!env.production">Remplir form</button>
       <button mat-button type="button" (click)="testModal()" *ngIf="!env.production">testModal</button>
     </form>
@@ -159,17 +167,17 @@
               </mat-radio-button>
             </div>
             <div fxLayout="row" fxLayoutAlign="start">
-              <mat-radio-button value='-1'></mat-radio-button>
-              <span class="wrap-mat-label">Aucune</span>
+              <mat-radio-button value='-1'>
+                <span class="wrap-mat-label">Aucune</span>
+              </mat-radio-button>
             </div>
           </mat-radio-group>
         </mat-card-content>
       </mat-card>
-      <div>
-        <button mat-button matStepperPrevious>Précédent - Vos informations</button>
-        <button mat-button matStepperNext type="submit" [disabled]="confForm.invalid">Suivant - Récapitulatif</button>
-        <button mat-button type="submit" [disabled]="confForm.invalid" *ngIf="!env.production">log form value</button>
-      </div>
+      <button mat-flat-button color="primary" matStepperPrevious>Précédent - Vos informations</button>
+      <button mat-flat-button color="accent" mat-flat-button color="accent" matStepperNext type="submit"
+        [disabled]="confForm.invalid">Suivant - Récapitulatif</button>
+      <button mat-button type="submit" [disabled]="confForm.invalid" *ngIf="!env.production">log form value</button>
     </form>
   </mat-step>
 
@@ -189,10 +197,11 @@
         </div>
       </div>
     </div>
-    <div>
-      <button mat-button matStepperPrevious>Précédent - Les conférences</button>
-      <button mat-button (click)="reset(stepper)">Réinitialiser les formulaire</button>
-      <button mat-button (click)="validateSignUp()" *ngIf="!isUpdating">Valider la préinscription</button>
+    <div fxLayout="column">
+      <button mat-flat-button color="primary" matStepperPrevious>Précédent - Les conférences</button>
+      <button mat-raised-button (click)="validateSignUp()" *ngIf="!isUpdating" color="accent">Valider la
+        préinscription</button>
+      <button mat-button (click)="reset(stepper)">Réinitialiser les formulaires</button>
       <button mat-button (click)="updateUserData()" *ngIf="isUpdating">Mettre à jour</button>
       <button mat-button (click)="log()" *ngIf="!env.production">Log</button>
     </div>
