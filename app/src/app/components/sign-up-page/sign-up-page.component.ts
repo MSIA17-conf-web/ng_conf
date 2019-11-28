@@ -36,7 +36,7 @@ export class SignUpPageComponent implements OnInit {
   cfCreneau: Array<CfCreneau>;
   isUpdating = false;
   isMobile: boolean;
-
+  env = environment;
   constructor(private formBuilder: FormBuilder,
               private conferencesService: ConferencesService,
               private guestsService: GuestsService,

@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 
 import { CdTheme } from 'src/app/interfaces/ConfDisplayData.model';
@@ -15,14 +15,13 @@ import { LoaderService } from 'src/app/services/loader/loader.service';
   templateUrl: './conferences.component.html',
   styleUrls: ['./conferences.component.scss']
 })
-export class ConferencesComponent implements OnInit, AfterViewInit {
+export class ConferencesComponent implements OnInit {
   cdThemeList: Array<CdTheme>;
 
   constructor(private conferencesService: ConferencesService,
               public mobSvc: MobileService,
               public dialog: MatDialog,
-              public loaderService: LoaderService,
-              private cdRef:ChangeDetectorRef) { }
+              public loaderService: LoaderService) { }
 
   ngOnInit() {
     this.loaderService.setSpinnerState(true);
@@ -41,10 +40,6 @@ export class ConferencesComponent implements OnInit, AfterViewInit {
       });
     });
   }
-
-  ngAfterViewInit() {
-
-}
 
   markdownChanged(mdLink: string) {
     return atob(mdLink);

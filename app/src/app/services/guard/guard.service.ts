@@ -18,7 +18,7 @@ export class GuardService implements CanActivate {
       console.log('The requested route is ' + requestedRoute);
       if (requestedRoute !== 'accueil') {
         cookie.requestedRoute = '';
-        this.router.navigate([requestedRoute]);
+        this.router.navigateByUrl(requestedRoute);
         return false;
       } else {
         console.log('The requested route is accueil');

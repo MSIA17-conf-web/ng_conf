@@ -3,7 +3,11 @@
     <button mat-icon-button (click)="snav.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
-    <h1 class="app-name"><a routerLink="accueil">Conférences MSIA 17</a></h1>
+    <h1 class="app-name"><a routerLink="accueil">IT's 4 Tomorrow</a></h1>
+    <span style="flex: 1 1 auto"></span>
+    <button mat-raised-button color="accent" style="font-weight: bold;" routerLink="inscription">
+      S'INSCRIRE
+    </button>
   </mat-toolbar>
 
   <mat-sidenav-container class="sidenav-container" [style.marginTop.px]="mobSvc.getIsMobile() ? 50 : 0">

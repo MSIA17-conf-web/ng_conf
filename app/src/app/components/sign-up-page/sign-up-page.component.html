@@ -1,5 +1,4 @@
 <!-- For desktop -->
-
 <mat-horizontal-stepper *ngIf="!mobSvc.getIsMobile()" linear #stepper>
   <!-- User Form -->
   <mat-step [stepControl]="userForm">
@@ -31,10 +30,10 @@
             placeholder="Intitulé de votre poste">
           <mat-hint align="end">{{position.value.length}} / 70</mat-hint>
         </mat-form-field>
-        <mat-checkbox formControlName="vehicle">Serez-vous véhiculé ?</mat-checkbox>
-        <button mat-button matStepperNext type="submit" [disabled]="userForm.invalid">Les conférences</button>
-        <button mat-button type="button" (click)="fillUserInfoFormRemy()">Remplir form</button>
-        <button mat-button type="button" (click)="testModal()">testModal</button>
+        <mat-checkbox formControlName="vehicle">Avez-vous besoin d'une place de parking ?</mat-checkbox>
+        <button mat-button matStepperNext type="submit" [disabled]="userForm.invalid">Suivant - Les conférences</button>
+        <button mat-button type="button" (click)="fillUserInfoFormRemy()" *ngIf="!env.production">Remplir form</button>
+        <button mat-button type="button" (click)="testModal()" *ngIf="!env.production">testModal</button>
       </form>
     </mat-card>
   </mat-step>
@@ -53,16 +52,28 @@
         <mat-card-content>
           <mat-radio-group [id]="creneau.crenId" fxLayout="column" fxLayoutAlign="start"
             [formControlName]="creneau.crenId">
-            <mat-radio-button *ngFor="let conf of creneau.conferences, let y = index" [value]="conf">{{ conf.confName }}
-            </mat-radio-button>
-            <mat-radio-button value='-1'>Aucune</mat-radio-button>
+            <div *ngFor="let conf of creneau.conferences, let y = index" fxLayout="row" fxLayoutAlign="start">
+              <mat-radio-button [value]="conf">
+                <span class="wrap-mat-label">
+                  {{ conf.confName }}
+                </span>
+              </mat-radio-button>
+
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start">
+              <mat-radio-button value='-1'>
+                <span class="wrap-mat-label">
+                  Aucune
+                </span>
+              </mat-radio-button>
+            </div>
           </mat-radio-group>
         </mat-card-content>
       </mat-card>
       <div>
-        <button mat-button matStepperPrevious>Vos informations</button>
-        <button mat-button matStepperNext type="submit" [disabled]="confForm.invalid">Récapitulatif</button>
-        <button mat-button type="submit" [disabled]="confForm.invalid">log form value</button>
+        <button mat-button matStepperPrevious>Précédent - Vos informations</button>
+        <button mat-button matStepperNext type="submit" [disabled]="confForm.invalid">Suivant - Récapitulatif</button>
+        <button mat-button type="submit" [disabled]="confForm.invalid" *ngIf="!env.production">log form value</button>
       </div>
     </form>
   </mat-step>
@@ -84,14 +95,15 @@
       </div>
     </div>
     <div>
-      <button mat-button matStepperPrevious>Les conférences</button>
-      <button mat-button (click)="reset(stepper)">Réinitialiser</button>
-      <button mat-button (click)="validateSignUp()" *ngIf="!isUpdating">Valider</button>
+      <button mat-button matStepperPrevious>Précédent - Les conférences</button>
+      <button mat-button (click)="reset(stepper)">Réinitialiser le formulaire</button>
+      <button mat-button (click)="validateSignUp()" *ngIf="!isUpdating">Valider la préinscription</button>
       <button mat-button (click)="updateUserData()" *ngIf="isUpdating">Mettre à jour</button>
-      <button mat-button (click)="log()">Log</button>
+      <button mat-button (click)="log()" *ngIf="!env.production">Log</button>
     </div>
   </mat-step>
 </mat-horizontal-stepper>
+
 
 <!-- For mobile -->
 <mat-vertical-stepper *ngIf="mobSvc.getIsMobile()" linear #stepper>
@@ -116,10 +128,12 @@
         <input matInput type="text" class="form-control" id="position" formControlName="position"
           placeholder="Intitulé de votre poste">
       </mat-form-field>
-      <mat-checkbox formControlName="vehicle">Serez-vous véhiculé ?</mat-checkbox>
-      <button mat-button matStepperNext type="submit" [disabled]="userForm.invalid">Les conférences</button>
-      <button mat-button type="button" (click)="fillUserInfoFormRemy()">Remplir form</button>
-      <button mat-button type="button" (click)="testModal()">testModal</button>
+      <mat-checkbox formControlName="vehicle">
+        <span class="wrap-mat-label">Avez-vous besoin d'une
+          place de parking ?</span></mat-checkbox>
+      <button mat-button matStepperNext type="submit" [disabled]="userForm.invalid">Suivant - Les conférences</button>
+      <button mat-button type="button" (click)="fillUserInfoFormRemy()" *ngIf="!env.production">Remplir form</button>
+      <button mat-button type="button" (click)="testModal()" *ngIf="!env.production">testModal</button>
     </form>
   </mat-step>
 
@@ -137,16 +151,24 @@
         <mat-card-content>
           <mat-radio-group [id]="creneau.crenId" fxLayout="column" fxLayoutAlign="start"
             [formControlName]="creneau.crenId">
-            <mat-radio-button *ngFor="let conf of creneau.conferences, let y = index" [value]="conf">{{ conf.confName }}
-            </mat-radio-button>
-            <mat-radio-button value='-1'>Aucune</mat-radio-button>
+            <div *ngFor="let conf of creneau.conferences, let y = index" fxLayout="row" fxLayoutAlign="start">
+              <mat-radio-button [value]="conf" [id]="conf.confId">
+                <span class="wrap-mat-label">
+                  {{ conf.confName }}
+                </span>
+              </mat-radio-button>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start">
+              <mat-radio-button value='-1'></mat-radio-button>
+              <span class="wrap-mat-label">Aucune</span>
+            </div>
           </mat-radio-group>
         </mat-card-content>
       </mat-card>
       <div>
-        <button mat-button matStepperPrevious>Vos informations</button>
-        <button mat-button matStepperNext type="submit" [disabled]="confForm.invalid">Récapitulatif</button>
-        <button mat-button type="submit" [disabled]="confForm.invalid">log form value</button>
+        <button mat-button matStepperPrevious>Précédent - Vos informations</button>
+        <button mat-button matStepperNext type="submit" [disabled]="confForm.invalid">Suivant - Récapitulatif</button>
+        <button mat-button type="submit" [disabled]="confForm.invalid" *ngIf="!env.production">log form value</button>
       </div>
     </form>
   </mat-step>
@@ -168,11 +190,11 @@
       </div>
     </div>
     <div>
-      <button mat-button matStepperPrevious>Les conférences</button>
-      <button mat-button (click)="reset(stepper)">Réinitialiser</button>
-      <button mat-button (click)="validateSignUp()" *ngIf="!isUpdating">Valider</button>
+      <button mat-button matStepperPrevious>Précédent - Les conférences</button>
+      <button mat-button (click)="reset(stepper)">Réinitialiser les formulaire</button>
+      <button mat-button (click)="validateSignUp()" *ngIf="!isUpdating">Valider la préinscription</button>
       <button mat-button (click)="updateUserData()" *ngIf="isUpdating">Mettre à jour</button>
-      <button mat-button (click)="log()">Log</button>
+      <button mat-button (click)="log()" *ngIf="!env.production">Log</button>
     </div>
   </mat-step>
 </mat-vertical-stepper>

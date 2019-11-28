@@ -1,32 +1,112 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import "@angular/material/prebuilt-themes/deeppurple-amber.css";
+// @import "@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import "~@angular/material/theming";
+@include mat-core();
+
+$cesi: (
+  50: #e0f4f2,
+  100: #b3e4de,
+  200: #80d2c8,
+  300: #4dbfb1,
+  400: #26b2a1,
+  500: #00a490,
+  600: #009c88,
+  700: #00927d,
+  800: #008973,
+  900: #007861,
+  A100: #a6ffeb,
+  A200: #73ffdf,
+  A400: #40ffd3,
+  A700: #26ffcd,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000
+  )
+);
+$cesi-accent: (
+  50: #f4e0e3,
+  100: #e4b3b9,
+  200: #d2808a,
+  300: #bf4d5b,
+  400: #b22637,
+  500: #a40014,
+  600: #9c0012,
+  700: #92000e,
+  800: #89000b,
+  900: #780006,
+  A100: #ffa6a7,
+  A200: #ff7374,
+  A400: #ff4042,
+  A700: #ff2629,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #ffffff,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #ffffff,
+    A700: #ffffff
+  )
+);
+
 
 @import "../node_modules/material-design-icons/iconfont/material-icons.css";
 
 // "../node_modules/material-design-icons/iconfont/material-icons.css"
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, sans-serif;
+}
 .toolbar {
-    height: 60px;
-    margin: -8px;
-    display: flex;
-    align-items: center;
-    background-color: #1976d2;
-    color: white;
-    font-weight: 600;
-  }
+  height: 60px;
+  margin: -8px;
+  display: flex;
+  align-items: center;
+  background-color: #1976d2;
+  color: white;
+  font-weight: 600;
+}
 
-  .toolbar img {
-    margin: 0 16px;
-  }
+.toolbar img {
+  margin: 0 16px;
+}
 
-  .toolbar #twitter-logo {
-    height: 40px;
-    margin: 0 16px;
-  }
+.toolbar #twitter-logo {
+  height: 40px;
+  margin: 0 16px;
+}
 
-  .toolbar #twitter-logo:hover {
-    opacity: 0.8;
-  }
+.toolbar #twitter-logo:hover {
+  opacity: 0.8;
+}
+
+$my-app-primary: mat-palette($cesi);
+$my-app-accent: mat-palette($cesi-accent);
+$my-app-warn: mat-palette($mat-deep-orange);
+$my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
+@include angular-material-theme($my-app-theme);

@@ -18,6 +18,7 @@ services:
   ng_conf:
     container_name: ng_conf_prod
     hostname: ng_conf_prod
+    restart: always
     build: 
       context: ./
       dockerfile: Dockerfile
