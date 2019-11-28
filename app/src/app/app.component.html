@@ -8,6 +8,7 @@
     <button mat-raised-button color="accent" style="font-weight: bold;" routerLink="inscription">
       S'INSCRIRE
     </button>
+
   </mat-toolbar>
 
   <mat-sidenav-container class="sidenav-container" [style.marginTop.px]="mobSvc.getIsMobile() ? 50 : 0">
@@ -29,3 +30,7 @@
 <div class="loading" *ngIf="loaderService.getSpinnerState()">
   <mat-spinner></mat-spinner>
 </div>
+
+<button class="fab-button" mat-mini-fab color="accent" (click)="openBottomSheet()">
+  <mat-icon>add</mat-icon>
+</button>

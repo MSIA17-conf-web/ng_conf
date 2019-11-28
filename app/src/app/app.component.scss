@@ -70,3 +70,10 @@ h1.app-name a {
   height: 100%;
   background-color: rgba(0,0,0,0.3);
 }
+
+.fab-button {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  z-index: 1000;
+}

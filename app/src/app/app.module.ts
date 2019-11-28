@@ -12,7 +12,7 @@ import {
   MatStepperModule, MatInputModule, MatFormFieldModule,
   MatCheckboxModule, MatRadioModule, MatDialogModule,
   MatTabsModule, MatSnackBarModule, MatCardModule,
-  MatExpansionModule, MatProgressSpinnerModule
+  MatExpansionModule, MatProgressSpinnerModule, MatBottomSheetModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -25,6 +25,7 @@ import { ConferencesComponent } from './components/conferences/conferences.compo
 import { GenericDialogComponent } from './components/dialogs/generic-dialog/generic-dialog.component';
 import { UpdateUserDialogComponent } from './components/dialogs/update-user-dialog/update-user-dialog.component';
 import { DeleteUserDialogComponent } from './components/dialogs/delete-user-dialog/delete-user-dialog.component';
+import { BottomSheetOverviewComponent } from './components/bottom-sheet-overview/bottom-sheet-overview.component';
 
 import { EmailService } from './services/email/email.service';
 import { ConferencesService } from './services/conferences/conferences.service';
@@ -47,7 +48,8 @@ import { LoaderService } from './services/loader/loader.service';
     ConferencesComponent,
     GenericDialogComponent,
     UpdateUserDialogComponent,
-    DeleteUserDialogComponent
+    DeleteUserDialogComponent,
+    BottomSheetOverviewComponent
   ],
   imports: [
     BrowserModule,
@@ -70,6 +72,7 @@ import { LoaderService } from './services/loader/loader.service';
     MatCardModule,
     MatExpansionModule,
     MatProgressSpinnerModule,
+    MatBottomSheetModule,
     ReactiveFormsModule,
     FlexLayoutModule,
     HttpClientModule,
@@ -78,7 +81,8 @@ import { LoaderService } from './services/loader/loader.service';
   entryComponents : [
     GenericDialogComponent,
     UpdateUserDialogComponent,
-    DeleteUserDialogComponent
+    DeleteUserDialogComponent,
+    BottomSheetOverviewComponent
   ],
   providers: [
     EmailService,

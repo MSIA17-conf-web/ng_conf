@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { MatProgressSpinnerModule } from '@angular/material';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Subject } from 'rxjs';
 
 @Injectable({

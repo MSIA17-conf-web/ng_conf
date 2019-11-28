@@ -1,4 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+
+import { BottomSheetOverviewComponent } from './components/bottom-sheet-overview/bottom-sheet-overview.component';
+
 import { MobileService } from './services/mobile/mobile.service';
 import { LoaderService } from './services/loader/loader.service';
 
@@ -11,13 +15,17 @@ export class AppComponent implements OnDestroy, OnInit {
 
   isMobile: boolean;
 
-  constructor(public mobSvc: MobileService, public loaderService: LoaderService) {}
+  constructor(public mobSvc: MobileService,
+              public loaderService: LoaderService,
+              private bottomSheet: MatBottomSheet) {}
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
+  }
+
+  openBottomSheet(): void {
+    this.bottomSheet.open(BottomSheetOverviewComponent);
   }
 
   ngOnDestroy(): void {
   }
-
-  // shouldRun = [/(^|\.)plnkr\.co$/, /(^|\.)stackblitz\.io$/].some(h => h.test(window.location.host));
 }
