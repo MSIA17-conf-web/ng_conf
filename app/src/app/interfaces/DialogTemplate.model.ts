@@ -5,10 +5,10 @@ export default class DialogTemplate {
   public static modalTempates: any = {
     tokenSent: (options: UserInformations) => {
       return {
-        title: 'Finalisation de votre inscription ',
+        title: 'Finalisation de votre inscription',
         text: [
           options.fName + ', merci pour votre inscription.',
-          'Nous vous avons envoyer un email à l\'adresse : ' + options.email + ' permettant de finaliser votre inscription.'
+          'Nous vous avons envoyé un email à l\'adresse : ' + options.email + ' permettant de finaliser votre inscription.'
         ],
         displayLink: {
           signup: false,
@@ -45,8 +45,8 @@ export default class DialogTemplate {
       return {
         title: 'Erreur durant votre inscription',
         text: [
-          'L\'adresse email ' + options.email + ' à déjà fait l\'objet d\'une inscription.',
-          'Pour se désincrire ou modifier vos données, référer vous au mail de confirmation reçu lors de l\'inscription',
+          'L\'adresse email ' + options.email + ' a déjà fait l\'objet d\'une inscription.',
+          'Pour se désincrire ou modifier vos données, référez-vous au mail de confirmation reçu lors de l\'inscription',
         ],
         email: options.email,
         displayLink: {
@@ -72,7 +72,7 @@ export default class DialogTemplate {
       return {
         title: 'Erreur durant votre inscription',
         text: [
-          'Une erreur innatendue est survenue.',
+          'Une erreur inatendue est survenue.',
         ],
         displayLink: {
           signup: true,
@@ -84,7 +84,7 @@ export default class DialogTemplate {
       return {
         title: 'Demande envoyée',
         text: [
-          'Merci pour votre demande, elle sera traité dans les plus bref délais.',
+          'Merci pour votre demande, elle sera traitée dans les plus brefs délais.',
         ],
         displayLink: {
           signup: false,
@@ -96,7 +96,7 @@ export default class DialogTemplate {
       return {
         title: 'Erreur lors de la prise de contact',
         text: [
-          'Erreur durant l\'envoi de votre message, veuillez réesayer ultérieuement.',
+          'Erreur durant l\'envoi de votre message, veuillez réesayer ultérieurement.',
           'Si le problème persiste veuillez directement nous contacter à l\'adresse <a href="mailto:msia17conferences@gmail.com?subject=' + options.lastName + ' ' + options.firstName + ' cherche à vous contacter'
           + '&body=' + options.messageEmail + '">msia17conferences@gmail.com</a>'
         ],
@@ -110,8 +110,8 @@ export default class DialogTemplate {
       return {
         title: 'Erreur interne',
         text: [
-          'Nous rencontrons actuellement quelques soucis. Nos équipes mettent tous en place pour résoudre ce problème.',
-          'Veuillez nous excusez pour la gêne occasionnée.'
+          'Nous rencontrons actuellement quelques soucis. Nos équipes mettent tout en place pour résoudre ce problème.',
+          'Veuillez nous excuser pour la gêne occasionnée.'
         ],
         displayLink: {
           signup: true,
@@ -136,8 +136,8 @@ export default class DialogTemplate {
       return {
         title: 'Erreur lors de la mise à jour de vos données',
         text: [
-          options.fName + ', une erreur innatendue c\'est produite.',
-          'Veuillez nous excusez pour la gêne occasionnée.'
+          options.fName + ', une erreur inatendue s\'est produite.',
+          'Veuillez nous excuser pour la gêne occasionnée.'
         ],
         displayLink: {
           signup: true,
@@ -149,7 +149,7 @@ export default class DialogTemplate {
       return {
         title: 'Confirmation de suppression',
         text: [
-          'Vos données ont correctement été supprimée de l\'intégralité de nos fichiers.',
+          'Vos données ont correctement été supprimées de l\'intégralité de nos fichiers.',
         ],
         displayLink: {
           signup: false,
@@ -161,8 +161,8 @@ export default class DialogTemplate {
       return {
         title: 'Erreur lors de la suppression de vos données',
         text: [
-          options.fName + ', une erreur innatendue c\'est produite.',
-          'Veuillez nous excusez pour la gêne occasionnée.'
+          options.fName + ', une erreur inatendue s\'est produite.',
+          'Veuillez nous excuser pour la gêne occasionnée.'
         ],
         displayLink: {
           signup: true,

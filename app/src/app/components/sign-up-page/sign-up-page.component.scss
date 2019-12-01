@@ -16,3 +16,18 @@
 button {
   margin: 5px;
 }
+
+mat-horizontal-stepper {
+  background-color: #fafafa;
+
+
+  mat-card {
+    width: 500px;
+    margin: auto;
+    padding: 0 40px;
+  }
+}
+
+mat-vertical-stepper {
+  background-color: #fafafa;
+}
