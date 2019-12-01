@@ -30,14 +30,8 @@ app.use("/", express.static(path.join(__dirname, '../', "dist")))
 // })
 
 app.get("/*", function (req, res) {
-  console.log(req.path.substring(1));
-  if(!req.path.includes('sockjs')) {
-    res.cookie('requestedRoute', req.path.substring(1), { maxAge: 900000, httpOnly: false });
-  }
-  res.writeHead(302, {
-    "Location": "/"
-  });
-  res.end()
+  console.log(`[TRACE] Server request: ${req.originalUrl}`);
+  res.status(200).sendFile(path.resolve("../dist/index.html"));
 })
 
 app.get("/hello", (req, res) => {

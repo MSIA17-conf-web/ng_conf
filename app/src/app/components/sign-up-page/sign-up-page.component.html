@@ -31,7 +31,7 @@
           <mat-hint align="end">{{position.value.length}} / 70</mat-hint>
         </mat-form-field>
         <mat-checkbox formControlName="vehicle">Avez-vous besoin d'une place de parking ?</mat-checkbox>
-        <mat-card-actions style="margin: 8px 0 0 0;">
+        <mat-card-actions align="center" style="margin-top: 8px;">
           <button mat-button mat-flat-button color="accent" matStepperNext type="submit"
             [disabled]="userForm.invalid">Suivant - Les conférences</button>
           <button mat-button type="button" (click)="fillUserInfoFormRemy()" *ngIf="!env.production">Remplir
@@ -74,7 +74,7 @@
           </mat-radio-group>
         </mat-card-content>
       </mat-card>
-      <mat-card-actions>
+      <mat-card-actions align="center">
         <button mat-flat-button color="primary" matStepperPrevious>Précédent - Vos informations</button>
         <button mat-button mat-flat-button color="accent" matStepperNext type="submit"
           [disabled]="confForm.invalid">Suivant - Récapitulatif</button>
@@ -99,7 +99,7 @@
         </div>
       </div>
     </div>
-    <mat-card-actions>
+    <mat-card-actions align="center">
       <button mat-button (click)="reset(stepper)">Réinitialiser les formulaires</button>
       <button mat-flat-button color="primary" matStepperPrevious>Précédent - Les conférences</button>
       <button mat-raised-button color="accent" (click)="validateSignUp()" *ngIf="!isUpdating">Valider la
@@ -138,7 +138,7 @@
       <mat-checkbox formControlName="vehicle">
         <span class="wrap-mat-label" style="margin: 0 0 8px 0;">Avez-vous besoin d'une
           place de parking ?</span></mat-checkbox>
-      <button mat-button mat-flat-button color="accent" matStepperNext type="submit"
+      <button mat-button mat-flat-button color="accent" style="margin-top: 8px;" matStepperNext type="submit"
         [disabled]="userForm.invalid">Suivant - Les conférences</button>
       <button mat-button type="button" (click)="fillUserInfoFormRemy()" *ngIf="!env.production">Remplir form</button>
       <button mat-button type="button" (click)="testModal()" *ngIf="!env.production">testModal</button>

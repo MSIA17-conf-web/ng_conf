@@ -17,7 +17,6 @@ import {
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
-import { DefaultTemplateComponent } from './components/default-template/default-template.component';
 import { SignUpPageComponent } from './components/sign-up-page/sign-up-page.component';
 import { AboutComponent } from './components/about/about.component';
 import { ContactComponent } from './components/contact/contact.component';
@@ -29,7 +28,6 @@ import { BottomSheetOverviewComponent } from './components/bottom-sheet-overview
 
 import { EmailService } from './services/email/email.service';
 import { ConferencesService } from './services/conferences/conferences.service';
-import { GuardService } from './services/guard/guard.service';
 import { MobileService } from './services/mobile/mobile.service';
 import { GuestsService } from 'src/app/services/guests/guests.service';
 import { LoaderService } from './services/loader/loader.service';
@@ -39,7 +37,6 @@ import { LoaderService } from './services/loader/loader.service';
 @NgModule({
   declarations: [
     AppComponent,
-    DefaultTemplateComponent,
     HomeComponent,
     SignUpPageComponent,
     AboutComponent,
@@ -87,8 +84,6 @@ import { LoaderService } from './services/loader/loader.service';
   providers: [
     EmailService,
     ConferencesService,
-    GuardService,
-    GuardService,
     GuestsService,
     MobileService,
     LoaderService

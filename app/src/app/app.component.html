@@ -5,7 +5,7 @@
     </button>
     <h1 class="app-name"><a routerLink="accueil">IT's 4 Tomorrow</a></h1>
     <span style="flex: 1 1 auto"></span>
-    <button mat-raised-button color="accent" style="font-weight: bold;" routerLink="inscription">
+    <button mat-raised-button color="accent" style="font-weight: bold;" routerLink="inscription" *ngIf="router.url !== '/inscription'">
       S'INSCRIRE
     </button>
 
@@ -15,7 +15,7 @@
     <mat-sidenav #snav [mode]="mobSvc.getIsMobile() ? 'over' : 'side'" [fixedInViewport]="mobSvc.getIsMobile()"
       fixedTopGap="50">
       <mat-nav-list (click)="snav.toggle()">
-        <a mat-list-item routerLink="inscription">Inscription</a>
+        <a mat-list-item routerLink="inscription" *ngIf="router.url !== '/inscription'">Inscription</a>
         <a mat-list-item routerLink="conferences">Conférences</a>
         <a mat-list-item routerLink="a-propos">A propos de nous</a>
         <a mat-list-item routerLink="contact">Nous contacter</a>

@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { Router } from '@angular/router';
 
 import { BottomSheetOverviewComponent } from './components/bottom-sheet-overview/bottom-sheet-overview.component';
 
@@ -17,7 +18,8 @@ export class AppComponent implements OnDestroy, OnInit {
 
   constructor(public mobSvc: MobileService,
               public loaderService: LoaderService,
-              private bottomSheet: MatBottomSheet) {}
+              private bottomSheet: MatBottomSheet,
+              public router: Router) {}
 
   ngOnInit(): void {
   }

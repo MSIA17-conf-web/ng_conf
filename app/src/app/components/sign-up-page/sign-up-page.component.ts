@@ -48,7 +48,6 @@ export class SignUpPageComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
     this.loaderService.setSpinnerState(true);
     // this.mockCreneau = this.conferencesService.mockCreneau;
     this.initUserInfoForm();
