@@ -1,9 +1,9 @@
 <!-- For desktop -->
-<div *ngIf="!mobSvc.getIsMobile()">
-    <mat-tab-group>
-        <mat-tab *ngFor="let theme of cdThemeList" [label]="theme.themeName">
+<mat-card *ngIf="!mobSvc.getIsMobile()" style="width: 1150px; margin: 10px auto;">
+    <mat-tab-group mat-stretch-tabs>
+        <mat-tab *ngFor="let theme of cdThemeList" [label]="'Theme : '+ theme.themeName">
             <mat-list role="list">
-                <mat-tab-group>
+                <mat-tab-group mat-stretch-tabs>
                     <mat-tab label="Présentation générale">
                         <markdown [data]="markdownChanged(theme.themeMDlink)"></markdown>
                     </mat-tab>
@@ -14,13 +14,13 @@
             </mat-list>
         </mat-tab>
     </mat-tab-group>
-</div>
+</mat-card>
 <!-- For mobile -->
 <mat-accordion *ngIf="mobSvc.getIsMobile()">
     <mat-expansion-panel *ngFor="let theme of cdThemeList">
         <mat-expansion-panel-header>
             <mat-panel-description>
-                {{ theme.themeName }}
+                Theme : {{ theme.themeName }}
             </mat-panel-description>
         </mat-expansion-panel-header>
 

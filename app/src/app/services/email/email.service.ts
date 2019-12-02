@@ -12,8 +12,8 @@ import { ConferencesService } from 'src/app/services/conferences/conferences.ser
 export class EmailService {
 
   constructor(private httpClient: HttpClient,
-              private guestsService: GuestsService,
-              private conferencesService: ConferencesService) { }
+    private guestsService: GuestsService,
+    private conferencesService: ConferencesService) { }
 
   sendEmail(options) {
     // console.log(options.data);
@@ -30,18 +30,24 @@ export class EmailService {
       this.httpClient
         .post<any>('https://msia17conferences.com:9010/api', {
           method: 'POST',
-          url: 'sendContactEmail',
+          url: 'sendEmail',
           baseURL: 'http://email_api:9010',
           // headers: {
           //   'Access-Control-Allow-Origin': '*',
           //   'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
           // },
           body: {
-            lastName: values.lastName,
-            firstName: values.firstName,
-            enterpriseName: values.enterpriseName,
-            userEmail: values.userEmail,
-            messageEmail: values.messageEmail
+            templateName: 'contactMail',
+            data: {
+              from: values.userEmail,
+              to: 'msia',
+              templateOptions: {
+                lName: values.lastName,
+                fName: values.firstName,
+                company: values.enterpriseName,
+                messageEmail: values.messageEmail
+              }
+            }
           }
         }).subscribe(res => {
           console.log('Response from APIs', res);
@@ -84,18 +90,18 @@ export class EmailService {
           url: 'sendEmail',
           baseURL: 'http://email_api:9010',
           body: {
-          templateName: 'successfullSignUpMail',
-          data: {
-            userdata,
-            from: 'msia',
-            to: user.email,
-            templateOptions: {
-              lName: user.lName,
-              fName: user.fName,
-              company: user.company,
-              conferences: allConfName
+            templateName: 'successfullSignUpMail',
+            data: {
+              userdata,
+              from: 'msia',
+              to: user.email,
+              templateOptions: {
+                lName: user.lName,
+                fName: user.fName,
+                company: user.company,
+                conferences: allConfName
+              }
             }
-          }
           }
         }).subscribe();
 

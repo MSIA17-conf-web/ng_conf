@@ -4,8 +4,10 @@ import { MatDialog } from '@angular/material/dialog';
 
 import DialogTemplate from 'src/app/interfaces/DialogTemplate.model';
 
-import { EmailService } from 'src/app/services/email/email.service';
 import { GenericDialogComponent } from '../dialogs/generic-dialog/generic-dialog.component';
+
+import { EmailService } from 'src/app/services/email/email.service';
+import { LoaderService } from 'src/app/services/loader/loader.service';
 
 @Component({
   selector: 'app-contact',
@@ -16,7 +18,10 @@ export class ContactComponent implements OnInit {
 
   contactForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private emailService: EmailService, public dialog: MatDialog) { }
+  constructor(private formBuilder: FormBuilder,
+              private emailService: EmailService,
+              public dialog: MatDialog,
+              private loaderService: LoaderService) { }
 
   ngOnInit() {
     this.initForm();
@@ -33,10 +38,12 @@ export class ContactComponent implements OnInit {
   }
 
   onSubmit() {
+    this.loaderService.setSpinnerState(true);
     const contactFormValue = this.contactForm.value;
 
     this.emailService.sendContactEmail(contactFormValue)
       .then(res => {
+        this.loaderService.setSpinnerState(false);
         this.dialog.open(GenericDialogComponent, {
           width: 'auto',
           data: DialogTemplate.modalTempates.contactResponseSuccess()
@@ -46,6 +53,7 @@ export class ContactComponent implements OnInit {
         messageEmail.setErrors(null);
       })
       .catch(err => {
+        this.loaderService.setSpinnerState(false);
         console.log('Error when sending contact email : ', err);
         this.dialog.open(GenericDialogComponent, {
           width: 'auto',
@@ -54,6 +62,6 @@ export class ContactComponent implements OnInit {
       });
   }
 
-   // convenience getter for easy access to form fields
-   get f() { return this.contactForm.controls; }
+  // convenience getter for easy access to form fields
+  get f() { return this.contactForm.controls; }
 }

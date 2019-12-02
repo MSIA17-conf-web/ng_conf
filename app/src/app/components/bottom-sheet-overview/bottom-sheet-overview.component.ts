@@ -8,6 +8,23 @@ import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
   styleUrls: ['./bottom-sheet-overview.component.scss']
 })
 export class BottomSheetOverviewComponent implements OnInit {
+  icons: [
+    {
+      img: 'CESI_logo.png',
+      link: 'https://paris.cesi.fr/',
+      size: '30px'
+    },
+    {
+      img: 'Facebook.png',
+      link: 'https://www.facebook.com/campuscesiidf/',
+      size: '24px'
+    },
+    {
+      img: 'Linkedin.png',
+      link: 'https://www.linkedin.com/company/groupe-cesi/',
+      size: '30px'
+    }
+  ];
 
   constructor(private bottomSheetRef: MatBottomSheetRef<BottomSheetOverviewComponent>) {}
 

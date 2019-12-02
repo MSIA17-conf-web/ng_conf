@@ -21,7 +21,7 @@ export class ConferencesComponent implements OnInit {
   constructor(private conferencesService: ConferencesService,
               public mobSvc: MobileService,
               public dialog: MatDialog,
-              public loaderService: LoaderService) { }
+              private loaderService: LoaderService) { }
 
   ngOnInit() {
     this.loaderService.setSpinnerState(true);
