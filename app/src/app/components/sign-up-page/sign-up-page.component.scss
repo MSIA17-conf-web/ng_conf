@@ -1,5 +1,6 @@
 .conf-form {
   margin: 0 0 10px 0;
+
   mat-card-content {
     margin: 10px 0 0 0;
   }
@@ -19,12 +20,13 @@ button {
 
 mat-horizontal-stepper {
   background-color: #fafafa;
-
-
   mat-card {
     width: 500px;
     margin: auto;
     padding: 0 40px;
+    form {
+      padding-top: 15px;
+    }
   }
 }
 

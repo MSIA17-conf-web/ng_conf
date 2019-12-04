@@ -8,6 +8,7 @@ import { GenericDialogComponent } from '../dialogs/generic-dialog/generic-dialog
 
 import { EmailService } from 'src/app/services/email/email.service';
 import { LoaderService } from 'src/app/services/loader/loader.service';
+import { MobileService } from 'src/app/services/mobile/mobile.service';
 
 @Component({
   selector: 'app-contact',
@@ -21,7 +22,8 @@ export class ContactComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private emailService: EmailService,
               public dialog: MatDialog,
-              private loaderService: LoaderService) { }
+              private loaderService: LoaderService,
+              public mobSvc: MobileService) { }
 
   ngOnInit() {
     this.initForm();

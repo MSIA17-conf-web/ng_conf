@@ -7,5 +7,6 @@
     <button mat-button cdkFocusInitial mat-dialog-close routerLink="inscription" *ngIf="data.displayLink.signup">S'inscrire</button>
     <button mat-button cdkFocusInitial mat-dialog-close routerLink="contact" *ngIf="data.displayLink.contact">Nous contacter</button>
     <button mat-button cdkFocusInitial mat-dialog-close *ngIf="data.displayLink.resendConfirmMail" (click)="emailService.resendConfirmMail(data.email)">Renvoyer le mail</button>
+    <button mat-button cdkFocusInitial mat-dialog-close *ngIf="!data.displayLink.resendConfirmMail" (click)="emailService.resendTokenMail(data.email)">Renvoyer le mail</button>
     <button mat-button cdkFocusInitial mat-dialog-close>Fermer</button>
 </div>

@@ -14,5 +14,4 @@ export class GenericDialogComponent implements OnInit {
               public emailService: EmailService) { }
   ngOnInit() {
   }
-
 }

@@ -5,6 +5,9 @@ import { UserInformations } from 'src/app/interfaces/generic/UserInformations.mo
 
 import { GuestsService } from 'src/app/services/guests/guests.service';
 import { ConferencesService } from 'src/app/services/conferences/conferences.service';
+import { environment } from '../../../environments/environment';
+import { LoaderService } from 'src/app/services/loader/loader.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -12,12 +15,11 @@ import { ConferencesService } from 'src/app/services/conferences/conferences.ser
 export class EmailService {
 
   constructor(private httpClient: HttpClient,
-    private guestsService: GuestsService,
-    private conferencesService: ConferencesService) { }
+              private guestsService: GuestsService,
+              private conferencesService: ConferencesService,
+              private loaderService: LoaderService) { }
 
-  sendEmail(options) {
-    // console.log(options.data);
-
+  sendEmail(options: any) {
     return this.httpClient.post<any>('https://msia17conferences.com:9010/api', {
       method: 'POST',
       url: 'sendEmail',
@@ -25,17 +27,13 @@ export class EmailService {
       body: options
     });
   }
-  sendContactEmail(values): Promise<any> {
+  sendContactEmail(values: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.httpClient
         .post<any>('https://msia17conferences.com:9010/api', {
           method: 'POST',
           url: 'sendEmail',
           baseURL: 'http://email_api:9010',
-          // headers: {
-          //   'Access-Control-Allow-Origin': '*',
-          //   'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
-          // },
           body: {
             templateName: 'contactMail',
             data: {
@@ -63,9 +61,12 @@ export class EmailService {
   }
 
   resendConfirmMail(email: string) {
+    this.loaderService.setSpinnerState(true);
+
     this.guestsService.getOneUser(email).subscribe(verifResult => {
       if (!verifResult.success) {
         console.log('error', verifResult.err || verifResult.data.errors);
+        this.loaderService.setSpinnerState(false);
         return;
       }
 
@@ -103,10 +104,66 @@ export class EmailService {
               }
             }
           }
-        }).subscribe();
+        }).subscribe(res => {
+          console.log('Response from APIs', res);
+          this.loaderService.setSpinnerState(false);
+        }, err => {
+          console.log('Error from APIs', err);
+          this.loaderService.setSpinnerState(false);
+        });
 
       }).catch(err => {
         console.log('Error when calling getAllConfName in email service : ', err);
+      });
+    });
+  }
+
+  resendTokenMail(email: string, ) {
+    console.log('resendTokenMail');
+    this.loaderService.setSpinnerState(true);
+
+    this.guestsService.getOneUser(email).subscribe(verifResult => {
+      if (!verifResult.success) {
+        console.log('error', verifResult.err || verifResult.data.errors);
+        return;
+      }
+      // Suppimer traitement en trop : getAllconf
+      const user = verifResult.data;
+      const route = environment.production ? '' : '/dev';
+
+      this.httpClient.post<any>('https://msia17conferences.com:9010/api', {
+        method: 'POST',
+        url: 'sendEmail',
+        baseURL: 'http://email_api:9010',
+        body: {
+          templateName: 'tokenMail',
+          data: {
+            from: 'msia',
+            to: user.email,
+            templateOptions: {
+              fName: user.fName,
+              url: 'https://msia17conferences.com' + route + '/inscription?' + this.encodeData({
+                  userdata: btoa(JSON.stringify({
+                    lName: user.lName,
+                    fName: user.fName,
+                    company: user.company,
+                    email: user.email,
+                    position: user.position,
+                    vehicle: user.vehicle,
+                    token: user.token,
+                    conferences: user.conferences
+                  })),
+                  checkToken: true
+                })
+            }
+          }
+        }
+      }).subscribe(res => {
+        console.log('Response from APIs', res);
+        this.loaderService.setSpinnerState(false);
+      }, err => {
+        console.log('Error from APIs', err);
+        this.loaderService.setSpinnerState(false);
       });
     });
   }
@@ -121,5 +178,11 @@ export class EmailService {
         });
       });
     });
+  }
+
+  private encodeData(data) {
+    return Object.keys(data).map(key => {
+      return [key, data[key]].map(encodeURIComponent).join('=');
+    }).join('&');
   }
 }

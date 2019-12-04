@@ -41,7 +41,8 @@ export default class DialogTemplate {
         }
       };
     },
-    userAlreadyExist: (options: UserInformations) => {
+    userAlreadyExist: (options: UserInformations, hasValidate: boolean) => {
+      console.log('options user', options, hasValidate);
       return {
         title: 'Erreur durant votre inscription',
         text: [
@@ -52,7 +53,8 @@ export default class DialogTemplate {
         displayLink: {
           signup: false,
           contact: false,
-          resendConfirmMail: true
+          // If true resend confirm mail else resend token mail
+          resendConfirmMail: hasValidate
         }
       };
     },
@@ -119,7 +121,6 @@ export default class DialogTemplate {
         }
       };
     },
-    // Renvoyer un mail avec le nouveau QRCode ?
     updateUserSuccess: (options: UserInformations) => {
       return {
         title: 'Mise à jour des données réussie',
