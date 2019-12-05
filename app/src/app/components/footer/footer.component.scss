@@ -1,0 +1,16 @@
+div {
+    padding: 0 10px;
+}
+
+hr {
+    display: block;
+    margin: 10px 10%;
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: rgba(0, 0, 0, 0.12);
+}
+
+.footer-link a, .footer-link a:hover {
+    text-decoration: none;
+    color: inherit;
+}

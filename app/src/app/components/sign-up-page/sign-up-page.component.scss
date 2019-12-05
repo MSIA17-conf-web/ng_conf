@@ -33,3 +33,14 @@ mat-horizontal-stepper {
 mat-vertical-stepper {
   background-color: #fafafa;
 }
+
+.recap-container {
+  mat-card {
+    margin: 10px 500px;
+  }
+}
+
+.small-text {
+  font-size: 10px;
+  font-weight: italic;
+}

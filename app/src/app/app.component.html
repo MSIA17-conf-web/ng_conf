@@ -1,4 +1,4 @@
-<div class="container" [class.is-mobile]="mobSvc.getIsMobile()">
+<div class="container" [class.is-mobile]="mobSvc.getIsMobile()" fxLayout="column">
   <mat-toolbar color="primary" class="toolbar">
     <button mat-icon-button (click)="snav.toggle()">
       <mat-icon>menu</mat-icon>
@@ -24,13 +24,11 @@
 
     <mat-sidenav-content>
       <router-outlet></router-outlet>
+      <br>
     </mat-sidenav-content>
   </mat-sidenav-container>
+  <app-footer></app-footer>
 </div>
 <div class="loading" *ngIf="loaderService.getSpinnerState()">
   <mat-spinner></mat-spinner>
 </div>
-
-<button class="fab-button" mat-mini-fab color="accent" (click)="openBottomSheet()">
-  <mat-icon>add</mat-icon>
-</button>

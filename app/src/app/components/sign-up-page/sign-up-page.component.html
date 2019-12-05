@@ -4,7 +4,8 @@
   <mat-step [stepControl]="userForm">
     <ng-template matStepLabel>Vos informations</ng-template>
     <mat-card>
-      <form [formGroup]="userForm" (ngSubmit)="onSubmitUserInfo()" fxLayout="column" fxLayoutAlign="start" style="margin-top: 25px;">
+      <form [formGroup]="userForm" (ngSubmit)="onSubmitUserInfo()" fxLayout="column" fxLayoutAlign="start"
+        style="margin-top: 25px;">
         <mat-form-field>
           <input matInput type="email" class="form-control" #email maxlength="70" formControlName="email"
             placeholder="Adresse email">
@@ -31,12 +32,12 @@
           <mat-hint align="end">{{position.value.length}} / 70</mat-hint>
         </mat-form-field>
         <mat-checkbox formControlName="vehicle" color="primary">J'ai besoin d'une place de parking</mat-checkbox>
+        <p class="small-text">Un badge nominale vous sera remis le jour de la conférence</p>
         <mat-card-actions align="center" style="margin-top: 8px;">
           <button mat-button mat-flat-button color="primary" matStepperNext type="submit"
             [disabled]="userForm.invalid">Suivant - Les conférences</button>
           <button mat-button type="button" (click)="fillUserInfoFormRemy()" *ngIf="!env.production">Remplir
             form</button>
-          <button mat-button type="button" (click)="testModal()" *ngIf="!env.production">testModal</button>
         </mat-card-actions>
       </form>
     </mat-card>
@@ -49,62 +50,58 @@
       liste des conférences</mat-card>
     <br>
     <form [formGroup]="confForm" (ngSubmit)="onSubmitConf()" fxLayout="column" fxLayoutAlign="start">
-      <mat-card class="conf-form" *ngFor="let creneau of cfCreneau, let i = index">
-        <mat-card-header>
-          <label [for]="creneau.crenId">{{ creneau.crenDesc }}</label>
-        </mat-card-header>
-        <mat-card-content>
-          <mat-radio-group [id]="creneau.crenId" fxLayout="column" fxLayoutAlign="start"
-            [formControlName]="creneau.crenId">
-            <div *ngFor="let conf of creneau.conferences, let y = index" fxLayout="row" fxLayoutAlign="start">
-              <mat-radio-button [value]="conf" color="primary">
-                <span class="wrap-mat-label">
-                  {{ conf.confName }}
-                </span>
-              </mat-radio-button>
+      <mat-card class="conf-form" style="padding-top: 15px;">
+        <ng-container *ngFor="let creneau of cfCreneau, let i = index" style="margin-bottom: 8px;">
+          <mat-card-header>
+            <label [for]="creneau.crenId">{{ creneau.crenDesc }}</label>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-radio-group [id]="creneau.crenId" fxLayout="column" fxLayoutAlign="start"
+              [formControlName]="creneau.crenId">
+              <div *ngFor="let conf of creneau.conferences, let y = index" fxLayout="row" fxLayoutAlign="start">
+                <mat-radio-button [value]="conf" color="primary">
+                  <span class="wrap-mat-label">
+                    {{ conf.confName }}
+                  </span>
+                </mat-radio-button>
 
-            </div>
-            <div fxLayout="row" fxLayoutAlign="start">
-              <mat-radio-button value='-1' color="primary">
-                <span class="wrap-mat-label">
-                  Aucune
-                </span>
-              </mat-radio-button>
-            </div>
-          </mat-radio-group>
-        </mat-card-content>
+              </div>
+              <div fxLayout="row" fxLayoutAlign="start">
+                <mat-radio-button value='-1' color="primary">
+                  <span class="wrap-mat-label">
+                    Aucune
+                  </span>
+                </mat-radio-button>
+              </div>
+            </mat-radio-group>
+          </mat-card-content>
+        </ng-container>
+        <mat-card-actions align="center">
+          <button mat-flat-button color="accent" matStepperPrevious>Précédent - Vos informations</button>
+          <button mat-button mat-flat-button color="primary" matStepperNext type="submit"
+            [disabled]="confForm.invalid">Suivant - Récapitulatif</button>
+          <button mat-button type="submit" [disabled]="confForm.invalid" *ngIf="!env.production">log form value</button>
+        </mat-card-actions>
       </mat-card>
-      <mat-card-actions align="center">
-        <button mat-flat-button color="accent" matStepperPrevious>Précédent - Vos informations</button>
-        <button mat-button mat-flat-button color="primary" matStepperNext type="submit"
-          [disabled]="confForm.invalid">Suivant - Récapitulatif</button>
-        <button mat-button type="submit" [disabled]="confForm.invalid" *ngIf="!env.production">log form value</button>
-      </mat-card-actions>
     </form>
   </mat-step>
 
   <!-- Récapitulatif -->
-  <mat-step>
+  <mat-step fxLayout="column" fxLayoutAlign="start">
     <ng-template matStepLabel>Récapitulatif</ng-template>
-    <div class="row" fxLayout="row">
-      <div class="col m6" fxLayout="column" style="border-right: 2px solid grey">
-        <div *ngFor="let key of utilsUserForm.keys">
-          <p>{{ validatedUserFormValue[key] }}</p>
-        </div>
-      </div>
-      <div class="col m6" fxLayout="column">
-        <div *ngFor="let conf of utilsConfForm.conf">
-          <p *ngIf="conf">{{ conf.confName }}</p>
-          <p *ngIf="isNone(conf)">{{ noneString }}</p>
-        </div>
-      </div>
-    </div>
+    <h3 align="center">Voici les conférences que vous avez choisis : </h3>
+    <ng-container *ngIf="utilsConfForm.conf" class="recap-container">
+      <mat-card *ngFor="let cren of cfCreneau; let i = index">
+        {{ cren.crenDesc }}, de {{ cren.crenStartTime }} à {{ cren.crenEndTime }} :
+        <p> {{ utilsConfForm.conf[i].confName }}</p>
+      </mat-card>
+    </ng-container>
     <mat-card-actions align="center">
       <button mat-button (click)="reset(stepper)">Réinitialiser les formulaires</button>
       <button mat-flat-button color="accent" matStepperPrevious>Précédent - Les conférences</button>
-      <button mat-raised-button color="accent" (click)="validateSignUp()" *ngIf="!isUpdating">Valider la
+      <button mat-raised-button color="primary" (click)="validateSignUp()" *ngIf="!isUpdating">Valider la
         préinscription</button>
-      <button mat-raised-button color="accent" (click)="updateUserData()" *ngIf="isUpdating">Mettre à jour</button>
+      <button mat-raised-button color="primary" (click)="updateUserData()" *ngIf="isUpdating">Mettre à jour</button>
       <button mat-button (click)="log()" *ngIf="!env.production">Log</button>
     </mat-card-actions>
   </mat-step>
@@ -137,11 +134,12 @@
       </mat-form-field>
       <mat-checkbox formControlName="vehicle">
         <span class="wrap-mat-label" style="margin: 0 0 8px 0;" color="primary">J'ai besoin d'une
-          place de parking</span></mat-checkbox>
+          place de parking</span>
+      </mat-checkbox>
+      <p class="small-text">Un badge nominale vous sera remis le jour de la conférence</p>
       <button mat-button mat-flat-button color="primary" style="margin-top: 8px;" matStepperNext type="submit"
         [disabled]="userForm.invalid">Suivant - Les conférences</button>
       <button mat-button type="button" (click)="fillUserInfoFormRemy()" *ngIf="!env.production">Remplir form</button>
-      <button mat-button type="button" (click)="testModal()" *ngIf="!env.production">testModal</button>
     </form>
   </mat-step>
 
@@ -175,8 +173,8 @@
         </mat-card-content>
       </mat-card>
       <button mat-flat-button color="accent" matStepperPrevious>Précédent - Vos informations</button>
-      <button  mat-flat-button color="primary" matStepperNext type="submit"
-        [disabled]="confForm.invalid">Suivant - Récapitulatif</button>
+      <button mat-flat-button color="primary" matStepperNext type="submit" [disabled]="confForm.invalid">Suivant -
+        Récapitulatif</button>
       <button mat-button type="submit" [disabled]="confForm.invalid" *ngIf="!env.production">log form value</button>
     </form>
   </mat-step>
@@ -199,7 +197,7 @@
     </div>
     <div fxLayout="column">
       <button mat-flat-button color="accent" matStepperPrevious>Précédent - Les conférences</button>
-      <button mat-raised-button (click)="validateSignUp()" *ngIf="!isUpdating" color="accent">Valider la
+      <button mat-raised-button (click)="validateSignUp()" *ngIf="!isUpdating" color="primary">Valider la
         préinscription</button>
       <button mat-button (click)="reset(stepper)">Réinitialiser les formulaires</button>
       <button mat-button (click)="updateUserData()" *ngIf="isUpdating">Mettre à jour</button>

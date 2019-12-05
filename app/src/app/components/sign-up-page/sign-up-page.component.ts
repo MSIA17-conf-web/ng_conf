@@ -69,6 +69,10 @@ export class SignUpPageComponent implements OnInit {
     });
   }
 
+  public getConfRecap(i: number) {
+    return this.utilsConfForm[i].confName;
+  }
+
   private checkURI(event: any) {
     const userdata = event.userdata;
 
@@ -165,9 +169,10 @@ export class SignUpPageComponent implements OnInit {
   }
 
   private checkCreate(userdata: any, verifResult: any, user: UserInformations, allConfName: any[], templateName: string) {
+    // console.log('checkCreate', verifResult.hasValidate);
     if (!verifResult.success) {
       this.loaderService.setSpinnerState(false);
-      this.handleErrorDialog(verifResult.type, user);
+      this.handleErrorDialog(verifResult.type, user, verifResult.hasValidate);
     } else {
       console.log('successfully registred');
       this.emailService.sendEmail(
@@ -220,7 +225,7 @@ export class SignUpPageComponent implements OnInit {
   private getAllConfName(user: UserInformations): any[] {
     return user.conferences.map((confId) => {
       return new Promise((resolve, reject) => {
-        console.log('confId', confId)
+        console.log('confId', confId);
         this.conferencesService.getConfName(confId).subscribe(conference => {
           resolve(conference.confName);
         }, err => {
@@ -234,12 +239,13 @@ export class SignUpPageComponent implements OnInit {
     });
   }
 
-  handleErrorDialog(verifResultType: string, user: UserInformations) {
+  handleErrorDialog(verifResultType: string, user: UserInformations, hasValidate: boolean) {
     switch (verifResultType) {
       case 'alreadyRegistered':
+        console.log('handleErrorDialog');
         this.dialog.open(GenericDialogComponent, {
           width: 'auto',
-          data: DialogTemplate.modalTempates.userAlreadyExist(user)
+          data: DialogTemplate.modalTempates.userAlreadyExist(user, hasValidate)
         });
         break;
 
@@ -332,7 +338,7 @@ export class SignUpPageComponent implements OnInit {
         this.loaderService.setSpinnerState(false);
         this.dialog.open(GenericDialogComponent, {
           width: 'auto',
-          data: DialogTemplate.modalTempates.userAlreadyExist(user)
+          data: DialogTemplate.modalTempates.userAlreadyExist(user, true)
         });
       } else {
         console.log('Sending email confirmation');
@@ -401,23 +407,25 @@ export class SignUpPageComponent implements OnInit {
   }
 
   log() {
-    console.log(this.generateToken(16));
-    const u = this.validatedUserFormValue;
-    const user = new UserInformations(
-      u.lName,
-      u.fName,
-      u.company,
-      u.email,
-      u.position,
-      u.vehicle,
-      false,
-      '',
-      this.utilsConfForm.ids
-    );
-    console.log('https://msia17conferences.com' + environment.production ? '' : '/dev' + '/inscription?userdata=' + this.encodeData({
-      userdata: btoa(JSON.stringify(user)),
-      token: this.generateToken(16)
-    }));
+    console.log(this.utilsConfForm);
+
+    // console.log(this.generateToken(16));
+    // const u = this.validatedUserFormValue;
+    // const user = new UserInformations(
+    //   u.lName,
+    //   u.fName,
+    //   u.company,
+    //   u.email,
+    //   u.position,
+    //   u.vehicle,
+    //   false,
+    //   '',
+    //   this.utilsConfForm.ids
+    // );
+    // console.log('https://msia17conferences.com' + environment.production ? '' : '/dev' + '/inscription?userdata=' + this.encodeData({
+    //   userdata: btoa(JSON.stringify(user)),
+    //   token: this.generateToken(16)
+    // }));
   }
 
   fillUserInfoForm() {
@@ -439,16 +447,6 @@ export class SignUpPageComponent implements OnInit {
       company: 'CACF',
       position: 'Ingénieur Logiciel',
       vehicle: true,
-    });
-  }
-  testModal() {
-    console.log('Testing modal');
-    this.dialog.open(GenericDialogComponent, {
-      width: 'auto',
-      data: DialogTemplate.modalTempates.tokenNotMatch({
-        fName: 'ALT236',
-        email: 'a@e.f'
-      })
     });
   }
 
