@@ -1,7 +1,7 @@
 <!-- For desktop -->
 <mat-card *ngIf="!mobSvc.getIsMobile()" style="width: 1150px; margin: 10px auto;">
     <mat-tab-group mat-stretch-tabs>
-        <mat-tab *ngFor="let theme of cdThemeList" [label]="'Theme : '+ theme.themeName">
+        <mat-tab *ngFor="let theme of cdThemeList" [label]="'Thème : '+ theme.themeName">
             <mat-list role="list">
                 <mat-tab-group mat-stretch-tabs>
                     <mat-tab label="Présentation générale">
@@ -20,7 +20,7 @@
     <mat-expansion-panel *ngFor="let theme of cdThemeList">
         <mat-expansion-panel-header>
             <mat-panel-description>
-                Theme : {{ theme.themeName }}
+                Thème : {{ theme.themeName }}
             </mat-panel-description>
         </mat-expansion-panel-header>
 

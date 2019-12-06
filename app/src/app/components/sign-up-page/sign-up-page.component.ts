@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
-import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 import { UserInformations } from 'src/app/interfaces/generic/UserInformations.model';
 import { CfCreneau } from 'src/app/interfaces/ConfFormData.model';
@@ -10,6 +10,7 @@ import { CfCreneau } from 'src/app/interfaces/ConfFormData.model';
 import { GenericDialogComponent } from '../dialogs/generic-dialog/generic-dialog.component';
 import { DeleteUserDialogComponent } from '../dialogs/delete-user-dialog/delete-user-dialog.component';
 import { UpdateUserDialogComponent } from '../dialogs/update-user-dialog/update-user-dialog.component';
+import { AlreadyUserExistComponent } from '../dialogs/already-user-exist/already-user-exist.component';
 import { BottomSheetOverviewComponent } from 'src/app/components/bottom-sheet-overview/bottom-sheet-overview.component';
 
 import { ConferencesService } from 'src/app/services/conferences/conferences.service';
@@ -37,6 +38,7 @@ export class SignUpPageComponent implements OnInit {
   noneString = 'Aucune';
   cfCreneau: Array<CfCreneau>;
   isUpdating = false;
+  alreadyRegistered = false;
   isMobile: boolean;
   env = environment;
   constructor(private formBuilder: FormBuilder,
@@ -125,17 +127,25 @@ export class SignUpPageComponent implements OnInit {
       Promise.all(this.getAllConfName(user)).then(allConfName => {
         console.log('Retrieving all conference names for ' + user.email + ' user');
         this.guestsService.confirmUser(user.email, user.token).subscribe(verifResult => {
-          this.checkCreate(userdata, verifResult, user, allConfName, 'successfullSignUpMail');
+          this.checkCreate(userdata, verifResult, user, allConfName, 'successfullSignUpMail', true);
+        }, err => {
+          this.loaderService.setSpinnerState(false);
+          this.dialog.open(GenericDialogComponent, {
+            width: 'auto',
+            data: DialogTemplate.modalTempates.internalServerError()
+          });
         });
       }).catch(err => {
         this.loaderService.setSpinnerState(false);
-        console.log('Error when calling getAllConfName : ', err);
+        console.log('Error when calling getAllConfName :', err);
+        this.dialog.open(GenericDialogComponent, {
+          width: 'auto',
+          data: DialogTemplate.modalTempates.confError()
+        });
       });
     }
   }
 
-  // Eviter pb de email déjà existant si on fait la maj OK je pense
-  // et on pourra pas faire la maj si le user change d'adresse mail,
   updateUserData() {
     if (this.isUpdating) {
       this.loaderService.setSpinnerState(true);
@@ -157,22 +167,32 @@ export class SignUpPageComponent implements OnInit {
 
         const user = JSON.parse(atob(userdata));
 
-        // Conf name in QRCode with/ getAllConfName
+        // Conf name in QRCode with getAllConfName
         Promise.all(this.getAllConfName(user)).then(allConfName => {
           console.log('Retrieving all conference names for ' + user.email + ' user');
           this.guestsService.updateUser(user).subscribe(verifResult => {
-            this.checkCreate(userdata, verifResult, user, allConfName, 'successfullUpdateSignUpMail');
+            this.checkCreate(userdata, verifResult, user, allConfName, 'successfullUpdateSignUpMail', false);
+          }, err => {
+            console.log('Error getting conferences data', err);
+            this.loaderService.setSpinnerState(false);
+            this.dialog.open(GenericDialogComponent, {
+              width: 'auto',
+              data: DialogTemplate.modalTempates.updateUserError()
+            });
           });
         }).catch(err => {
           this.loaderService.setSpinnerState(false);
           console.log('Error when calling getAllConfName :', err);
+          this.dialog.open(GenericDialogComponent, {
+            width: 'auto',
+            data: DialogTemplate.modalTempates.confError()
+          });
         });
       });
     }
   }
 
-  private checkCreate(userdata: any, verifResult: any, user: UserInformations, allConfName: any[], templateName: string) {
-    // console.log('checkCreate', verifResult.hasValidate);
+  private checkCreate(userdata: any, verifResult: any, user: UserInformations, allConfName: any[], templateName: string, successDialog: boolean) {
     if (!verifResult.success) {
       this.loaderService.setSpinnerState(false);
       this.handleErrorDialog(verifResult.type, user, verifResult.hasValidate);
@@ -192,11 +212,11 @@ export class SignUpPageComponent implements OnInit {
               conferences: allConfName
             }
           }
-        }).subscribe(mailRes => {
+        }).subscribe(() => {
           this.loaderService.setSpinnerState(false);
           this.dialog.open(GenericDialogComponent, {
             width: 'auto',
-            data: DialogTemplate.modalTempates.successful(user)
+            data: successDialog ? DialogTemplate.modalTempates.successful(user) : DialogTemplate.modalTempates.updateUserSuccess(user)
           });
         }, err => {
           this.loaderService.setSpinnerState(false);
@@ -228,14 +248,13 @@ export class SignUpPageComponent implements OnInit {
   private getAllConfName(user: UserInformations): any[] {
     return user.conferences.map((confId) => {
       return new Promise((resolve, reject) => {
-        console.log('confId', confId);
         this.conferencesService.getConfName(confId).subscribe(conference => {
           resolve(conference.confName);
         }, err => {
-          console.log('Error from APIs', err);
+          this.loaderService.setSpinnerState(false);
           this.dialog.open(GenericDialogComponent, {
             width: 'auto',
-            data: DialogTemplate.modalTempates.internalServerError(user)
+            data: DialogTemplate.modalTempates.confError()
           });
         });
       });
@@ -245,10 +264,12 @@ export class SignUpPageComponent implements OnInit {
   private handleErrorDialog(verifResultType: string, user: UserInformations, hasValidate: boolean) {
     switch (verifResultType) {
       case 'alreadyRegistered':
-        console.log('handleErrorDialog');
-        this.dialog.open(GenericDialogComponent, {
+        this.dialog.open(AlreadyUserExistComponent, {
           width: 'auto',
-          data: DialogTemplate.modalTempates.userAlreadyExist(user, hasValidate)
+          data: {
+            email: user.email,
+            hasValidate
+          }
         });
         break;
 
@@ -327,10 +348,7 @@ export class SignUpPageComponent implements OnInit {
   }
 
   validateSignUp() {
-    console.log('this.loaderService', this.loaderService);
-
     this.loaderService.setSpinnerState(true);
-    // console.log(this.validatedUserFormValue, this.validatedConfFormValue);
     const u = this.validatedUserFormValue;
     const token = this.generateToken(16);
     const user = new UserInformations(u.lName, u.fName, u.company, u.email, u.position, u.vehicle, false, token, this.utilsConfForm.ids);
@@ -340,9 +358,12 @@ export class SignUpPageComponent implements OnInit {
       console.log('this.loaderService', this.loaderService);
       if (data.err) {
         this.loaderService.setSpinnerState(false);
-        this.dialog.open(GenericDialogComponent, {
+        this.dialog.open(AlreadyUserExistComponent, {
           width: 'auto',
-          data: DialogTemplate.modalTempates.userAlreadyExist(user, true)
+          data: {
+            email: user.email,
+            hasValidate: true
+          }
         });
       } else {
         console.log('Sending email confirmation');
@@ -379,6 +400,7 @@ export class SignUpPageComponent implements OnInit {
                 width: 'auto',
                 data: DialogTemplate.modalTempates.internalServerError(user)
               });
+              return;
             }
             this.dialog.open(GenericDialogComponent, {
               width: 'auto',
@@ -460,7 +482,11 @@ export class SignUpPageComponent implements OnInit {
     });
   }
 
-  isNone(conf) {
+  checkResendMail(email: string) {
+    return !email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/igm);
+  }
+
+  isNone(conf: string) {
     return conf === '-1';
   }
 

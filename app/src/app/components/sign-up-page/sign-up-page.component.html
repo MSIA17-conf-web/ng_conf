@@ -1,5 +1,3 @@
-
-
 <!-- For desktop -->
 <mat-horizontal-stepper *ngIf="!mobSvc.getIsMobile()" linear #stepper>
   <!-- User Form -->
@@ -34,15 +32,31 @@
           <mat-hint align="end">{{position.value.length}} / 70</mat-hint>
         </mat-form-field>
         <mat-checkbox formControlName="vehicle" color="primary">J'ai besoin d'une place de parking</mat-checkbox>
-        <mat-checkbox #rgpd formControlName="rgpd" color="primary">J'ai lu et accepté les <a (click)="openBottomSheet()">mentions légales</a></mat-checkbox>
+        <mat-checkbox #rgpd formControlName="rgpd" color="primary">J'ai lu et accepté les <a
+            (click)="openBottomSheet()">mentions légales</a></mat-checkbox>
+
         <mat-card-actions align="center" style="margin-top: 8px;">
-          <p class="small-text">Un badge nominale vous sera remis le jour de la conférence</p>
+          <p class="small-text">Un badge nominatif vous sera remis le jour de la conférence</p>
           <button mat-button mat-flat-button color="primary" matStepperNext type="submit"
             [disabled]="userForm.invalid">Suivant - Les conférences</button>
           <button mat-button type="button" (click)="fillUserInfoFormRemy()" *ngIf="!env.production">Remplir
             form</button>
+          <button mat-button type="button" (click)="alreadyRegistered = !alreadyRegistered;">Déjà inscrit ?</button>
         </mat-card-actions>
       </form>
+
+      <div [hidden]="!alreadyRegistered">
+        <div fxLayout="column">
+          <mat-form-field>
+            <input matInput type="email" class="form-control" #resendEmail maxlength="70" placeholder="Adresse email">
+            <mat-hint align="end">{{resendEmail.value.length}} / 70</mat-hint>
+          </mat-form-field>
+
+          <button mat-button type="button" [disabled]="checkResendMail(resendEmail.value)"
+            (click)="emailService.resendMail(resendEmail.value)">Renvoyer le
+            mail</button>
+        </div>
+      </div>
     </mat-card>
   </mat-step>
 
@@ -56,7 +70,7 @@
       <mat-card class="conf-form" style="padding-top: 15px;">
         <ng-container *ngFor="let creneau of cfCreneau, let i = index" style="margin-bottom: 8px;">
           <mat-card-header>
-            <label [for]="creneau.crenId">{{ creneau.crenDesc }}</label>
+            <label [for]="creneau.crenId">{{ creneau.crenStartTime }} - {{ creneau.crenEndTime }}</label>
           </mat-card-header>
           <mat-card-content>
             <mat-radio-group [id]="creneau.crenId" fxLayout="column" fxLayoutAlign="start"
@@ -92,67 +106,69 @@
   <!-- Récapitulatif -->
   <mat-step fxLayout="column" fxLayoutAlign="start">
     <ng-template matStepLabel>Récapitulatif</ng-template>
-      <div fxLayout="row">
+    <div fxLayout="row">
       <mat-card fxLayout="column" style="padding: 10px 40px;">
-          <mat-card-title align="center">
-            Vos informations personnelles
-          </mat-card-title>
+        <mat-card-title align="center">
+          Vos informations personnelles
+        </mat-card-title>
         <mat-card-content *ngIf="validatedUserFormValue">
-            <div fxLayout="row">
-              <div fxLayout="column" fxFlex="50" align="start">Nom :</div>
-              <div fxLayout="column" fxFlex="50" align="end">{{ validatedUserFormValue.lName }}</div>
-            </div>
-            <br>
+          <div fxLayout="row">
+            <div fxLayout="column" fxFlex="50" align="start">Nom :</div>
+            <div fxLayout="column" fxFlex="50" align="end">{{ validatedUserFormValue.lName }}</div>
+          </div>
+          <br>
 
-            <div fxLayout="row">
-                <div fxLayout="column" fxFlex="50" align="start">Prénom :</div>
-                <div fxLayout="column" fxFlex="50" align="end">{{ validatedUserFormValue.fName }}</div>
-              </div>
-              <br>
+          <div fxLayout="row">
+            <div fxLayout="column" fxFlex="50" align="start">Prénom :</div>
+            <div fxLayout="column" fxFlex="50" align="end">{{ validatedUserFormValue.fName }}</div>
+          </div>
+          <br>
 
-            <div fxLayout="row">
-                <div fxLayout="column" fxFlex="50" align="start">Adresse mail :</div>
-                <div fxLayout="column" fxFlex="50" align="end">{{ validatedUserFormValue.email }}</div>
-              </div>
-            <br>
+          <div fxLayout="row">
+            <div fxLayout="column" fxFlex="50" align="start">Adresse mail :</div>
+            <div fxLayout="column" fxFlex="50" align="end">{{ validatedUserFormValue.email }}</div>
+          </div>
+          <br>
 
-            <div fxLayout="row">
-                <div fxLayout="column" fxFlex="50" align="start">Entreprise :</div>
-                <div fxLayout="column" fxFlex="50" align="end">{{ validatedUserFormValue.company }}</div>
-              </div>
-              <br>
+          <div fxLayout="row">
+            <div fxLayout="column" fxFlex="50" align="start">Entreprise :</div>
+            <div fxLayout="column" fxFlex="50" align="end">{{ validatedUserFormValue.company }}</div>
+          </div>
+          <br>
 
-            <div fxLayout="row">
-                <div fxLayout="column" fxFlex="50" align="start">Poste :</div>
-                <div fxLayout="column" fxFlex="50" align="end">{{ validatedUserFormValue.position }}</div>
-              </div>
-              <br>
+          <div fxLayout="row">
+            <div fxLayout="column" fxFlex="50" align="start">Poste :</div>
+            <div fxLayout="column" fxFlex="50" align="end">{{ validatedUserFormValue.position }}</div>
+          </div>
+          <br>
 
-            <div fxLayout="column" align="center">
-              <span *ngIf="validatedUserFormValue.vehicle">Vous aurez besoin d'une place de parking</span>
-              <span *ngIf="!validatedUserFormValue.vehicle">Vous n'aurez pas besoin d'une place de parking</span>
-            </div>
+          <div fxLayout="column" align="center">
+            <span *ngIf="validatedUserFormValue.vehicle">Vous aurez besoin d'une place de parking</span>
+            <span *ngIf="!validatedUserFormValue.vehicle">Vous n'aurez pas besoin d'une place de parking</span>
+          </div>
 
         </mat-card-content>
       </mat-card>
     </div>
 
-      <div fxLayout="row" *ngIf="utilsConfForm.conf">
-        <mat-card *ngFor="let cren of cfCreneau; let i = index" align="center" style="margin: 25px; padding: 10px 40px;">
-          <span style="font-size: 18px;">{{ cren.crenDesc }} <br> {{ cren.crenStartTime }} - {{ cren.crenEndTime }}</span><br><br>
-          <mat-card-content style="font-size: 16px;">
-            <p *ngIf="utilsConfForm.conf[i].confName"> {{ utilsConfForm.conf[i].confName }}</p>
-            <p *ngIf="!utilsConfForm.conf[i].confName"> {{ noneString }}</p>
-          </mat-card-content>
-        </mat-card>
-      </div>
+    <div fxLayout="row" *ngIf="utilsConfForm.conf">
+      <mat-card *ngFor="let cren of cfCreneau; let i = index" align="center" style="margin: 25px; padding: 30px 40px;">
+        <span style="font-size: 18px;">{{ cren.crenStartTime }} - {{ cren.crenEndTime }}</span>
+        <br><br>
+        <mat-card-content style="font-size: 16px;">
+          <p *ngIf="utilsConfForm.conf[i].confName"> {{ utilsConfForm.conf[i].confName }}</p>
+          <p *ngIf="!utilsConfForm.conf[i].confName"> {{ noneString }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
 
     <mat-card-actions align="center">
       <button mat-button (click)="reset(stepper)">Réinitialiser les formulaires</button>
       <button mat-flat-button color="accent" matStepperPrevious>Précédent - Les conférences</button>
       <button mat-raised-button color="primary" (click)="validateSignUp()" *ngIf="!isUpdating">Valider la
         préinscription</button>
-      <button mat-raised-button color="primary" (click)="updateUserData()" *ngIf="isUpdating">Mettre à jour</button>
+      <button mat-raised-button color="primary" (click)="updateUserData()" *ngIf="isUpdating" color="primary">Mettre à
+        jour</button>
       <button mat-button (click)="log()" *ngIf="!env.production">Log</button>
     </mat-card-actions>
   </mat-step>
@@ -191,7 +207,7 @@
         <span class="wrap-mat-label">J'ai lu et accepté les <a (click)="openBottomSheet()">mentions légales</a></span>
       </mat-checkbox>
       <br>
-      <p align="center" class="small-text">Un badge nominale vous sera remis le jour de la conférence</p>
+      <p align="center" class="small-text">Un badge nominatif vous sera remis le jour de la conférence</p>
       <button mat-button mat-flat-button color="primary" style="margin-top: 8px;" matStepperNext type="submit"
         [disabled]="userForm.invalid">Suivant - Les conférences</button>
       <button mat-button type="button" (click)="fillUserInfoFormRemy()" *ngIf="!env.production">Remplir form</button>
@@ -207,7 +223,7 @@
     <form [formGroup]="confForm" (ngSubmit)="onSubmitConf()" fxLayout="column" fxLayoutAlign="start">
       <mat-card class="conf-form" *ngFor="let creneau of cfCreneau, let i = index">
         <mat-card-header>
-          <label [for]="creneau.crenId">{{ creneau.crenDesc }}</label>
+          <label [for]="creneau.crenId">{{ creneau.crenStartTime }} - {{ creneau.crenEndTime }}</label>
         </mat-card-header>
         <mat-card-content>
           <mat-radio-group [id]="creneau.crenId" fxLayout="column" fxLayoutAlign="start"
@@ -238,67 +254,67 @@
   <mat-step>
     <ng-template matStepLabel>Récapitulatif</ng-template>
     <div fxLayout="column" align="center">
-        <ng-container>
+      <ng-container>
         <mat-card fxLayout="column" class="mobile-recap">
-            <mat-card-title>
-              Vos informations personnelles
-            </mat-card-title>
+          <mat-card-title>
+            Vos informations personnelles
+          </mat-card-title>
           <mat-card-content *ngIf="validatedUserFormValue">
-              <div fxLayout="row">
-                <div fxLayout="column" fxFlex="50" align="start">Nom :</div>
-                <div fxLayout="column" fxFlex="50" align="end">{{ validatedUserFormValue.lName }}</div>
-              </div>
-              <br>
+            <div fxLayout="row">
+              <div fxLayout="column" fxFlex="50" align="start">Nom :</div>
+              <div fxLayout="column" fxFlex="50" align="end">{{ validatedUserFormValue.lName }}</div>
+            </div>
+            <br>
 
-              <div fxLayout="row">
-                  <div fxLayout="column" fxFlex="50" align="start">Prénom :</div>
-                  <div fxLayout="column" fxFlex="50" align="end">{{ validatedUserFormValue.fName }}</div>
-                </div>
-                <br>
+            <div fxLayout="row">
+              <div fxLayout="column" fxFlex="50" align="start">Prénom :</div>
+              <div fxLayout="column" fxFlex="50" align="end">{{ validatedUserFormValue.fName }}</div>
+            </div>
+            <br>
 
-              <div fxLayout="row">
-                  <div fxLayout="column" fxFlex="50" align="start">Adresse mail :</div>
-                  <div fxLayout="column" fxFlex="50" align="end">{{ validatedUserFormValue.email }}</div>
-                </div>
-              <br>
+            <div fxLayout="row">
+              <div fxLayout="column" fxFlex="50" align="start">Adresse mail :</div>
+              <div fxLayout="column" fxFlex="50" align="end">{{ validatedUserFormValue.email }}</div>
+            </div>
+            <br>
 
-              <div fxLayout="row">
-                  <div fxLayout="column" fxFlex="50" align="start">Entreprise :</div>
-                  <div fxLayout="column" fxFlex="50" align="end">{{ validatedUserFormValue.company }}</div>
-                </div>
-                <br>
+            <div fxLayout="row">
+              <div fxLayout="column" fxFlex="50" align="start">Entreprise :</div>
+              <div fxLayout="column" fxFlex="50" align="end">{{ validatedUserFormValue.company }}</div>
+            </div>
+            <br>
 
-              <div fxLayout="row">
-                  <div fxLayout="column" fxFlex="50" align="start">Poste :</div>
-                  <div fxLayout="column" fxFlex="50" align="end">{{ validatedUserFormValue.position }}</div>
-                </div>
-                <br>
+            <div fxLayout="row">
+              <div fxLayout="column" fxFlex="50" align="start">Poste :</div>
+              <div fxLayout="column" fxFlex="50" align="end">{{ validatedUserFormValue.position }}</div>
+            </div>
+            <br>
 
-              <div fxLayout="column">
-                <span *ngIf="validatedUserFormValue.vehicle">Vous aurez besoin d'une place de parking</span>
-                <span *ngIf="!validatedUserFormValue.vehicle">Vous n'aurez pas besoin d'une place de parking</span>
-              </div>
+            <div fxLayout="column">
+              <span *ngIf="validatedUserFormValue.vehicle">Vous aurez besoin d'une place de parking</span>
+              <span *ngIf="!validatedUserFormValue.vehicle">Vous n'aurez pas besoin d'une place de parking</span>
+            </div>
 
           </mat-card-content>
         </mat-card>
       </ng-container>
 
-        <ng-container *ngIf="utilsConfForm.conf">
-          <mat-card fxLayout="column" *ngFor="let cren of cfCreneau; let i = index" class="mobile-recap">
-            <span style="font-size: 18px; padding-bottom: 15px;">{{ cren.crenDesc }} <br> {{ cren.crenStartTime }} - {{ cren.crenEndTime }}</span>
-            <mat-card-content style="font-size: 16px;">
-              <p *ngIf="utilsConfForm.conf[i].confName"> {{ utilsConfForm.conf[i].confName }}</p>
-              <p *ngIf="!utilsConfForm.conf[i].confName"> {{ noneString }}</p>
-            </mat-card-content>
-          </mat-card>
-        </ng-container>
+      <ng-container *ngIf="utilsConfForm.conf">
+        <mat-card fxLayout="column" *ngFor="let cren of cfCreneau; let i = index" class="mobile-recap">
+          <span style="font-size: 18px; padding-bottom: 15px;">{{ cren.crenStartTime }} - {{ cren.crenEndTime }}</span>
+          <mat-card-content style="font-size: 16px;">
+            <p *ngIf="utilsConfForm.conf[i].confName"> {{ utilsConfForm.conf[i].confName }}</p>
+            <p *ngIf="!utilsConfForm.conf[i].confName"> {{ noneString }}</p>
+          </mat-card-content>
+        </mat-card>
+      </ng-container>
 
-      </div>
-      <ng-container>
-        <div fxLayout="column" sttyle="margin: 10px 0 0 -15px">
+    </div>
+    <ng-container>
+      <div fxLayout="column" style="margin: 10px 0px 0px -6%;">
         <button mat-raised-button (click)="validateSignUp()" *ngIf="!isUpdating" color="primary">Valider la
           préinscription</button>
-        <button mat-button (click)="updateUserData()" *ngIf="isUpdating">Mettre à jour</button>
+        <button mat-button (click)="updateUserData()" *ngIf="isUpdating" color="primary">Mettre à jour</button>
         <button mat-flat-button color="accent" matStepperPrevious>Précédent - Les conférences</button>
         <button mat-button (click)="reset(stepper)">Réinitialiser les formulaires</button>
         <button mat-button (click)="log()" *ngIf="!env.production">Log</button>

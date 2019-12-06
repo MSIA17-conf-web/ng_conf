@@ -27,6 +27,7 @@ import { ConferencesComponent } from './components/conferences/conferences.compo
 import { GenericDialogComponent } from './components/dialogs/generic-dialog/generic-dialog.component';
 import { UpdateUserDialogComponent } from './components/dialogs/update-user-dialog/update-user-dialog.component';
 import { DeleteUserDialogComponent } from './components/dialogs/delete-user-dialog/delete-user-dialog.component';
+import { AlreadyUserExistComponent } from './components/dialogs/already-user-exist/already-user-exist.component';
 import { BottomSheetOverviewComponent } from './components/bottom-sheet-overview/bottom-sheet-overview.component';
 
 import { EmailService } from './services/email/email.service';
@@ -35,7 +36,6 @@ import { MobileService } from './services/mobile/mobile.service';
 import { GuestsService } from 'src/app/services/guests/guests.service';
 import { LoaderService } from './services/loader/loader.service';
 import { FooterComponent } from './components/footer/footer.component';
-import { AlreadyUserExistComponent } from './components/dialogs/already-user-exist/already-user-exist.component';
 
 // import { TestComponent } from './components/test/test.component';
 
@@ -86,7 +86,8 @@ import { AlreadyUserExistComponent } from './components/dialogs/already-user-exi
     GenericDialogComponent,
     UpdateUserDialogComponent,
     DeleteUserDialogComponent,
-    BottomSheetOverviewComponent
+    BottomSheetOverviewComponent,
+    AlreadyUserExistComponent
   ],
   providers: [
     EmailService,

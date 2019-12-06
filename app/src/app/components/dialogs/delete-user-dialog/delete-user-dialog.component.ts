@@ -35,13 +35,13 @@ export class DeleteUserDialogComponent implements OnInit {
         console.log('Erreur lors de la désincription');
         this.dialog.open(GenericDialogComponent, {
           width: 'auto',
-          data: DialogTemplate.modalTempates.deleteUserError()
+          data: DialogTemplate.modalTempates.deleteUserError(this.user)
         });
       } else {
         console.log('Désincription réussie');
         this.dialog.open(GenericDialogComponent, {
           width: 'auto',
-          data: DialogTemplate.modalTempates.deleteUserSuccess()
+          data: DialogTemplate.modalTempates.deleteUserSuccess(this.user)
         });
       }
 

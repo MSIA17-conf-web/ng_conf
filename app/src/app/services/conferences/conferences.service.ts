@@ -11,8 +11,6 @@ import { environment } from '../../../environments/environment';
 })
 export class ConferencesService {
 
-  confFormDataSubject = new Subject<CfCreneau[]>();
-
   constructor(private httpClient: HttpClient) { }
 
   public getConfFormData(): Observable<CfCreneau[]> {

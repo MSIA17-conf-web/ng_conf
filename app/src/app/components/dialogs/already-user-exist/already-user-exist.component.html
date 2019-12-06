@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Inscritption déjà effectuée</h1>
+<div mat-dialog-content>
+    <p>L'adresse email {{ data.email }} a déjà fait l'objet d'une inscription.</p>
+    <p>Pour se désincrire ou modifier vos données, référez-vous au mail de confirmation reçu lors de l'inscription.</p>
+</div>
+
+<div mat-dialog-actions align="end">
+    <button mat-button cdkFocusInitial mat-dialog-close routerLink="contact">Nous contacter</button>
+    <button mat-button cdkFocusInitial mat-dialog-close *ngIf="data.hasValidate" (click)="emailService.resendConfirmMail(data.email)">Renvoyer le mail</button>
+    <button mat-button cdkFocusInitial mat-dialog-close *ngIf="!data.hasValidate" (click)="emailService.resendTokenMail(data.email)">Renvoyer le mail</button>
+    <button mat-button cdkFocusInitial mat-dialog-close>Fermer</button>
+</div>

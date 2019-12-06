@@ -1,5 +1,7 @@
 import { UserInformations } from 'src/app/interfaces/generic/UserInformations.model';
 
+const persistingProblem = 'Si le problème persiste, veuillez directement nous contacter via l\'un des boutons ci-dessous.';
+
 export default class DialogTemplate {
 
   public static modalTempates: any = {
@@ -21,6 +23,7 @@ export default class DialogTemplate {
         title: 'Erreur durant votre inscription',
         text: [
           'Erreur lors de la vérification de votre profil.',
+          persistingProblem
         ],
         displayLink: {
           signup: true,
@@ -30,31 +33,15 @@ export default class DialogTemplate {
     },
     successful: (options: UserInformations) => {
       return {
-        title: 'Félicitaions, votre inscription est terminée',
+        title: 'Félicitations, votre inscription est terminée',
         text: [
           options.fName + ', merci pour votre inscription, ',
-          'un email récapitulatif va vous être envoyé à : ' + options.email + '.'
+          'un email récapitulatif va vous être envoyé à : ' + options.email + '.',
+          'Un QR code a été mis à votre disposition et vous sera nécessaire le jpur de la conférence.'
         ],
         displayLink: {
           signup: false,
           contact: false
-        }
-      };
-    },
-    userAlreadyExist: (options: UserInformations, hasValidate: boolean) => {
-      console.log('options user', options, hasValidate);
-      return {
-        title: 'Erreur durant votre inscription',
-        text: [
-          'L\'adresse email ' + options.email + ' a déjà fait l\'objet d\'une inscription.',
-          'Pour se désincrire ou modifier vos données, référez-vous au mail de confirmation reçu lors de l\'inscription',
-        ],
-        email: options.email,
-        displayLink: {
-          signup: false,
-          contact: false,
-          // If true resend confirm mail else resend token mail
-          resendConfirmMail: hasValidate
         }
       };
     },
@@ -63,18 +50,7 @@ export default class DialogTemplate {
         title: 'Erreur durant votre inscription',
         text: [
           'L\'email : ' + options.email + ' n\'existe pas.',
-        ],
-        displayLink: {
-          signup: true,
-          contact: true
-        }
-      };
-    },
-    updateError: () => {
-      return {
-        title: 'Erreur durant votre inscription',
-        text: [
-          'Une erreur inatendue est survenue.',
+          persistingProblem
         ],
         displayLink: {
           signup: true,
@@ -99,12 +75,27 @@ export default class DialogTemplate {
         title: 'Erreur lors de la prise de contact',
         text: [
           'Erreur durant l\'envoi de votre message, veuillez réesayer ultérieurement.',
-          'Si le problème persiste veuillez directement nous contacter à l\'adresse <a href="mailto:msia17conferences@gmail.com?subject=' + options.lastName + ' ' + options.firstName + ' cherche à vous contacter'
-          + '&body=' + options.messageEmail + '">msia17conferences@gmail.com</a>'
+          'Si le problème persiste, veuillez directement nous contacter à l\'adresse '
+            + '<a href="mailto:msia17conferences@gmail.com?subject=' + options.lastName + ' ' + options.firstName + ' cherche à vous contacter'
+            + '&body=' + options.messageEmail + '">msia17conferences@gmail.com</a>'
         ],
         displayLink: {
           signup: false,
           contact: false
+        }
+      };
+    },
+    sendMailError: () => {
+      return {
+        title: 'Erreur lors de l\'envoie de votre mail',
+        text: [
+          'Nous rencontrons actuellement quelques soucis. Nos équipes mettent tout en place pour résoudre ce problème.',
+          'Veuillez nous excuser pour la gêne occasionnée.',
+          persistingProblem
+        ],
+        displayLink: {
+          signup: true,
+          contact: true
         }
       };
     },
@@ -113,7 +104,22 @@ export default class DialogTemplate {
         title: 'Erreur interne',
         text: [
           'Nous rencontrons actuellement quelques soucis. Nos équipes mettent tout en place pour résoudre ce problème.',
-          'Veuillez nous excuser pour la gêne occasionnée.'
+          'Veuillez nous excuser pour la gêne occasionnée.',
+          persistingProblem
+        ],
+        displayLink: {
+          signup: true,
+          contact: true
+        }
+      };
+    },
+    confError: () => {
+      return {
+        title: 'Erreur lors de la récupération des conférences',
+        text: [
+          'Nous rencontrons actuellement quelques soucis. Nos équipes mettent tout en place pour résoudre ce problème.',
+          'Veuillez nous excuser pour la gêne occasionnée.',
+          persistingProblem
         ],
         displayLink: {
           signup: true,
@@ -123,7 +129,7 @@ export default class DialogTemplate {
     },
     updateUserSuccess: (options: UserInformations) => {
       return {
-        title: 'Mise à jour des données réussie',
+        title: 'Mise à jour des données réussies',
         text: [
           options.fName + ', un email vient de vous être envoyé à l\'adresse ' + options.email + ' avec votre nouveau QRCode',
         ],
@@ -138,7 +144,8 @@ export default class DialogTemplate {
         title: 'Erreur lors de la mise à jour de vos données',
         text: [
           options.fName + ', une erreur inatendue s\'est produite.',
-          'Veuillez nous excuser pour la gêne occasionnée.'
+          'Veuillez nous excuser pour la gêne occasionnée.',
+          persistingProblem
         ],
         displayLink: {
           signup: true,
@@ -146,11 +153,24 @@ export default class DialogTemplate {
         }
       };
     },
-    deleteUserSuccess: () => {
+    updateError: () => {
+      return {
+        title: 'Erreur durant votre inscription',
+        text: [
+          'Une erreur inattendue est survenue.',
+          persistingProblem
+        ],
+        displayLink: {
+          signup: true,
+          contact: true
+        }
+      };
+    },
+    deleteUserSuccess: (user: UserInformations) => {
       return {
         title: 'Confirmation de suppression',
         text: [
-          'Vos données ont correctement été supprimées de l\'intégralité de nos fichiers.',
+          user.fName + ', vos données ont correctement été supprimées de l\'intégralité de nos fichiers.',
         ],
         displayLink: {
           signup: false,
@@ -158,12 +178,13 @@ export default class DialogTemplate {
         }
       };
     },
-    deleteUserError: (options: UserInformations) => {
+    deleteUserError: (user: UserInformations) => {
       return {
         title: 'Erreur lors de la suppression de vos données',
         text: [
-          options.fName + ', une erreur inatendue s\'est produite.',
-          'Veuillez nous excuser pour la gêne occasionnée.'
+          user.fName + ', une erreur inatendue s\'est produite.',
+          'Veuillez nous excuser pour la gêne occasionnée.',
+          persistingProblem
         ],
         displayLink: {
           signup: true,
