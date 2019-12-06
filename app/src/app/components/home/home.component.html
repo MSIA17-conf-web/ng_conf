@@ -1,1 +1,96 @@
-<p>home works!</p>
+<!-- Desktop -->
+<div class="container-desktop" *ngIf="!mobSvc.getIsMobile()" fxLayout="column" fxLayoutAlign="stretch">
+  <div color="warn" fxLayout="row" fxLayoutAlign="space-around center" class="home-header-d">
+    <div fxLayout="column" fxLayoutAlign="space-around end">
+      <span>24 JANVIER 2020</span>
+      <span>CESI NANTERRE</span>
+    </div>
+    <div fxLayout="row"><img style="padding: 25px" height="160px"
+        src="https://drive.google.com/uc?export=view&id=1zzzTGc2smgERqm_yiX-gO6IxgD8jjYqJ" alt="IT's for tomorrow"
+        width=""></div>
+    <div fxLayout="column" fxLayoutAlign="space-around start">
+      <span>1 JOURNEE</span>
+      <span>3 THEMES</span>
+      <span>9 CONFERENCES</span>
+    </div>
+  </div>
+  <p class="home-text-d">Nous, managers en systèmes d'information en apprentissage, travaillons dans diverses
+    entreprises
+    sur des projets liés à l'informatique et au management. Cette expérience professionnelle acquise durant nos parcours
+    professionnels nous pousse aujourd'hui à transmettre cette passion aux autres au travers de 9 conférences auxquelles
+    nous vous invitons.</p>
+
+  <div class="agenda-d" fxLayout="row" fxLayoutAlign="space-between start">
+    <div *ngFor="let theme of homeTheme;" class="sub-a-d" fxLayoutAlign="center center" fxLayout="column">
+      <img [src]="buildThemeImageUrl(theme.themeId)" width="100%" alt="">
+      <div class="slot-info-d" align="center">10h30 - Accueil</div>
+      <div fxLayout="column" align="center" class="slot-conf-d">
+        <div> {{ theme.conferences[0].creneau[0].crenStartTime }} </div>
+        <div> {{ theme.conferences[0].confName }} </div>
+      </div>
+      <div class="slot-info-d margin-bottom" align="center">12h00 - Animation</div>
+      <div class="slot-info-d" align="center">12h30 - Pause Déjeuner</div>
+      <div fxLayout="column" align="center" class="slot-conf-d border-bottom">
+        <div> {{ theme.conferences[1].creneau[0].crenStartTime }} </div>
+        <div> {{ theme.conferences[1].confName }} </div>
+      </div>
+      <div fxLayout="column" align="center" class="slot-conf-d border-bottom">
+        <div> {{ theme.conferences[2].creneau[0].crenStartTime }} </div>
+        <div> {{ theme.conferences[2].confName }} </div>
+      </div>
+    </div>
+
+  </div>
+  <div fxLayout="row" fxLayoutAlign="center center" style="margin-top: 15px;">
+    <button mat-raised-button type="button" color="accent" routerLink="inscription">S'INSCRIRE</button>
+  </div>
+</div>
+
+<div class="container-mobile" *ngIf="mobSvc.getIsMobile()">
+  <div color="warn" fxLayout="column" fxLayoutAlign="space-around center" class="home-header-m">
+    <div fxLayout="column" fxLayoutAlign="space-around center">
+      <span>24 JANVIER 2020</span>
+      <span>CESI NANTERRE</span>
+    </div>
+    <div fxLayout="row"><img style="padding: 25px" height="160px"
+        src="https://drive.google.com/uc?export=view&id=1zzzTGc2smgERqm_yiX-gO6IxgD8jjYqJ" alt="IT's for tomorrow">
+    </div>
+    <div fxLayout="column" fxLayoutAlign="space-around center">
+      <span>1 JOURNEE</span>
+      <span>3 THEMES</span>
+      <span>9 CONFERENCES</span>
+    </div>
+  </div>
+
+  <p class="home-text-m">Nous, managers en systèmes d'information en apprentissage, travaillons dans diverses
+    entreprises
+    sur des projets liés à l'informatique et au management. Cette expérience professionnelle acquise durant nos
+    parcours
+    professionnels nous pousse aujourd'hui à transmettre cette passion aux autres au travers de 9 conférences
+    auxquelles
+    nous vous invitons.</p>
+
+  <div class="agenda-m" fxLayout="column" fxLayoutAlign="space-between center">
+    <div *ngFor="let theme of homeTheme;" class="sub-a-m" fxLayoutAlign="center center" fxLayout="column">
+      <img [src]="buildThemeImageUrl(theme.themeId)" width="100%" alt="">
+      <div class="slot-info-m" align="center">10h30 - Accueil</div>
+      <div fxLayout="column" align="center" class="slot-conf-m">
+        <div> {{ theme.conferences[0].creneau[0].crenStartTime }} </div>
+        <div> {{ theme.conferences[0].confName }} </div>
+      </div>
+      <div class="slot-info-m margin-bottom" align="center">12h00 - Animation</div>
+      <div class="slot-info-m" align="center">12h30 - Pause Déjeuner</div>
+      <div fxLayout="column" align="center" class="slot-conf-m border-bottom">
+        <div> {{ theme.conferences[1].creneau[0].crenStartTime }} </div>
+        <div> {{ theme.conferences[1].confName }} </div>
+      </div>
+      <div fxLayout="column" align="center" class="slot-conf-m border-bottom">
+        <div> {{ theme.conferences[2].creneau[0].crenStartTime }} </div>
+        <div> {{ theme.conferences[2].confName }} </div>
+      </div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="center center" style="margin-top: 15px;">
+      <button mat-raised-button type="button" color="accent" routerLink="inscription">S'INSCRIRE</button>
+    </div>
+  </div>
+</div>
