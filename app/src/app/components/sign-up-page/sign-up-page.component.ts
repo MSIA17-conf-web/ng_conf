@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material';
+import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 
 import { UserInformations } from 'src/app/interfaces/generic/UserInformations.model';
 import { CfCreneau } from 'src/app/interfaces/ConfFormData.model';
@@ -9,6 +10,7 @@ import { CfCreneau } from 'src/app/interfaces/ConfFormData.model';
 import { GenericDialogComponent } from '../dialogs/generic-dialog/generic-dialog.component';
 import { DeleteUserDialogComponent } from '../dialogs/delete-user-dialog/delete-user-dialog.component';
 import { UpdateUserDialogComponent } from '../dialogs/update-user-dialog/update-user-dialog.component';
+import { BottomSheetOverviewComponent } from 'src/app/components/bottom-sheet-overview/bottom-sheet-overview.component';
 
 import { ConferencesService } from 'src/app/services/conferences/conferences.service';
 import { EmailService } from 'src/app/services/email/email.service';
@@ -44,7 +46,8 @@ export class SignUpPageComponent implements OnInit {
               public dialog: MatDialog,
               private ngRoute: ActivatedRoute,
               public mobSvc: MobileService,
-              public loaderService: LoaderService
+              public loaderService: LoaderService,
+              private bottomSheet: MatBottomSheet
   ) { }
 
   ngOnInit() {
@@ -239,7 +242,7 @@ export class SignUpPageComponent implements OnInit {
     });
   }
 
-  handleErrorDialog(verifResultType: string, user: UserInformations, hasValidate: boolean) {
+  private handleErrorDialog(verifResultType: string, user: UserInformations, hasValidate: boolean) {
     switch (verifResultType) {
       case 'alreadyRegistered':
         console.log('handleErrorDialog');
@@ -288,7 +291,8 @@ export class SignUpPageComponent implements OnInit {
       lName: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(2)]],
       company: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(2)]],
       position: ['', [Validators.required, Validators.maxLength(60), Validators.minLength(2)]],
-      vehicle: [false, [Validators.required]]
+      vehicle: [false, [Validators.required]],
+      rgpd: [false, [Validators.requiredTrue]]
     });
     // console.log(this.userForm);
   }
@@ -399,6 +403,10 @@ export class SignUpPageComponent implements OnInit {
     });
   }
 
+  openBottomSheet() {
+    this.bottomSheet.open(BottomSheetOverviewComponent);
+  }
+
   reset(stepper: any) {
     stepper.reset();
     Object.keys(this.userForm.controls).forEach(key => {
@@ -436,6 +444,7 @@ export class SignUpPageComponent implements OnInit {
       company: 'General Electrics',
       position: 'Apprenti Architecte Solution',
       vehicle: true,
+      rgpd: true
     });
   }
 
@@ -447,6 +456,7 @@ export class SignUpPageComponent implements OnInit {
       company: 'CACF',
       position: 'Ingénieur Logiciel',
       vehicle: true,
+      rgpd: true
     });
   }
 

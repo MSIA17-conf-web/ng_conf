@@ -13,4 +13,14 @@ hr {
 .footer-link a, .footer-link a:hover {
     text-decoration: none;
     color: inherit;
+    cursor: pointer;
+}
+
+:host {
+  bottom: 0;
+  background-color: #292425;
+  color: white;
+  width: 100%;
+  z-index: 1000;
+  padding: 15px 0;
 }
