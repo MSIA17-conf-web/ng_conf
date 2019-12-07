@@ -106,7 +106,7 @@
   <!-- Récapitulatif -->
   <mat-step fxLayout="column" fxLayoutAlign="start">
     <ng-template matStepLabel>Récapitulatif</ng-template>
-    <div fxLayout="row">
+    <!-- <div fxLayout="row">
       <mat-card fxLayout="column" style="padding: 10px 40px;">
         <mat-card-title align="center">
           Vos informations personnelles
@@ -149,9 +149,9 @@
 
         </mat-card-content>
       </mat-card>
-    </div>
+    </div> -->
 
-    <div fxLayout="row" *ngIf="utilsConfForm.conf">
+    <!-- <div fxLayout="row" *ngIf="utilsConfForm.conf">
       <mat-card *ngFor="let cren of cfCreneau; let i = index" align="center" style="margin: 25px; padding: 30px 40px;">
         <span style="font-size: 18px;">{{ cren.crenStartTime }} - {{ cren.crenEndTime }}</span>
         <br><br>
@@ -160,7 +160,7 @@
           <p *ngIf="!utilsConfForm.conf[i].confName"> {{ noneString }}</p>
         </mat-card-content>
       </mat-card>
-    </div>
+    </div> -->
 
     <mat-card-actions align="center">
       <button mat-button (click)="reset(stepper)">Réinitialiser les formulaires</button>
@@ -182,22 +182,27 @@
     <ng-template matStepLabel>Vos informations</ng-template>
     <form [formGroup]="userForm" (ngSubmit)="onSubmitUserInfo()" fxLayout="column" fxLayoutAlign="start">
       <mat-form-field>
-        <input matInput type="email" class="form-control" id="email" formControlName="email"
+        <input matInput type="email" class="form-control" #email formControlName="email"
           placeholder="Adresse email">
+          <mat-hint align="end">{{email.value.length}} / 70</mat-hint>
       </mat-form-field>
       <mat-form-field>
-        <input matInput type="text" class="form-control" id="fName" formControlName="fName" placeholder="Prénom">
+        <input matInput type="text" class="form-control" #fName formControlName="fName" placeholder="Prénom">
+        <mat-hint align="end">{{fName.value.length}} / 60</mat-hint>
       </mat-form-field>
       <mat-form-field>
-        <input matInput type="text" class="form-control" id="lName" formControlName="lName" placeholder="Nom">
+        <input matInput type="text" class="form-control" #lName formControlName="lName" placeholder="Nom">
+        <mat-hint align="end">{{lName.value.length}} / 60</mat-hint>
       </mat-form-field>
       <mat-form-field>
-        <input matInput type="text" class="form-control" id="company" formControlName="company"
+        <input matInput type="text" class="form-control" #company formControlName="company"
           placeholder="Nom de votre entreprise">
+          <mat-hint align="end">{{company.value.length}} / 60</mat-hint>
       </mat-form-field>
       <mat-form-field>
-        <input matInput type="text" class="form-control" id="position" formControlName="position"
+        <input matInput type="text" class="form-control" #position formControlName="position"
           placeholder="Intitulé de votre poste">
+          <mat-hint align="end">{{position.value.length}} / 70</mat-hint>
       </mat-form-field>
       <mat-checkbox formControlName="vehicle" color="primary">
         <span class="wrap-mat-label">J'ai besoin d'une
@@ -253,7 +258,7 @@
   <!-- Récapitulatif -->
   <mat-step>
     <ng-template matStepLabel>Récapitulatif</ng-template>
-    <div fxLayout="column" align="center">
+    <!-- <div fxLayout="column" align="center">
       <ng-container>
         <mat-card fxLayout="column" class="mobile-recap">
           <mat-card-title>
@@ -309,7 +314,7 @@
         </mat-card>
       </ng-container>
 
-    </div>
+    </div> -->
     <ng-container>
       <div fxLayout="column" style="margin: 10px 0px 0px -6%;">
         <button mat-raised-button (click)="validateSignUp()" *ngIf="!isUpdating" color="primary">Valider la
