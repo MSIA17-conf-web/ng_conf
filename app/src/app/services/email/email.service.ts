@@ -27,7 +27,7 @@ export class EmailService {
     return this.httpClient.post<any>('https://msia17conferences.com:9010/api', {
       method: 'POST',
       url: 'sendEmail',
-      baseURL: 'http://email_api:9010',
+      baseURL: environment.emailAPIUrl,
       body: options
     });
   }
@@ -37,7 +37,7 @@ export class EmailService {
         .post<any>('https://msia17conferences.com:9010/api', {
           method: 'POST',
           url: 'sendEmail',
-          baseURL: 'http://email_api:9010',
+          baseURL: environment.emailAPIUrl,
           body: {
             templateName: 'contactMail',
             data: {
@@ -164,7 +164,7 @@ export class EmailService {
     this.httpClient.post<any>('https://msia17conferences.com:9010/api', {
       method: 'POST',
       url: 'sendEmail',
-      baseURL: 'http://email_api:9010',
+      baseURL: environment.emailAPIUrl,
       body: data
     }).subscribe(res => {
       console.log('Response from APIs', res);

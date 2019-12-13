@@ -37,7 +37,7 @@ export default class DialogTemplate {
         text: [
           options.fName + ', merci pour votre inscription, ',
           'un email récapitulatif va vous être envoyé à : ' + options.email + '.',
-          'Un QR code a été mis à votre disposition et vous sera nécessaire le jpur de la conférence.'
+          'Un QR code a été mis à votre disposition et vous sera nécessaire le jour de la conférence.'
         ],
         displayLink: {
           signup: false,

@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  postgreAPIUrl: 'http://postgre_api:9010'
+  postgreAPIUrl: 'http://postgre_api:9010',
+  emailAPIUrl: 'http://email_api:9010'
 };
 
 /*

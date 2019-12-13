@@ -11,7 +11,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/accueil', pathMatch: 'full' },
   { path: 'accueil', component: HomeComponent },
   { path: 'inscription', component: SignUpPageComponent },
-  { path: 'a-propos', component: AboutComponent },
+  { path: 'a-propos', component: HomeComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'conferences', component: ConferencesComponent }
 ];
