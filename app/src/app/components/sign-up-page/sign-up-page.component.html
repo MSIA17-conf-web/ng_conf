@@ -7,8 +7,8 @@
       <form [formGroup]="userForm" (ngSubmit)="onSubmitUserInfo()" fxLayout="column" fxLayoutAlign="start"
         style="margin-top: 25px;">
         <mat-form-field>
-          <input matInput type="email" class="form-control" #email maxlength="70" formControlName="email"
-            placeholder="Adresse email">
+          <input matInput type="email" class="form-control" [readonly]="isUpdating" #email maxlength="70"
+            formControlName="email" placeholder="Adresse email">
           <mat-hint align="end">{{email.value.length}} / 70</mat-hint>
         </mat-form-field>
         <mat-form-field>
@@ -21,16 +21,31 @@
             placeholder="Nom">
           <mat-hint align="end">{{lName.value.length}} / 60</mat-hint>
         </mat-form-field>
+
+        <mat-radio-group id="situation" fxLayout="row" fxLayoutAlign="space-around" formControlName="situation"
+          [(ngModel)]="situation" style="margin-bottom: 5px;">
+          <mat-radio-button (click)="setValueSituation('salarie')" [value]="'salarie'" color="primary" checked>
+            Salarié(e)
+          </mat-radio-button>
+          <mat-radio-button (click)="setValueSituation('etudiant')" [value]="'etudiant'" color="primary">
+            Etudiant(e)
+          </mat-radio-button>
+          <mat-radio-button (click)="setValueSituation('autre')" [value]="'autre'" color="primary">
+            Autre
+          </mat-radio-button>
+        </mat-radio-group>
+
         <mat-form-field>
           <input matInput type="text" class="form-control" #company maxlength="60" formControlName="company"
-            placeholder="Nom de votre entreprise">
+            [placeholder]="placeHolderSituationCompany" [readonly]="situation === 'autre'">
           <mat-hint align="end">{{company.value.length}} / 60</mat-hint>
         </mat-form-field>
         <mat-form-field>
-          <input matInput type="text" class="form-control" #position maxlength="70" formControlName="position"
-            placeholder="Intitulé de votre poste">
+          <input matInput type="text" class="form-control" [readonly]="situation === 'etudiant'" #position
+            maxlength="70" formControlName="position" [placeholder]="placeHolderSituationPosition">
           <mat-hint align="end">{{position.value.length}} / 70</mat-hint>
         </mat-form-field>
+
         <mat-checkbox formControlName="vehicle" color="primary">J'ai besoin d'une place de parking</mat-checkbox>
         <mat-checkbox #rgpd formControlName="rgpd" color="primary">J'ai lu et accepté les <a
             (click)="openBottomSheet()">mentions légales</a></mat-checkbox>
@@ -182,28 +197,45 @@
     <ng-template matStepLabel>Vos informations</ng-template>
     <form [formGroup]="userForm" (ngSubmit)="onSubmitUserInfo()" fxLayout="column" fxLayoutAlign="start">
       <mat-form-field>
-        <input matInput type="email" class="form-control" #email formControlName="email"
+        <input matInput type="email" class="form-control" #email [readonly]="isUpdating" maxlength="70" formControlName="email"
           placeholder="Adresse email">
-          <mat-hint align="end">{{email.value.length}} / 70</mat-hint>
+        <mat-hint align="end">{{email.value.length}} / 70</mat-hint>
       </mat-form-field>
       <mat-form-field>
-        <input matInput type="text" class="form-control" #fName formControlName="fName" placeholder="Prénom">
+        <input matInput type="text" class="form-control" #fName maxlength="60" formControlName="fName"
+          placeholder="Prénom">
         <mat-hint align="end">{{fName.value.length}} / 60</mat-hint>
       </mat-form-field>
       <mat-form-field>
-        <input matInput type="text" class="form-control" #lName formControlName="lName" placeholder="Nom">
+        <input matInput type="text" class="form-control" #lName maxlength="60" formControlName="lName"
+          placeholder="Nom">
         <mat-hint align="end">{{lName.value.length}} / 60</mat-hint>
       </mat-form-field>
+
+      <mat-radio-group id="situation" fxLayout="column" formControlName="situation"
+        [(ngModel)]="situation">
+        <mat-radio-button (click)="setValueSituation('salarie')" style="margin: 5px 0;" [value]="'salarie'" color="primary" checked>
+          Salarié(e)
+        </mat-radio-button>
+        <mat-radio-button (click)="setValueSituation('etudiant')" style="margin: 5px 0;" [value]="'etudiant'" color="primary">
+          Etudiant(e)
+        </mat-radio-button>
+        <mat-radio-button (click)="setValueSituation('autre')" style="margin: 5px 0;" [value]="'autre'" color="primary">
+          Autre
+        </mat-radio-button>
+      </mat-radio-group>
+
       <mat-form-field>
-        <input matInput type="text" class="form-control" #company formControlName="company"
-          placeholder="Nom de votre entreprise">
-          <mat-hint align="end">{{company.value.length}} / 60</mat-hint>
+        <input matInput type="text" class="form-control" #company maxlength="60" formControlName="company"
+          [placeholder]="placeHolderSituationCompany" [readonly]="situation === 'autre'">
+        <mat-hint align="end">{{company.value.length}} / 60</mat-hint>
       </mat-form-field>
       <mat-form-field>
-        <input matInput type="text" class="form-control" #position formControlName="position"
-          placeholder="Intitulé de votre poste">
-          <mat-hint align="end">{{position.value.length}} / 70</mat-hint>
+        <input matInput type="text" class="form-control" [readonly]="situation === 'etudiant'" #position maxlength="70"
+          formControlName="position" [placeholder]="placeHolderSituationPosition">
+        <mat-hint align="end">{{position.value.length}} / 70</mat-hint>
       </mat-form-field>
+
       <mat-checkbox formControlName="vehicle" color="primary">
         <span class="wrap-mat-label">J'ai besoin d'une
           place de parking</span>

@@ -30,6 +30,9 @@ import { environment } from '../../../environments/environment';
 export class SignUpPageComponent implements OnInit {
 
   userForm: FormGroup;
+  situation: string;
+  placeHolderSituationCompany: string;
+  placeHolderSituationPosition: string;
   confForm: FormGroup = new FormGroup({});
   validatedUserFormValue: any = {};
   utilsUserForm: any = {};
@@ -53,6 +56,7 @@ export class SignUpPageComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.initSituationValues();
     this.loaderService.setSpinnerState(true);
     // this.mockCreneau = this.conferencesService.mockCreneau;
     this.initUserInfoForm();
@@ -72,6 +76,12 @@ export class SignUpPageComponent implements OnInit {
     this.ngRoute.queryParams.subscribe(event => {
       this.checkURI(event);
     });
+  }
+
+  private initSituationValues() {
+    this.situation = 'salarie';
+    this.placeHolderSituationCompany = 'Nom de votre entreprise';
+    this.placeHolderSituationPosition = 'Nom de votre poste';
   }
 
   public getConfRecap(i: number) {
@@ -230,19 +240,27 @@ export class SignUpPageComponent implements OnInit {
   }
 
   initFormValues(user: any/*UserInformations*/) {
-    this.userForm.controls.email.disable();
+    // this.userForm.controls.email.disable();
     Object.keys(this.userForm.controls).forEach(key => {
-      console.log('key', key, user);
       if (user.hasOwnProperty(key)) {
-        console.log('user[key]', user[key]);
         this.userForm.get(key).setValue(user[key]);
+      } else {
+        // Situation
+        if (user.company === 'Autre') {
+          this.userForm.get('situation').setValue('autre');
+          this.placeHolderSituationCompany = 'Autre';
+          this.placeHolderSituationPosition = 'Quel est votre situation';
+        } else if (user.position === 'Etudiant(e)') {
+          this.userForm.get('situation').setValue('etudiant');
+          this.placeHolderSituationCompany = 'Nom de votre école';
+          this.placeHolderSituationPosition = 'Statut';
+        } else {
+          this.userForm.get('situation').setValue('salarie');
+          this.placeHolderSituationCompany = 'Nom de votre entreprise';
+          this.placeHolderSituationPosition = 'Nom de votre poste';
+        }
       }
     });
-    // Object.keys(this.confForm.controls).forEach(key => {
-    //   console.log('confForm', key, user.conferences[key]);
-    //   this.confForm.get(key).setValue(user.conferences[key]);
-    //   // this.confForm.get(key).writeValue(user.conferences[key]);
-    // });
   }
 
   private getAllConfName(user: UserInformations): any[] {
@@ -310,12 +328,12 @@ export class SignUpPageComponent implements OnInit {
       email: ['', [Validators.required, Validators.email, Validators.maxLength(70)]],
       fName: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(2)]],
       lName: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(2)]],
+      situation: ['salarie', [Validators.required]],
       company: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(2)]],
       position: ['', [Validators.required, Validators.maxLength(60), Validators.minLength(2)]],
       vehicle: [false, [Validators.required]],
       rgpd: [false, [Validators.requiredTrue]]
     });
-    // console.log(this.userForm);
   }
 
   initConfForm() {
@@ -329,7 +347,7 @@ export class SignUpPageComponent implements OnInit {
     const userFormValue = this.userForm.value;
     this.validatedUserFormValue = this.userForm.value;
     this.utilsUserForm.keys = Object.keys(this.validatedUserFormValue);
-    console.log('User form values', userFormValue);
+    // console.log('User form values', userFormValue);
   }
 
   onSubmitConf() {
@@ -344,7 +362,7 @@ export class SignUpPageComponent implements OnInit {
       }
     });
     // Mettre un message d'erreur si l'utilisateur choisi partout "Aucune" ?
-    console.log('Conf form values', confFormValue, this.utilsConfForm);
+    // console.log('Conf form values', confFormValue, this.utilsConfForm);
   }
 
   validateSignUp() {
@@ -352,7 +370,6 @@ export class SignUpPageComponent implements OnInit {
     const u = this.validatedUserFormValue;
     const token = this.generateToken(16);
     const user = new UserInformations(u.lName, u.fName, u.company, u.email, u.position, u.vehicle, false, token, this.utilsConfForm.ids);
-    console.log(user);
 
     this.guestsService.createUser(user).subscribe(data => {
       console.log('this.loaderService', this.loaderService);
@@ -395,7 +412,7 @@ export class SignUpPageComponent implements OnInit {
             this.loaderService.setSpinnerState(false);
 
             if (!mailRes.success) {
-              console.log('err', mailRes.err);
+              console.log('Error sending mail', mailRes.err);
               this.dialog.open(GenericDialogComponent, {
                 width: 'auto',
                 data: DialogTemplate.modalTempates.internalServerError(user)
@@ -436,6 +453,34 @@ export class SignUpPageComponent implements OnInit {
     });
   }
 
+  setValueSituation(situation: string) {
+    console.log('setValueSituation', situation);
+    this.userForm.get('company').setValue('');
+    this.userForm.get('position').setValue('');
+
+    switch (situation) {
+      case 'autre':
+        this.userForm.get('company').setValue('Autre');
+        this.placeHolderSituationCompany = 'Autre';
+        this.placeHolderSituationPosition = 'Quel est votre situation';
+        break;
+
+      case 'etudiant':
+        this.userForm.get('position').setValue('Etudiant(e)');
+        this.placeHolderSituationCompany = 'Nom de votre école';
+        this.placeHolderSituationPosition = 'Statut';
+        break;
+
+      case 'salarie':
+        this.placeHolderSituationCompany = 'Nom de votre entreprise';
+        this.placeHolderSituationPosition = 'Nom de votre poste';
+        break;
+
+      default:
+        break;
+    }
+  }
+
   log() {
     console.log(this.utilsConfForm);
 
@@ -463,6 +508,7 @@ export class SignUpPageComponent implements OnInit {
       email: 'willineito@gmail.com',
       fName: 'Willem',
       lName: 'Houm',
+      situation: 'salarie',
       company: 'General Electrics',
       position: 'Apprenti Architecte Solution',
       vehicle: true,
@@ -475,6 +521,7 @@ export class SignUpPageComponent implements OnInit {
       email: 'remousses@gmail.com',
       fName: 'Remousses',
       lName: 'Argentin',
+      situation: 'salarie',
       company: 'CACF',
       position: 'Ingénieur Logiciel',
       vehicle: true,
