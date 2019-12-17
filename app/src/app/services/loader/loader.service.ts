@@ -20,8 +20,6 @@ export class LoaderService {
   }
 // eventemitter ?
   setSpinnerState(val: boolean) {
-    console.log('setLoading', val);
-
     this.ssSub.next(val);
   }
 }

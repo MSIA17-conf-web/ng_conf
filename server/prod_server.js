@@ -1,5 +1,4 @@
 var env = require('dotenv').config();
-console.log(env.parsed);
 
 // Dependencies
 const fs = require("fs"),
@@ -19,18 +18,11 @@ app.all("*", function (req, res, next) {
 })
 
 app.use(cors());
-// app.use(express.static(path.join(__dirname, "/..", "dist")))
 app.use(bodyParser.json())
 app.use("/", express.static(path.join(__dirname, '../', "dist")))
 
-// app.get("/*", function (req, res) {
-//   console.log("into");
-//   // express.static(path.join(__dirname, '../', "dist"));
-//   res.sendFile("../dist/index.html", { root: __dirname })
-// })
-
 app.get("/*", function (req, res) {
-  console.log(`[TRACE] Server request: ${req.originalUrl}`);
+  console.log("[TRACE] Server request :", req.originalUrl);
   res.status(200).sendFile(path.resolve("../dist/index.html"));
 })
 

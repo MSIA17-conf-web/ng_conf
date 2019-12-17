@@ -21,7 +21,6 @@ export class ConferencesService {
       body: {}
     }).pipe(
       map(data => {
-        console.log(data);
         return data.map(cren => new CfCreneau().deserialize(cren));
       })
     );
@@ -35,7 +34,6 @@ export class ConferencesService {
       body: {}
     }).pipe(
       map(data => {
-        console.log(data);
         return data.map(cren => new CdTheme().deserialize(cren));
       })
     );

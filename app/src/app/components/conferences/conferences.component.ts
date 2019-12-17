@@ -24,12 +24,11 @@ export class ConferencesComponent implements OnInit {
               private loaderService: LoaderService) { }
 
   ngOnInit() {
+    console.log('Récupération des données des conférences');
     this.loaderService.setSpinnerState(true);
 
     this.conferencesService.getConfDisplayData().subscribe(res => {
       this.loaderService.setSpinnerState(false);
-      console.log(res);
-
       this.cdThemeList = res;
     }, err => {
       this.loaderService.setSpinnerState(false);

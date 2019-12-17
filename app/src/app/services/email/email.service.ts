@@ -70,7 +70,7 @@ export class EmailService {
     this.guestsService.getOneUser(email).subscribe(verifResult => {
       if (!verifResult.success) {
         this.loaderService.setSpinnerState(false);
-        console.log('error', verifResult.err || verifResult.data.errors);
+        console.log('Error resending confimation mail', verifResult.err || verifResult.data.errors);
         this.dialog.open(GenericDialogComponent, {
           width: 'auto',
           data: DialogTemplate.modalTempates.sendMailError()
@@ -118,13 +118,12 @@ export class EmailService {
   }
 
   resendTokenMail(email: string) {
-    console.log('resendTokenMail');
     this.loaderService.setSpinnerState(true);
 
     this.guestsService.getOneUser(email).subscribe(verifResult => {
       if (!verifResult.success) {
         this.loaderService.setSpinnerState(false);
-        console.log('error', verifResult.err || verifResult.data.errors);
+        console.log('Error resending token mail', verifResult.err || verifResult.data.errors);
         this.dialog.open(GenericDialogComponent, {
           width: 'auto',
           data: DialogTemplate.modalTempates.sendMailError()
@@ -185,7 +184,7 @@ export class EmailService {
     this.guestsService.getOneUser(email).subscribe(verifResult => {
       if (!verifResult.success) {
         this.loaderService.setSpinnerState(false);
-        console.log('Error', verifResult.err || verifResult.data.errors);
+        console.log('Error resending mail', verifResult.err || verifResult.data.errors);
         this.dialog.open(GenericDialogComponent, {
           width: 'auto',
           data: DialogTemplate.modalTempates.sendMailError()

@@ -27,6 +27,7 @@ export class DeleteUserDialogComponent implements OnInit {
   }
 
   deleteUser() {
+    console.log('Désinscription en cours');
     this.loaderService.setSpinnerState(true);
 
     this.guestsService.deleteUser(this.user.email).subscribe(verifResult => {

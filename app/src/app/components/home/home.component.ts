@@ -24,8 +24,6 @@ export class HomeComponent implements OnInit {
     this.loaderService.setSpinnerState(true);
 
     this.conferencesService.getConfDisplayData().subscribe(res => {
-      console.log('Home data', res);
-
       this.homeTheme = res;
       this.loaderService.setSpinnerState(false);
     }, err => {
@@ -39,7 +37,7 @@ export class HomeComponent implements OnInit {
 
   }
 
-  public buildThemeImageUrl(id): string {
+  public buildThemeImageUrl(id: number): string {
     let imgId = '';
 
     switch (id) {
@@ -56,11 +54,5 @@ export class HomeComponent implements OnInit {
     }
 
     return 'https://drive.google.com/uc?export=view&id=' + imgId;
-  }
-
-  public getI(i, y) {
-    console.log('iy ', i, y);
-
-    return i + y;
   }
 }

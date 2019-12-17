@@ -40,6 +40,7 @@ export class ContactComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log('Envoie du mail');
     this.loaderService.setSpinnerState(true);
     const contactFormValue = this.contactForm.value;
 
