@@ -10,6 +10,8 @@ import { GenericDialogComponent } from '../dialogs/generic-dialog/generic-dialog
 import { MobileService } from 'src/app/services/mobile/mobile.service';
 import { LoaderService } from 'src/app/services/loader/loader.service';
 
+import * as _ from 'lodash';
+
 @Component({
   selector: 'app-conferences',
   templateUrl: './conferences.component.html',
@@ -19,9 +21,9 @@ export class ConferencesComponent implements OnInit {
   cdThemeList: Array<CdTheme>;
 
   constructor(private conferencesService: ConferencesService,
-              public mobSvc: MobileService,
-              public dialog: MatDialog,
-              private loaderService: LoaderService) { }
+    public mobSvc: MobileService,
+    public dialog: MatDialog,
+    private loaderService: LoaderService) { }
 
   ngOnInit() {
     console.log('Récupération des données des conférences');
@@ -29,6 +31,8 @@ export class ConferencesComponent implements OnInit {
 
     this.conferencesService.getConfDisplayData().subscribe(res => {
       this.loaderService.setSpinnerState(false);
+      res.map(theme => { theme.conferences = _.sortBy(theme.conferences, conf => conf.confCrenId); });
+
       this.cdThemeList = res;
     }, err => {
       this.loaderService.setSpinnerState(false);
@@ -41,6 +45,8 @@ export class ConferencesComponent implements OnInit {
   }
 
   markdownChanged(mdLink: string) {
-    return atob(mdLink);
+    return decodeURIComponent(atob(mdLink).split('').map((c) => {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
   }
 }

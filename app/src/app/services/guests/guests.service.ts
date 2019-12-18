@@ -13,7 +13,7 @@ export class GuestsService {
 
   // Pas dans guest.service ?
   createUser(user: UserInformations) {
-    return  this.httpClient.post<any>('https://msia17conferences.com:9010/api', {
+    return  this.httpClient.post<any>('https://msia17conferences.com/api', {
       method: 'POST',
       url: 'guests/create',
       baseURL: environment.postgreAPIUrl,
@@ -23,7 +23,7 @@ export class GuestsService {
 
   // Pas dans guest.service ?
   deleteUser(email: string) {
-    return  this.httpClient.post<any>('https://msia17conferences.com:9010/api', {
+    return  this.httpClient.post<any>('https://msia17conferences.com/api', {
       method: 'delete',
       url: 'guests/delete',
       baseURL: environment.postgreAPIUrl,
@@ -34,7 +34,7 @@ export class GuestsService {
   }
 
   confirmUser(email: string, token: string) {
-    return this.httpClient.post<any>('https://msia17conferences.com:9010/api', {
+    return this.httpClient.post<any>('https://msia17conferences.com/api', {
       method: 'POST',
       url: 'guests/verify-token',
       baseURL: environment.postgreAPIUrl,
@@ -43,7 +43,7 @@ export class GuestsService {
   }
 
   updateUser(user: UserInformations) {
-    return this.httpClient.post<any>('https://msia17conferences.com:9010/api', {
+    return this.httpClient.post<any>('https://msia17conferences.com/api', {
       method: 'PUT',
       url: 'guests/update',
       baseURL: environment.postgreAPIUrl,
@@ -52,7 +52,7 @@ export class GuestsService {
   }
 
   getOneUser(email: string) {
-    return this.httpClient.post<any>('https://msia17conferences.com:9010/api', {
+    return this.httpClient.post<any>('https://msia17conferences.com/api', {
       method: 'POST',
       url: 'guests/get-one',
       baseURL: environment.postgreAPIUrl,

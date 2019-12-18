@@ -24,7 +24,7 @@ export class EmailService {
               private dialog: MatDialog) { }
 
   sendEmail(options: any) {
-    return this.httpClient.post<any>('https://msia17conferences.com:9010/api', {
+    return this.httpClient.post<any>('https://msia17conferences.com/api', {
       method: 'POST',
       url: 'sendEmail',
       baseURL: environment.emailAPIUrl,
@@ -34,7 +34,7 @@ export class EmailService {
   sendContactEmail(values: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.httpClient
-        .post<any>('https://msia17conferences.com:9010/api', {
+        .post<any>('https://msia17conferences.com/api', {
           method: 'POST',
           url: 'sendEmail',
           baseURL: environment.emailAPIUrl,
@@ -160,7 +160,7 @@ export class EmailService {
   }
 
   private commonResendMail(data: any) {
-    this.httpClient.post<any>('https://msia17conferences.com:9010/api', {
+    this.httpClient.post<any>('https://msia17conferences.com/api', {
       method: 'POST',
       url: 'sendEmail',
       baseURL: environment.emailAPIUrl,

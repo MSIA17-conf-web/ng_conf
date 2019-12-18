@@ -2,6 +2,7 @@
 
 // @import "@angular/material/prebuilt-themes/deeppurple-amber.css";
 @import "~@angular/material/theming";
+@import "~leaflet/dist/leaflet.css";
 @include mat-core();
 
 $cesi: (

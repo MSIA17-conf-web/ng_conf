@@ -42,12 +42,24 @@
 
   </div>
   <div fxLayout="row" fxLayoutAlign="center center" style="margin-top: 15px;">
-      <button mat-raised-button color="accent" style="font-weight: bold;" routerLink="/inscription">
-        S'INSCRIRE
-      </button>
+    <button mat-raised-button color="accent" style="font-weight: bold;" routerLink="/inscription">
+      S'INSCRIRE
+    </button>
+  </div>
+
+  <div fxLayout="column">
+    <h1 fxLayout="row" fxLayoutAlign="center">
+      Plan d'accès
+    </h1>
+    <div fxLayout="row">
+      <div class="map-viewer" id="map"></div>
+      <img alt="Détails du plan d'accès" fxLayout="column"
+        src="https://drive.google.com/uc?export=view&id=1JGXDmSzeopqzztFUED_We61UmW7YxPw6" />
+    </div>
   </div>
 </div>
 
+<!-- Mobile -->
 <div class="container-mobile" *ngIf="mobSvc.getIsMobile()">
   <div color="warn" fxLayout="column" fxLayoutAlign="space-around center" class="home-header-m">
     <div fxLayout="column" fxLayoutAlign="space-around center">
@@ -95,4 +107,11 @@
       S'INSCRIRE
     </button>
   </div>
+
+  <h1 fxLayout="row" fxLayoutAlign="center">
+    Plan d'accès
+  </h1>
+  <div class="map-viewer-mobile" id="map"></div>
+  <img alt="Détails du plan d'accès" fxLayout="row" fxLayoutAlign="center" style="margin: auto; margin-top: 8px;"
+    src="https://drive.google.com/uc?export=view&id=1JGXDmSzeopqzztFUED_We61UmW7YxPw6" />
 </div>

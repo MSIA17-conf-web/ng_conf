@@ -14,7 +14,7 @@ export class ConferencesService {
   constructor(private httpClient: HttpClient) { }
 
   public getConfFormData(): Observable<CfCreneau[]> {
-    return this.httpClient.post<CfCreneau[]>('https://msia17conferences.com:9010/api', {
+    return this.httpClient.post<CfCreneau[]>('https://msia17conferences.com/api', {
       method: 'GET',
       url: 'misc/conf-form-data',
       baseURL: environment.postgreAPIUrl,
@@ -27,7 +27,7 @@ export class ConferencesService {
   }
 
   public getConfDisplayData(): Observable<CdTheme[]> {
-    return this.httpClient.post<CdTheme[]>('https://msia17conferences.com:9010/api', {
+    return this.httpClient.post<CdTheme[]>('https://msia17conferences.com/api', {
       method: 'GET',
       url: 'misc/conf-display-data',
       baseURL: environment.postgreAPIUrl,
@@ -40,7 +40,7 @@ export class ConferencesService {
   }
 
   public getConfName(confId: number): Observable<Conference> {
-    return this.httpClient.post<Conference>('https://msia17conferences.com:9010/api', {
+    return this.httpClient.post<Conference>('https://msia17conferences.com/api', {
       method: 'POST',
       url: 'misc/get-conf-name',
       baseURL: environment.postgreAPIUrl,

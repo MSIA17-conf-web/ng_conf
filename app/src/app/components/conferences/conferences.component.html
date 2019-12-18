@@ -4,11 +4,9 @@
         <mat-tab *ngFor="let theme of cdThemeList" [label]="'Thème : '+ theme.themeName">
             <mat-list role="list">
                 <mat-tab-group mat-stretch-tabs>
-                    <mat-tab label="Présentation générale">
-                        <markdown [data]="markdownChanged(theme.themeMDlink)"></markdown>
-                    </mat-tab>
                     <mat-tab *ngFor="let conference of theme.conferences" [label]="conference.confName">
                         <markdown [data]="markdownChanged(conference.confMDlink)"></markdown>
+                        <!-- <markdown [src]="https://drive.google.com/uc?export=view&id=1SxXQYJshUsJIjzQXyGAE6oUvFRCQNNgn"></markdown> -->
                     </mat-tab>
                 </mat-tab-group>
             </mat-list>
@@ -34,8 +32,5 @@
 
             <markdown [data]="markdownChanged(conference.confMDlink)"></markdown>
         </mat-expansion-panel>
-
-        <h1>Présentation générale</h1>
-        <markdown [data]="markdownChanged(theme.themeMDlink)"></markdown>
     </mat-expansion-panel>
 </mat-accordion>

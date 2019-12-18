@@ -35,8 +35,8 @@ export default class DialogTemplate {
       return {
         title: 'Félicitations, votre inscription est terminée',
         text: [
-          options.fName + ', merci pour votre inscription, ',
-          'un email récapitulatif va vous être envoyé à : ' + options.email + '.',
+          options.fName + ', merci pour votre inscription.',
+          'Un email récapitulatif va vous être envoyé à : ' + options.email + '.',
           'Un QR code a été mis à votre disposition et vous sera nécessaire le jour de la conférence.'
         ],
         displayLink: {
@@ -129,7 +129,7 @@ export default class DialogTemplate {
     },
     updateUserSuccess: (options: UserInformations) => {
       return {
-        title: 'Mise à jour des données réussies',
+        title: 'Mise à jour des données réussie',
         text: [
           options.fName + ', un email vient de vous être envoyé à l\'adresse ' + options.email + ' avec votre nouveau QRCode',
         ],
